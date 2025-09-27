@@ -1,0 +1,29 @@
+{
+  "short_name": "Logística GDM",
+  "name": "Sistema de Logística - Grupo Doce Mel",
+  "icons": [
+    {
+      "src": "assets/logodocemel.png",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/logodocemel.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "assets/logodocemel.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#2E7D32",
+  "background_color": "#ffffff",
+  "description": "Sistema de gerenciamento de entregas e logística do Grupo Doce Mel",
+  "orientation": "portrait",
+  "scope": "/",
+  "lang": "pt-BR"
+} 

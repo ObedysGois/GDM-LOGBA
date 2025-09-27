@@ -1,0 +1,139 @@
+{
+    "name": "Delivery",
+    "type": "object",
+    "properties": {
+      "client": {
+        "type": "string",
+        "description": "Nome do cliente"
+      },
+      "driver": {
+        "type": "string",
+        "description": "Nome do fretista"
+      },
+      "checkin_time": {
+        "type": "string",
+        "format": "date-time",
+        "description": "Data e hora do check-in"
+      },
+      "checkout_time": {
+        "type": "string",
+        "format": "date-time",
+        "description": "Data e hora do check-out"
+      },
+      "duration": {
+        "type": "string",
+        "description": "Duração em formato legível (ex: '45 min')"
+      },
+      "information": {
+        "type": "string",
+        "description": "Informações adicionais da entrega"
+      },
+      "problem_type": {
+        "type": "string",
+        "enum": [
+          "Nota com problema",
+          "Diferença de preço",
+          "Nota sem pedido",
+          "Divergência de quantidade",
+          "ERRO DE REFERENCIA SEM XML",
+          "LOJA EM INVENTARIO",
+          "LOJA SEM PROMOTOR",
+          "PRODUTO SEM PEDIDO",
+          "EM DESACORDO COM O PEDIDO",
+          "Estoque cheio",
+          "Erro de Digitação",
+          "Erro de cadastro",
+          "Fora do Horário de Recebimento",
+          "Nota em tratamento",
+          "Nota fora do coletor",
+          "Outros motivos"
+        ],
+        "description": "Tipo do problema na entrega"
+      },
+      "status": {
+        "type": "string",
+        "enum": [
+          "Entrega em andamento",
+          "Entrega finalizada",
+          "Entrega devolvida"
+        ],
+        "default": "Entrega em andamento",
+        "description": "Status da entrega"
+      },
+      "being_monitored": {
+        "type": "boolean",
+        "default": false,
+        "description": "Se a entrega está sendo acompanhada pelo admin"
+      },
+      "attachments": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string"
+            },
+            "filename": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "size": {
+              "type": "number"
+            }
+          }
+        },
+        "description": "Arquivos anexados à entrega"
+      },
+      "userEmail": {
+        "type": "string",
+        "description": "Email do usuário que fez o registro"
+      },
+      "vendedor": {
+        "type": "string",
+        "description": "Vendedor associado ao cliente"
+      },
+      "rede": {
+        "type": "string",
+        "description": "Rede do cliente"
+      },
+      "uf": {
+        "type": "string",
+        "description": "UF do cliente"
+      },
+      "timestamp": {
+        "type": "object",
+        "description": "Timestamp do Firestore para ordenação"
+      },
+      "createdAt": {
+        "type": "object",
+        "description": "Timestamp de criação"
+      },
+      "updatedAt": {
+        "type": "object",
+        "description": "Timestamp de atualização"
+      },
+      "notifications_dismissed": {
+        "type": "object",
+        "description": "Notificações dispensadas pelo usuário"
+      },
+      "support_requested": {
+        "type": "boolean",
+        "default": false,
+        "description": "Se foi solicitado apoio para esta entrega"
+      },
+      "support_request_time": {
+        "type": "string",
+        "format": "date-time",
+        "description": "Hora da solicitação de apoio"
+      }
+    },
+    "required": [
+      "client",
+      "driver",
+      "checkin_time",
+      "status",
+      "userEmail"
+    ]
+  }

@@ -1,0 +1,1179 @@
+CRIAR APLICATIVO - LOG BA
+# 1º PASSO (CRIAÇÃO DO APP E IMPORTAÇÃO DAS BIBLIOTECAS NECESSÁRIAS)
+# 1 CRIAR APP FUNCIONAL QUE RODE EM CELULARES ANDROID E IOS
+# 1.1 IMPORTAR TODAS AS BIBLIOTECAS NECESSÁRIAS PARA FUNCIONAMENTO DO APP
+-----------------------------------------------------------------------------------------------------------------------------
+# PRIMEIRA TELA DO APP (LOGIN)
+# 2º PASSO (CRIAR TELA DE LOGIN PARA ACESSO AO APP)
+USAR A LOGO FRUTASDOCEMEL (VERMELHA) NESSA TELA
+# 2 CRIAÇÃO DA TELA DE LOGIN (USUARIO E SENHA) - ESSA TELA DE LOGIN QUE DARÁ ACESSO AO APP.
+	# 2.1 CAMPO PREENCHER USUARIO (NOME DO USUARIO COM ATE 30 DIGITOS)
+# 2.1.1 CONDIÇÃO 1: SO PODE SER PREENCHIDO COM LETRAS
+		# 2.1.2 CONDIÇÃO 2: PREENCHIMENTO MÁXIMO DE ATÉ 30 DIGITOS
+	# 2.2 CAMPO PREENCHER SENHA (SENHA COM 8 DIGITOS)
+		# 2.2.1 CONDIÇÃO 1: SO PODE SER PREENCHIDO COM LETRAS, NUMEROS OU NUMEROS + LETRAS
+		# 2.2.2 CONDIÇÃO 2: PREENCHIMENTO MÁXIMO DE ATÉ 10 DIGITOS
+# 2.3 CRIAR BOTÃO “CADASTRAR USUARIO” - ESSE BOTÃO AO SER CLICADO, VAI GERAR UM REGISTRO NA BASE DE DADOS DO USUARIO CADASTRADO, LIBERANDO ACESSO AO APP.
+# 2.4 O USUARIO ADMINISTRADOR “OBEDYS” TERÁ ACESSO A VISUALIZAÇÃO DE TODOS OS USUARIOS CRIADOS E DE TODAS AS SENHAS CRIADAS.
+-----------------------------------------------------------------------------------------------------------------------------
+# SEGUNDA TELA DO APP (HOME)
+# 3º PASSO (VISUAL DO APP DA TELA DE INICIO)
+# 3 NESSA TELA ESTARÁ VISIVEL A LOGO DO GRUPODOCEMEL (VERDE), A ROTA QUE SERÁ IMPORTADA POR UM ARQUIVO DE IMAGEM E ABAIXO ESTARÁ O RESUMO COM OS ULTIMOS 10 REGISTROS DAS ENTREGAS.
+# 3.1 LOGO DA EMPRESA GRUPODOCEMEL (VERDE) ACIMA DO APP
+	# 3.1.1 CONFIGURAÇÃO DA LOGO: A LOGO FICARA VISIVEL FEITO UM “BANNER” NO INICIO DA TELA DO APP.
+# 3.2 TEXTO COM O NOME “ROTEIRIZAÇÃO DO DIA” ABAIXO DA LOGO
+	# 3.2.1 CONFIGURAR NO MESMO ESTILO DE FONTE E CORES DA LOGO
+# 3.3 IMAGEM DA ROTA (ESSA IMAGEM SERÁ IMPORTADA PELO BOTAO ABAIXO) E SO PODERÁ SER IMPORTADA POR USUARIO ADMINISTRADOR E USUARIOS COLABORADORES DO APP. FICARA ENTRE O TEXTO “ROTEIRIZACÃO DO DIA” E O BOTÃO DE IMPORTAR ROTA.
+# 3.4 BOTÃO DE IMPORTAR IMAGEM DA ROTA (AO CLICAR NO BOTAO, SERÁ ENVIANDO UM ARQUIVO DE IMAGEM QUE SERÁ A ROTA DO DIA.
+# 3.5 LOGO ABAIXO DA IMAGEM DA ROTA E DO BOTÃO, TERÁ UM SISTEMINHA QUE RETORNARÁ OS 10 ÚLTIMOS REGISTROS DAS ENTREGAS (CHECK IN, CHECK OUT, ETC). ESSES REGISTROS FICARAM SEMPRE ORDENADOS POR ORDEM DE DATA/HORA. SEMPRE DO MAIS RECENTE PARA O MAIS ANTIGO. SEMPRE MOSTRARÁ OS 10 ULTIMOS REGISTROS REALIZADOS.
+---------------------------------------------------------------------------------------------------------------
+# TERCEIRA TELA DO APP (REGISTROS)
+# 4º PASSO (VISUAL DO APP DA TELA DE REGISTROS)
+# 4 NESSA TELA SERÁ ONDE O USUARIO IRA REGISTRAR SEUS CHECK IN E CHECK OUT. TAMBEM AQUI SERÁ POSSIVEL ENVIAR INFORMAÇÕES NUM CAMPO DE DIGITAÇÃO, ONDE O USUARIO VAI COLOCAR A INFORMAÇÃO QUE DESEJAR. NO FINAL DESSA TELA, TERÁ UM BOTÃO “ROTA FINALIZADA” ONDE NELA, O USUARIO AO CLICAR, IRÁ REGISTRAR TODOS OS REGISTROS REALIZADOS POR ESTE USUARIO NESSE DIA DA ENTREGA (CHECKIN, CKECKOUT, INFORMAÇÕES, ETC) E, AUTOMATICAMENTE, ENVIARÁ UM RESUMO DESSES REGISTROS DO DIA VIA WHATSAPP, PARA UM GRUPO PRÉ PROGRAMADO. (BOT)
+Segue modelo de mensagem WhatsApp:
+
+📊 RESUMO DE ENTREGAS - 21/04/2025
+🚛 Fretista: GILDASIO
+👤 Cliente: Atakarejo Cd Simoes Filho
+⏱️ Check-in: 15:21:05
+⏱️ Check-out: 15:21:10
+⏳ Duração: 0 minutos
+📝 Informações: Teste
+✅ Status: Entrega finalizada
+
+👤 Cliente: Rmix Horto
+⏱️ Check-in: 16:20:05
+⏱️ Check-out: 17:20:05
+⏳ Duração: 60 minutos
+📝 Informações: Teste
+✅ Status: Entrega finalizada
+
+# 4.1 CAMPO SELEÇÃO DE CLIENTE – NESSE CAMPO O USUARIO IRÁ SELECIONAR O CLIENTE QUE ESTÁ FAZENDO CHECKIN
+Segue lista dos clientes:
+Armazem Cecilio Mota (006006 - 01)
+Assai Aeroporto (001899 - 43)
+Assai Barris (001899 - 51)
+Assai Cabula (001899 - 52)
+Assai Calcada (001899 - 39)
+Assai Camacari (001899 - 35)
+Assai Feira Sobradinho (001899 - 13)
+Assai Imbui (001899 - 74)
+Assai Inacio Barbosa (001899 - 54)
+Assai Jose Conrado De Araujo (001899 - 42)
+Assai Juazeiro (001899 - 81)
+Assai Lauro De Freitas (001899 - 34)
+Assai Luis Anselmo (001899 - 67)
+Assai Mussurunga (001899 - 37)
+Assai Nossa Sra Do Socorro (001899 - 66)
+Assai Paripe (001899 - 36)
+Assai Pau Da Lima (001899 - 38)
+Assai Petrolina (001899 - 79)
+Assai Porto (001899 - 44)
+Assai Sr Do Bonfim (001899 - 80)
+Assai Tomba (001899 - 75)
+Assai Vasco Da Gama 4049 (001899 - 53)
+Atac Camacari (000002 - 38)
+Atac Camacari Centro (000048 - 17)
+Atac Mares (000048 - 08)
+Atac Petrolina (000002 - 51)
+Atakarejo  Sao Goncalo Dos Campos (000213 - 25)
+Atakarejo Alagoinha (000213 - 29)
+Atakarejo Aracaju (000213 - 21)
+Atakarejo Baixa De Quintas (000213 - 28)
+Atakarejo Boca Do Rio (000213 - 07)
+Atakarejo Camacari (000213 - 13)
+Atakarejo Cd Simoes Filho (000213 - 12)
+Atakarejo Cd Vitoria Da Conquista (000213 - 18)
+Atakarejo Engenho Velho De Brotas (000213 - 15)
+Atakarejo Feira De Santana (000213 - 19)
+Atakarejo Iguatemi (000213 - 01)
+Atakarejo Ilha (000213 - 17)
+Atakarejo Ilheus (000213 - 20)
+Atakarejo Itacimirim (000213 - 16)
+Atakarejo Lauro (000213 - 02)
+Atakarejo Patamares (000213 - 14)
+Atakarejo Patamares Pinto De Aguiar (000213 - 31)
+Atakarejo Pernambues (000213 - 11)
+Atakarejo Piata (000213 - 05)
+Atakarejo Porto Seguro (000213 - 22)
+Atakarejo Salvador (000213 - 09)
+Atakarejo Simoes Filho (000213 - 30)
+Atakarejo Vitoria Da Conquista (000213 - 23)
+Benassi Ceasa (000003 - 02)
+Bontempo Supermercados (004290 - 01)
+Caravelas Comercial De Alimentos Ltda (006007 - 01)
+Carballo Faro - Horto (001872 - 03)
+Carballo Faro - Pituba (001872 - 01)
+Carballo Faro Alphaville (001872 - 04)
+Cbd - Costa Azul (000011 - 33)
+Cdp Alagoinhas (004383 - 01)
+Cdp Alagoinhas Loja 11 (004245 - 04)
+Cdp Armacao Stiep Loja 14 (004245 - 01)
+Cdp Boca Do Rio Loja 07 (002647 - 01)
+Cdp Castelo Branco Loja 05 (004245 - 07)
+Cdp Catu Loja 12 (004382 - 01)
+Cdp Cd Monte Libano (005085 - 01)
+Cdp Centro - Sede (004245 - 16)
+Cdp Centro Dias Davila (004245 - 15)
+Cdp Manoel Dia D'Avila Loja 04 (004245 - 06)
+Cdp Marechal Rondon Loja 13 (004245 - 09)
+Cdp Mata Premium Lj 01 (004245 - 03)
+Cdp Ogunja Loja 08 (004245 - 08)
+Cdp Rodoviaria Loja 17 (004245 - 05)
+Cdp Sao Caetano Loja 15 (004245 - 10)
+Cdp Sete Portas Loja 09 (002797 - 01)
+Cdp Super Centro Mata Loja 10 (004245 - 02)
+Cdp Super Mata Loja 02 (004245 - 11)
+Cesta Do Povo Boca Do Rio (004245 - 17)
+Churrascaria & Pizzaria Cupim De Ouro (004490 - 01)
+Coageli Lj 2 Centro (000208 - 02)
+Cogeali Lj 01 Paripe (000208 - 01)
+Com De Alimentos Flor Da Chapada (004236 - 01)
+Deli E Cia Graca (000218 - 01)
+Dist Sao Roque  Mangabeira (001600 - 03)
+Dist Sao Roque Calumbi (001600 - 04)
+Dist Sao Roque Centro (001600 - 02)
+Dist Sao Roque Conceicao (001600 - 07)
+Dist Sao Roque Sim (001600 - 05)
+Dist Sao Roque Sta Monica (001600 - 01)
+Dist Sao Roque Sto Estevao (001600 - 06)
+Economart Feira De Santana (006049 - 01)
+Economart Jequie (006049 - 03)
+Economart Luis Eduardo (006049 - 04)
+Economart Vitoria Da Conquista (006049 - 02)
+Exito Supermercado (006123 - 01)
+Feirao Das Frutas Atras Da Banca (001926 - 01)
+Feirao Das Frutas Maria Auxiliadora (001926 - 02)
+Frutos Da Terra (000259 - 01)
+G Barbosa Farolandia (000082 - 64)
+G Barbosa Hiper Norte (000082 - 55)
+G. Barbosa  - Rio Mar (000082 - 53)
+G. Barbosa Francisco Porto (000082 - 61)
+Gbarbosa  Sao Cristovao (000082 - 74)
+Gbarbosa 015 Feira De Santana (000082 - 15)
+Gbarbosa 016 Feira De Santana (000082 - 16)
+Gbarbosa 017 Feira De Santana (000082 - 17)
+Gbarbosa 029 Brotas (000082 - 08)
+Gbarbosa 035 Costa Azul (000082 - 09)
+Gbarbosa 037 Alagoinhas (000082 - 22)
+Gbarbosa 038 Alagoinhas (000082 - 23)
+Gbarbosa 074 Sobradinho (000082 - 25)
+Gbarbosa 076 Tomba (000082 - 26)
+Gbarbosa 108 Lauro De Freitas (000082 - 11)
+Gbarbosa 112 Vitoria Da Conquista (000082 - 30)
+Gbarbosa Cd Bahia (000082 - 85)
+Gbarbosa Cd Sergipe (000082 - 84)
+Gbarbosa Conj. Marcos Freire I (000082 - 82)
+Gbarbosa Hiper Sul (000082 - 70)
+Gbarbosa Jardins (000082 - 68)
+Gbarbosa Luzia (000082 - 73)
+Gbarbosa-125-Juazeiro Santo Antonio (000082 - 33)
+Gbarbosa-133 -Juazeiro Centro (000082 - 37)
+Gbarbosa-139-Vitoria Da Conquista (000082 - 39)
+Gbarbosa-272- Cabula (000082 - 47)
+Gbarbosa-274-Guarajuba (000082 - 48)
+Gbarbosa-302 - Horto Bela Vista (000082 - 49)
+Gral Panificacao (001824 - 01)
+Gran Hortifruti (002821 - 01)
+Hiper Carnes Barra Dos Coqueiros (004130 - 01)
+Hiper Ideal Cd (002613 - 24)
+Hiper Unimar Arembepe (000203 - 02)
+Hiper Unimar Barra Do Pojuca (000203 - 01)
+Hiperideal - Vitoria (002613 - 04)
+Hiperideal Amazonas (002613 - 27)
+Hiperideal Armacao (002613 - 02)
+Hiperideal Buraquinho (002613 - 08)
+Hiperideal Caminho Das Arvores (002613 - 25)
+Hiperideal Feira De Santana (002613 - 31)
+Hiperideal Horto Jardins Acm (002613 - 30)
+Hiperideal Horto Vasco Da Gama (002613 - 29)
+Hiperideal Orla (002613 - 28)
+Hiperideal Parque Shopping (002613 - 21)
+Hiperideal Piata Orlando Gomes (002613 - 19)
+Hiperideal Piata Otavio Mangabeira (002613 - 07)
+Jer Rio Vermelho Mercadinho Ltda (006040 - 01)
+Le Delis (004561 - 01)
+Logbras (005013 - 01)
+Marise Santos Peixoto (004002 - 01)
+Masani Com (000209 - 01)
+Massimo - Centro (002652 - 03)
+Massimo Farolandia (002652 - 02)
+Massimo Luzia (002652 - 01)
+Mateus Aracaju Santa Monica (002459 - D5)
+Mateus Cd - Feira De Santana/Ba (001456 - 12)
+Mateus Conceicao Do Coite (002459 - 53)
+Mateus Eunapolis (002459 - 97)
+Mateus Itabuna (002459 - 98)
+Mateus Jacobina (002459 - 34)
+Mateus Jose Conrado De Araujo (002459 - 42)
+Mateus Juazeiro (002459 - 41)
+Mateus Petrolina (002459 - 33)
+Mateus Porto Seguro (002459 - 51)
+Mateus Vitoria Da Conquista (002459 - 49)
+Megga Distribuidora (004007 - 01)
+Mel Distribuidora (004575 - 01)
+Mercadinho Economico  Centro (005079 - 02)
+Mercadinho Economico  Quati (005080 - 01)
+Mercadinho Economico (005079 - 01)
+Mercadinho Economico Jardim Maravilha (005081 - 01)
+Mix Mateus Da Gloria (002459 - 96)
+Multi Frios Premium (004469 - 01)
+Multi Frios Premium (004469 - 02)
+Novo Mix Lauro De Freitas (002552 - 01)
+Paris Delicatessen (002399 - 01)
+Perboni Juazeiro Ba (001497 - 03)
+Perini Graca (000069 - 04)
+Perini Pituba (000069 - 05)
+Perini Vasco Da Gama (000069 - 03)
+Pga Comercio Atacadista De Frutas E Verd (002860 - 01)
+Ponto Verde Iapi (001763 - 02)
+Ponto Verde Sete Portas (001763 - 01)
+Ponto Verde Vila Laura (001763 - 03)
+Rede Compre Bem Supermercados Ltda (004379 - 01)
+Redemix Chame-Chame (000186 - 12)
+Redemix Rio Vermelho (000186 - 13)
+Rmix  Stella Maris (000186 - 11)
+Rmix Alphaville 1 (000186 - 04)
+Rmix Buraquinho (000186 - 07)
+Rmix Horto (000186 - 08)
+Rmix Imbui (000186 - 02)
+Rmix Itapua (000186 - 05)
+Rmix Ondina (000186 - 09)
+Rmix Pituba (000186 - 01)
+Rmix Pituba (000186 - 06)
+Rmix Simoes Filho (000186 - 03)
+Rmix Vitoria (000186 - 10)
+Roselly Ferreira Sales Da Silva Ltda (006041 - 01)
+Sams Aracaju (000047 - 07)
+Sams Cosme De Farias (000047 - 10)
+Sams Feira De Santana (000047 - 12)
+Sams Lauro De Freitas (000047 - 09)
+Sams Pituba (000047 - 05)
+Sao Roque Artemia Pires (001600 - 08)
+Serrana  Barra (002613 - 11)
+Serrana - Graca (002613 - 10)
+Serrana  Itaigara (002613 - 16)
+Serrana  Jardim Apipema (002613 - 17)
+Serrana - Patamares (002613 - 13)
+Serrana  Patamares (002613 - 23)
+Serrana - Praia Do Forte (002613 - 14)
+Serrana Canela (002613 - 26)
+Serrana Guarajuba (Monte Gordo) (002613 - 22)
+Serrana Pituba (002613 - 12)
+Serrana Pituba (002613 - 18)
+Serrana Stella Maris (002613 - 05)
+Serrana Stella Maris Ii (002613 - 06)
+Serrana Vila Laura (002613 - 15)
+Sup Bombom Estancia Centro (004234 - 02)
+Supermercado Bombom Ltda Grageru (004234 - 03)
+Supermercado Compre Bem (004379 - 02)
+Supermercado Compre Bem Conselheiro Junq (004379 - 03)
+Supermercado Compre Bem Dantas Luma (004379 - 04)
+Supermercado Jhones (005095 - 01)
+Supermercado Jl (006020 - 01)
+Supermercado Nunes Peixoto Centro (002997 - 01)
+Total Atacado (005116 - 01)
+Wlamart - Palmares (001647 - 11)
+
+# 4.1.1 O APP EXIBIRÁ ESSA LISTA COM OS NOMES E ELE PODERÁ ESCOLHER APENAS UM CLIENTE A CADA REGISTRO DE CHECKIN
+# 4.1.2 CAMPO SELEÇÃO DE MOTORISTAS – NESSE CAMPO O USUARIO IRÁ SELECIONAR O FRETISTAS QUE ESTÁ FAZENDO CHECKIN
+Segue lista dos Fretistas:
+ANDERSON	ANDRE 	CLAUDEMAR	CLAUDIO	CRISTIAN	CRISTIANO	DANIEL	DANILO	DEIVISON	EDBALDO	EDEN	EDNILSON	ELVIS	FABIO	GALHA	 GILDASIO	GUTEMBERG	JANCLEITON	JOAO	JOIR	JOSENILSON	LUIZ	MAGNO	NATAL	OUTRO	PAULO NOEL	REAL	RICARDO	ROQUE	SERGIO	THIAGO NOEL	TIAGODANILO	  UANDERSON	  WEIDINEITON  
+# 4.1.3 O APP EXIBIRÁ ESSA LISTA COM OS NOMES E ELE PODERÁ ESCOLHER APENAS UM FRETISTA A CADA REGISTRO DE CHECKIN
+	# 4.2 BOTÃO CHECK IN – BOTÃO CLICAVEL QUE REGISTRARÁ A DATA E HORA DE CHEGADA NO CLIENTE
+		#4.2.1 SÓ SERÁ POSSIVEL REGISTRAR UM NOVO CHECKIN DEPOIS QUE O CHECKOUT NO CLIENTE ANTERIOR FOR REALIZADO.
+		# 4.2.2 CLICAR NO BOTÃO CHECKIN GERARÁ DADOS EM UMA BASE DE DADOS E REGISTRARÁ ESSA INFORMAÇÃO EM VISUALIZAÇÃO NA TELA (HOME), NO SISTEMINHA QUE TRAZ OS ULTIMOS 10 REGISTROS.
+		# 4.2.3 ESSE REGISTRO GERARÁ UM STATUS (ENTREGA EM ANDAMENTO)
+	
+	# 4.3 BOTÃO CHECK OUT – BOTÃO CLICAVEL QUE REGISTRARÁ A DATA E HORA DE SAÍDA DO CLIENTE
+		#4.3.1 SÓ SERÁ POSSIVEL REGISTRAR UM NOVO CHECKOUT DEPOIS QUE O CHECKIN NO CLIENTE ATUAL FOR REALIZADO.
+		# 4.3.2 CLICAR NO BOTÃO CHECKOUT GERARÁ DADOS EM UMA BASE DE DADOS E REGISTRARÁ ESSA INFORMAÇÃO EM VISUALIZAÇÃO NA TELA (HOME), NO SISTEMINHA QUE TRAZ OS ULTIMOS 10 REGISTROS.
+		# 4.3.3 CONDIÇÃO: ESSE CAMPO SÓ APARECERÁ PARA O USUÁRIO SE ELE JÁ TIVER FEITO O CHECKIN NO CLIENTE ESCOLHIDO NO ULTIMO REGISTRO.
+		# 4.3.4 ESSE REGISTRO GERARÁ UM STATUS (ENTREGA FINALIZADA)
+	# 4.4 CAMPO INFORMAÇÕES: NESSE CAMPO O USUARIO PODE ENVIAR UM TEXTO COM INFORMAÇÕES DA ENTREGA QUE ESTÁ REALIZANDO.
+		# 4.4.1 CADA ENVIO DEVERÁ ESTÁ ATRELADO AO CHECKIN ATUAL.
+		# 4.4.2 É OPCIONAL O ENVIO DE INFORMAÇÕES NESTE CAMPO
+		#4.4.3 NESSE CAMPO, O USUARIO PODERA ENVIAR INFORMAÇÕES PÓS CHECKIN E CHECKOUT, CONFORME EXPLICADO ACIMA. PODENDO TER A OPÇÃO DE ALTERAR SOMENTE ANTES DE FAZER O CHECKOUT
+CONSIDERAÇÕES:
+quero fazer alguns ajustes na tela de REGISTROS:
+1º na tela de registros, quero que crie um botão "DEVOLUÇÃO TOTAL", na cor vermelha, que so aparecerá após o usuário fazer um checkin e antes de fazer o checkout. Nesse botão, o usuário ao clicar atualizará o status da entrega como "Entrega Devolvida" e será atualizado assim no registros das entregas.
+2º na tela de registros, quero o usuário que tiver fazendo o registro, so consiga fazer um checkin por vez, e após esse checkin ser realizado, ele so poderá voltar a fazer outro checkin quando finalizar o checkout do checkin em aberto ou quando clicar no botão "DEVOLUÇAO TOTAL". Cada usuário so conseguirá fazer um checkin para apenas um cliente por vez, ele nao conseguirá fazer um checkin em outro cliente ate ter realizado o checkout no clienTe anterior ou ter clicado no botão "DEVOLUÇÃO TOTAL".
+3º na tela de registros, o usuário que for realizar o registro, so poderá escolher 1 cliente + 1 fretista por vez, para fazer o checkin. enquanto ele nao fizer o checkout desse cliente + fretista ou ter clicado no botão "DEVOLUÇÃO TOTAL, ele nao conseguirá fazer um novo checkin pra nenhum outro cliente ou fretista. Com exceção se ele clicar no botão DEVOLUÇÃO TOTAL. A entrega será registrada como "Entrega Devolvida" com a cor vermelha.
+4º na tela de registros, o botão "enviar resumo da rota" via whatsapp so ficará disponível para o usuário 1 vez a cada checkout ou "DEVOLUÇÃO TOTAL". ele nao conseguirá enviar so com o checkin.
+
+---------------------------------------------------------------------------------------------------------------
+# QUARTA TELA DO APP (MONITORAMENTO)
+# 5º PASSO (VISUAL DO APP DA TELA DE MONITORAMENTO)
+# 5 NESTA TELA FICARÁ VISIVEL TODOS OS REGISTROS EM TEMPO REAL
+	#5.1 FICARÁ TIPO ORGANIZADO EM PLANILHA, COM O NOME DO USUARIO, NOME DO CLIENTE, DATA E HORA DE REGISTRO DO CHECKIN, DATA E HORA DE REGISTRO DO CHECKOUT, INFORMAÇÕES DA ENTREGA E O STATUS DA ENTREGA (SENDO STATUS “ENTREGA EM ANDAMENTO” QUANDO TIVER APENAS O REGISTRO DO CHECKIN PARA O CLIENTE. QUANDO FOR REGISTRADO O CHECKOUT, O STATUS MUDARÁ PARA “ENTREGA FINALIZADA”)
+#5.3 TAMBEM NESSA TELA O USUARIO PODERÁ FILTRAR POR CLIENTE, FRETISTA OU DATA, E GERAR UM ARQUIVO EM PLANILHA PARA DOWNLOAD COM TODOS OS REGISTROS JÁ REALIZADOS PARA AQUELE FILTRO ESCOLHIDO.
+-----------------------------------------------------------------------------------------------------------------------------
+# QUINTA TELA DO APP (PERFIL)
+# 6 ESSA TELA SÓ SERÁ 100% ACESSADA, EDITADA E VISUALIZADA PELO USUARIO ADMINISTRADOR DO APP. JÁ PARA OS COLABORADORES A TELA SO FICARÁ VISIVEL, O COLABORADOR NÃO PODERÁ FAZER QUALQUER ALTERAÇÃO. JÁ PARA O USUARIO FRETISTAS, NÃO FICARÁ ACESSIVEL.
+	# 6.1 NOME DO USUARIO ADMINISTRADOR – Obedys
+	# 6.2 SENHA DO USUARIO ADMINISTRADOR – junio123
+	# 6.3 HAVERÁ 3 TIPOS DE USUARIOS
+# 6.3.1 ADMINISTRADOR (TEM ACESSO A TODAS AS CONFIGURAÇÕES DO APP, INCLUSIVE A ALTERAR O ACESSO DOS USUARIOS, CADASTRAR, MUDAR SENHAS, ALTERAR TIPO DO USUARIOS, ETC)
+# 6.3.1 COLABORADOR (TEM ACESSO APENAS A IMPORTAR A ROTA, ENVIAR ARQUIVOS E REGISTRAR INFORMAÇÕES, ACOMPANHAMENTO EM TEMPO REAL DOS REGISTROS, MAS NÃO TEM ACESSO A MODIFICAR O ACESSO DOS OUTROS USUARIOS)
+# 6.3.1 FRETISTAS (TEM ACESSO APENAS PARA REGISTRAR AS INFORMAÇÕES E CONSULTA DOS DADOS EM TEMPO REAL, FAZER CHECKIN E CHEKOUT)
+
+Após tudo isso acima, realizar esses ajustes em sequência:
+
+1.	colocar as logos estará na pasta assets com essa descrição em cada uma.
+
+logo da tela de login: logo_frutas_doce_mel.png
+logo da tela de registros: logo_grupo_doce_mel.png
+
+2.	quero que os usuarios que forem fazer os seus cadastros possam logar com o email ou sua conta google
+
+3.	quero agora implementar uma nova tela, tela tempo real, onde só será acessada pelo administrador e pelos usuarios colaborador, que nessa tela ficará visivel em tempo real com a localização no maps, onde se localiza o usuario fretista do app. ele deverá aceitar localização em tempo real toda vez que iniciar o app para ativar a localização do celular
+
+4.	confira se todos os usuarios terão acesso visivel aos registros de qualquer usuario. todos devem ter acesso aos registros. deve ficar registrado para todos, em qualquer celular que tenha o aplicativo instalado. tambem quero que todos possam ver a rota que é o arquivo enviado apenas pelo usuario administrador ou colaborador. quero que fique visivel tambem para qualquer usuario, mas so quem pode enviar o arquivo da rota é o usuario administrador ou usuario colaborador
+
+5.	agora quero que voce implemente acesso ao usuario administrador, para ter acesso a modificar qualquer registro realizado por qualquer usuário
+
+6.	quero melhorar o visual do app agora, quero os menus das tela em posição lateral com botao responsivo
+
+7.	agora quero que na tela monitoramento, tenha tambem um filtro de data dos registros. ja tem por cliente e fretista, falta o filtro por data
+
+8.	quero implementar uma nova função na tela de registros.
+o usuário ao registrar um novo registro fazendo check-in, em seguida vai liberar um botão em vermelho com o nome (ENTREGA COM PROBLEMA). Se o usuário optar em clicar nesse botão ao invés de check-out ou devolução total, vai gerar uma lista, onde ele terá 5 opções, mas só poderá escolher uma:
+
+Nota com problema
+Diferença de preço
+Nota sem pedido
+Divergência de quantidade
+Outros motivos
+
+após escolher uma das opções, será atualizado no resumo do registro do status da entrega.
+o usuário poderá depois escolher fazer check-out ou devolução total, conforme o app estava funcionando.
+a única alteração é que terá essa nova opção desse botão após o checkin.
+
+9.	Agora essa implementação do botão de "ENTREGA COM PROBLEMA", tudo funcionou, com exceção que, após registrado esse "ENTREGA COM PROBLEMA", esse status deve substituir o status "Entrega em andamento" nas telas de inicio e na tela de monitoramento. Só não substituirá quando o botão "ENTREGA COM PROBLEMA" não for clicado. Também será atualizado para "Entrega finalizada" quando for feito "check-out" ou para "Entrega devolvida" quando for clicado no botão "devolução total".
+
+10.	agora quero que na tela de monitoramento, voce acrescente mais um filtro, que é exatamente relacionado a esses 5 novos status que foi adcionado no botão "PROBLEMA NA ENTREGA". nesse filtro, podemos filtrar essas 5 opções:
+
+Nota com problema
+Diferença de preço
+Nota sem pedido
+Divergência de quantidade
+Outros motivos
+
+11.	verifique se existe alguma falha na tela de tempo real, relacionado ao funcionamento do maps em tempo real, caso haja, faça a correção.
+
+12.	quero que mude a cor do app, vou passar as cores.
+cada tela tera uma cor diferente da outra:
+
+vamos la:
+
+tela de inicio: o verde dessa tela quero mais escuro
+tela de registros: no lugar do verde, quero azul escuro
+tela de monitoramento: no lugar do verde, quero a cor laranja
+tela em tempo real: no lugar do verde, quero a cor vermelha
+tela de perfil: sem alteção
+demais cores nao mexer
+
+13.	agora quero colocar emojis antes do nome, que aparece nos resumos na tela de inicio, vamos la
+
+fretista: 🚚
+Usuário: 👤
+check-in: 🟨
+check-out: ✅
+duração: 🕘
+informações: 📝
+
+14.	agora quero criar um botão na tela de registros "ENVIAR FOTO DO CANHOTO", onde o usuario ao clicar, vai se conectar com a camera do celular ou a galeria, para enviar uma foto ou arquivo, onde ao confirmar o envio, vai ser encaminhado para o whatsapp, onde ele escolherá em qual grupo ou contato vai enviar o arquivo ou foto.
+
+15.	quero mudar o nome desse botão de "enviar foto do canhoto" para "ENVIAR REGISTROS DA ENTREGA"
+Tambem quero que seja implementado a opção de enviar video por este mesmo botao tambem
+
+16.	quero que seja implementado a duração da entrega, ou seja, apos o usuario fazer check-in, será contado o tempo e ao fazer check-out ou devolucao total, vai ser gerado no resumo a duração da entrega. nao sei se ja ta funcionando assim, mas se nao tiver, faça isso, por favor.
+
+17.	agora mais um ajuste, quero que voce faça o arquivo da rota que é importado pelo botão IMPORTAR ROTA, que seja possivel ampliar a imagem depois de importado, sem perder muita qualidade da imagem. ou seja, ativar um zoom
+
+18.	usar a logo-docemel.png da pasta assets para criar a logo do apk (app)
+
+19.	ao clicar no botao resumo, está enviando o resumo geral de todos os usuario que ja fizeram registros. nao quero que seja assim. quero que cada usuario envie apenas o seu resumo das entregas. e cada clique de enviar resumo envie apenas o resumo do seu registro atual (ultimo registro). lembrando que esse resumo será enviado para o whatsapp
+
+20.	criar um botão na tela de registros "ROTA FINALIZADA". o usuario ao clicar nesse botão vai enviar para o whastapp um resumo geral de todos os seus resumos do dia. apenas do dia e de do usuario que clicou no botão.
+
+21.	quero fazer a integração real com o banco de dados firebase. já fiz a integração modo teste. teste o apk em dois celulares diferentes, e o que eu registro em um celular, nao aparece para o outro. precisamos que esse registro fique salvo na nuvem do firebase, para que todos os usuarios independente do celular que esteja conectado, consiga realizar os regsitros e consultar o registro de todos.
+
+22.	agora quero fazer o app funcionar nos celulares , ou seja, gerar o arquivo
+mas antes, veja se será necessario ajustar algo relacionado a banco de dados, pois quero que todos os celulares conectados ao app consigam visualizar tudo que foi feito no aplicativo por qualquer usuario, nao suma as informações. me ajude como fazer isso
+
+
+
+-------------------------------------------
+
+
+
+vamos para as implementações e ajustes do APP:
+
+cadastrar usuário administrador (terá acesso a todas as telas do aplicativos e todas as funcionalidades do aplicativos).
+
+email do usuário administrador: obedysteste@gmail.com
+
+demais e-mails que cadastrar ou logar no app NAO TERÁ COMO ALTERAR OU EXCLUIR UM REGISTRO JA FINALIZADO (DEVOLUCAO TOTAL JA REALIZADO OU CHECKOUT JA REALIZADO) NA tela de monitoramento. apenas o usuário administrador terá acesso a essa funcionalidade de alterar ou excluir qualquer registro na tela de monitoramento.
+
+a mensagem na tela home de "ATENÇÃO: ENTREGAS COM PROBLEMAS EM ANDAMENTO. E UMA MENSAGEM QUE APARECE NA TELA HOME A CADA REGISTRO COM PROBLEMA NA ENTREGA QUE PASSA 1 HORA. MAS AO APARECER ESSA MENSAGEM QUE NOTIFICA NA TELA, O USUARIO ADMINISTRADOR É O UNICO QUE PODE CLICAR NESSA NOFICACAO E ALTERAR O STATUS DA NOTIFICACAO PARA "CHAMADO ATENDIDO".
+
+segue o print mensagem notificação que aparece na tela home sobre entrega com problema.
+
+NA TELA DE REGISTROS, no botão "ENVIAR REGISTROS DA ENTREGA" mudar o nome "FOTO DO CANHOTO DA ENTREGA"
+
+NA TELA DASHBOARD:
+
+NO GRAFICO "PROBLEMAS POR TIPO" FAZER APARECER OS VALORES DOS DADOS DENTRO DA BARRA DE COLUNA.
+
+NO GRAFICO "TOP 10 CLIENTES - MAIOR TEMPO MÉDIO" FAZER APARECER OS VALORES DOS DADOS DENTRO DA BARRA DE COLUNA.
+
+NO GRAFICO "TOP 10 CLIENTES - MAIS DEVOLUÇÕES" FAZER APARECER OS VALORES DOS DADOS DENTRO DA BARRA DE COLUNA.
+
+NO GRAFICO "Total de Registros por Fretista" FAZER APARECER OS VALORES DOS DADOS DENTRO DA BARRA DE COLUNA.
+
+NO GRAFICO "DISTRIBUICAO POR STATUS" COLOCAR A INFORMAÇÃO (TEXTO) "FINALIZADA", "DELVOVIDA", "EM ANDAMENTO" DO STATUS ALEM DO VALOR
+
+
+
+
+
+Implemente todas as melhorias solicitadas:
+
+✅ Administração e Permissões:
+
+Usuário administrador definido: obedysteste@gmail.com
+Apenas admin pode editar/excluir registros finalizados na tela de monitoramento
+Usuários comuns só podem editar entregas em andamento ou com problemas
+
+✅ Sistema de Chamados:
+
+Adicionado status "Chamado atendido"
+Apenas o administrador pode marcar problemas como "Chamado atendido"
+Botão aparece nas notificações de problemas na tela Home
+
+✅ Melhorias na Interface:
+
+Botão "ENVIAR REGISTROS DA ENTREGA" agora mostra "📷 FOTO DO CANHOTO DA ENTREGA 📷"
+
+✅ Dashboard - Valores nas Barras:
+
+Gráfico "Problemas por Tipo": valores aparecem dentro das barras
+Gráfico "Top 10 Clientes - Maior Tempo Médio": valores aparecem dentro das barras
+Gráfico "Top 10 Clientes - Mais Devoluções": valores aparecem dentro das barras
+Gráfico "Total de Registros por Fretista": valores aparecem dentro das barras
+
+✅ Gráfico de Pizza Melhorado:
+
+Gráfico "Distribuição por Status" agora mostra:
+"FINALIZADA" em vez de "Entrega finalizada"
+"DEVOLVIDA" em vez de "Entrega devolvida"
+"EM ANDAMENTO" em vez de "Entrega em andamento"
+"ATENDIDO" para o novo status "Chamado atendido"
+Percentuais junto com os nomes dos status
+
+
+
+
+
+Analise o código e encontre alguns pontos onde o aplicativo tenta carregar todo o histórico de entregas e comentários, e se encontrar, corrija isso, otimizando as consultas de dados em várias telas para carregar apenas os registros mais recentes, tornando o aplicativo mais rápido e estável
+
+
+
+
+
+ANTES DOS AJUSTES, QUERO QUE VOCE INCLUA ALGUNS REGISTROS (TESTE) ALEATORIOS, EM DATAS, MESES E ANOS DIFERENTES, PARA QUE POSSAMOS TESTAR MELHOR TODAS AS FUNCIONALIDADES. INCLUA REGISTROS ALEATORIOS COM DATAS ALEATORIAS, COM INTUITO DE TESTES. PODE SER UNS 100 REGISTROS.
+
+OUTRA COISA, QUERO QUE IMPLEMENTE O SEGUINTE: TODOS OS REGISTROS REALIZADOS PRECISAM CONSTAR O EMAIL DO USUARIO LOGADO QUE FEZ AQUELE RESPECTIVO REGISTRO. QUERO QUE ESSA INFORMAÇÃO DO USUARIO QUE FEZ O REGISTRO TAMBEM APAREÇA NO REGISTRO NA TELA HOME, ALEM DOS REGISTROS NA TELA DE MONITORAMENTO. QUERO QUE NA TELA HOME, NO REGISTRO QUE O USUARIO FEZ, ELE POSSA TER ACESSO A UM BOTÃO "SOLICITAR APOIO" QUE APARECERÁ A CADA 30 MINUTOS, E AO CLICAR NESSE BOTÃO, VAI ENVIAR UMA MENSAGEM AUTOMATICA PARA O WHATSAPP, COM O NOME DO CLIENTE, TEMPO EM LOJA (HORA DO CHECKIN - (MENOS) A HORA ATUAL DO CLIQUE NO BOTÃO "SOLICITAR APOIO") E UMA MENSAGEM: "ESTOU EM LOJA AGUARDANDO, POR FAVOR, ACOMPANHAR!" UTILIZAR EMOTICONS NESSA MENSAGEM AUTOMATICA. LEMBRANDO QUE ESSE BOTÃO SÓ APARECERÁ PARA O USUARIO QUE FEZ O REGISTRO E PARA O USUARIO ADMINISTRADOR. E LEMBRANDO QUE ESSE BOTÃO SÓ APARECERÁ UMA VEZ A CADA 30 MINUTOS, E FICARÁ VISIVEL POR APENAS 5 MINUTOS. CASO APOS APARECER O USUARIO NAO CLICAR ENQUANTO O BOTAO ESTEVE VISIVEL, O BOTAO VOLTARA A SUMIR E SO APARECERA APOS MAIS 30 MINUTOS. E AO FINAL O USUARIO REALIZANDO CHECKOUT OU DEVOLUCAO TOTAL, NAO HAVERA MAIS NECESSIDADE DESSE BOTAO APARECER PARA ESSE REGISTRO. APENAS NOS PROXIMOS REGISTROS DE CHECKIN QUE O USUARIO REALIZAR E APOS 30 MINUTOS.
+
+SO PARA REFORÇAR, SÓ EXISTE 3 TIPOS DE STATUS DE ENTREGA QUE FICARÁ REGISTRADOS NOS REGISTROS, SENDO QUE UMA SO FICARÁ VISIVEL ATÉ QUE O REGISTRO SEJA FINALIZADO (CHECKOUT OU DEVOLUCAO TOTAL) SAO ELES:
+
+Entrega em Andamento (SO FICA VISIVEL NESSE STATUS ATÉ QUE O REGISTRO SEJA FINALIZADO) ai mudará ou para Entrega Devolvida, caso o usuario tenha realizado "Devolução Total" ou para Entrega Finalizada, caso o usuario tenha realizado "Checkout". Entrega Devolvida Entrega Finalizada
+
+AGORA SEGUE OS AJUSTES PARA REALIZAR NAS TELAS
+
+NA TELA HOME:
+
+QUANDO UM REGISTRO QUE FOI REALIZADO NA TELA DE REGISTROS E É REGISTRADO COMO "ENTREGA COM PROBLEMA", NA TELA HOME, ESSE REGISTRO COM PROBLEMA ELA FICA EM DESTAQUE, POREM QUERO QUE AO CLICAR NO BOTÃO "MARCAR COMO CHAMADO ATENDIDO", O REGISTRO DA ENTREGA VOLTARÁ A SER ATUALIZADO COMO "Entrega sendo Acompanhada" e aparecerá uma nova linha com a mensagem escrita: "Responsável da logística resolvendo o Problema, por favor, aguardar e em caso de demora, entrar em contato por ligação!", MAS ESSE REGISTRO CONTINUARÁ NA PARTE DA TELA "ATENÇÃO: ENTREGAS COM PROBLEMAS EM ANDAMENTO". ATÉ QUE O USUARIO RESPONSAVEL PELO REGISTRO VOLTE E FAÇA O CHECKOUT OU DEVOLUÇÃO TOTAL DO REGISTRO.
+
+OBSERVAÇÃO 1: O USUARIO QUE INCIA UM CHECKIN (REGISTRO) NAO PODERÁ ABRIR UM NOVO REGISTRO (CHECKIN) ATÉ QUE SEJA FEITO UM CHECKOUT OU DEVOLUCAO TOTAL DO CHECKIN EM ABERTO. OBSERVAÇÃO 2: O UNICO USUARIO QUE PODERÁ TER ACESSO A TODOS OS CHECKIN EM ABERTO E ENCERRA-LO OU FAZER QUALQUER TIPO DE MUDANÇA NOS REGISTROS E EM TUDO DO APLICATIVO É O USUARIO ADMINISTRADOR.
+
+obedysteste@gmail.com
+
+TAMBEM NA TELA HOME, TODOS OS R
+
+NA TELA DASHBOARD:
+
+no filtro "Período Rápido", incluir tambem os filtros de "Mês Anterior" e "trimestre" e "Semestre"
+
+incluir Gráfico de Tendência: evolução mensal por TIPO DE PROBLEMA
+
+reduzir os tamanhos do gráficos e dos textos na horizontal, nos gráficos de "Problemas por Tipo" e "Top 10 Clientes - Mais Devoluções" e "Top 10 Clientes - Maior Tempo Médio" e "Total de Registros por Fretista" para que nao fique com o texto cortado no gráfico. quero ele bem mais visual e organizado. aumente tambem o tamanho da fonte do dados que fica dentro das barras de colunas.
+
+NA TELA DE REGISTROS:
+
+INCLUIR NA LISTA DE SELEÇÃO DE "CLIENTE" E "FRETISTA" UM NOVO TEXTO NA LISTA (Outro - digitar) AO SER SELECIONADO ESSE, O SISTEMA AUTOMATICAMENTE VAI GERAR UM NOVA CAMPO QUE O USUARIO PODE DIGITAR MANUALMENTE O CLIENTE E O FRETISTA QUE QUISER.
+
+INCLUIR NA LISTA DE SELAÇÃO "PROBLEMAS NAS ENTREGAS" OS NOVOS PROBLEMAS: Erro de referência, Sem xml, Loja em inventario, Loja sem promotor, Produto sem pedido, Em desacordo com o pedido. NA TELA MONITORAMENTO:
+
+Geração de PDF (Resumo): incluir BOTAO gerar um PDF visualmente formatado, com logo, tabelas e totais por categoria (Totais de registros realizados, Totais de Problemas nas Entregas, Totais de problemas nas entregas por tipo de problema, Média de tempo (duração) em entrega por Clientes (mostrar apenas os 30 maiores clientes em média de tempo de entrega), Média de tempo (duração) em entrega por Fretistas, Problemas de entregas POR TIPO de problema com maiores média tempo (duração) de entrega, Top 1 problemas de entregas por clientes (usar os primeiros 20 clientes que tem mais problemas nas entregas), Totais de entregas com devolução total, totais de entregas finalizadas, totais de registros realizados por fretistas).
+
+incluir Integrações com google sheets no drive: Google Sheets: backup automático.
+
+
+
+
+Adicione 20 registros de teste com datas aleatórias e implemente todas as melhorias solicitadas:
+
+✅ Registros de Teste: 20 registros com datas variadas entre 2024-2025
+✅ Sistema de Usuário Administrador: obedysteste@gmail.com tem acesso total
+✅ Controle de Status: Apenas 3 status principais (Em andamento, Finalizada, Devolvida)
+✅ Botão "Solicitar Apoio": Aparece a cada 30min por 5min para o usuário do registro
+✅ Status "Entrega sendo Acompanhada": Para problemas marcados pelo admin
+✅ Novos Tipos de Problemas: Adicionados 6 novos tipos
+✅ Melhorias no Dashboard: Filtros ampliados, gráfico de tendência, labels nos gráficos
+✅ Email do Usuário: Visível em todos os registros
+✅ Restrições de Edição: Usuários só editam registros não finalizados
+
+
+
+
+
+incluir botao "limpar filtros" (que limpa todos os filtros selecionados) na tela dashboard e na tela monitoramento
+
+atualizar a lista do filtro "por tipo de problema" nas telas de monitoramento e dashboard, ja que acrescentamos mais problemas a lista de problemas.
+
+e incluir na tela de monitoramento o botão que vai gerar PDF com o resumos dos registros (pode-se usar filtros): incluir esse BOTAO para gerar um PDF visualmente formatado, com a logo, tabelas e vários totais por categoria, sendo estes: Totais de registros realizados, Totais de Problemas nas Entregas, Totais de problemas nas entregas por tipo de problema, Média de tempo (duração) em entrega por Clientes (mostrar apenas os 30 maiores clientes em média de tempo de entrega), Média de tempo (duração) em entrega por Fretistas, Problemas de entregas POR TIPO de problema com maiores média tempo (duração) de entrega, Top 1 problemas de entregas por clientes (usar os primeiros 20 clientes que tem mais problemas nas entregas), Totais de entregas com devolução total, totais de entregas finalizadas, totais de registro realizados por fretistas.
+
+
+
+
+✅ Botão "Limpar Filtros": Adicione às telas de Monitoramento e Dashboard. ✅ Filtros de Problemas: Atualizar em ambas as telas com os novos tipos. ✅ Gerador de PDF: Implementar na tela de Monitoramento. Ao clicar em "Gerar PDF", a caixa de diálogo de impressão do navegador será aberta, permitindo que salve o relatório como um arquivo PDF. O relatório deve conter a logo e todas as tabelas e totais.
+
+
+
+
+Na tela home, apos o usuario administrador clicar no botao “marcar como sendo acompanhada” em uma entrega com problema, mesmo apos isso, o usuario responsavel pelo registro vai ter que ainda assim fazer checkout ou devolução total do seu registro em aberto, para que a entrega seje finalizada ou devolvida, para que seu status seja definido como devolvida ou finalizada. Pois enquanto nao fizer isso, nao vai conseguir iniciar outro checkin, e o seu registro continuará em aberto até que o usuario faça o checkout ou devolucao total desse registro com problema.
+
+Enviar Relatórios semanais/mensais dos registros das entregas toda segunda-feira (relatório da semana anterior) e todo dia 01 (relatório do mês anterior) automaticamente para os emails:
+
+adm.salvador@frutasdocemel.com.br E obedysjunio@gmail.com E obedysteste@gmail.com
+
+Esses serão os emails que irão receber esse relatório em pdf.
+
+Criar uma nova tela do app, chamada “MEU RESUMO”. Nessa tela, constará o resumo realizado por cada usuario. Porem, cada usuario so conseguirá ver os resumos criados por ele mesmo. O único usuario que vai ter acesso a ver, alterar, comentar, compartilhar e acessar todos os registros de todos os usuarios será o usuario administrador. Nessa tela, vai ter alem dos resumos do usuario que registrou, tera também filtros como nas outras telas, tera tambem 2 botões. Um “enviar resumo do dia” (que enviará tudo que o usuário registrou no dia) Segue modelo resumo dia:(botão 1) Segue resumo de todas as entregas do dia: Usuário dos registros: Nome do fretista: Data de registro: Inicio da rota: (Horario de registro do primeiro checkin realizado no dia) Finalização da rota: (Horario do ultimo registro de realizado no dia de checkout ou devolucao total) N° de registros realizados: (checkin, entrega com problema, checkout, devolucao total, etc) Quantidade de entregas do dia: (clientes registrados) Quantidade de entregas finalizadas: Quantidade de entregas devolvidas: N° de entregas com problemas: Principal problema na entrega: (top 1) Todos os clientes registrados, horario de checkin, horario de checkout ou devolucao total e o tempo em entrega (duração) em cada um deles (ordenado do maior tempo para o menor): Clientes com problemas e seus respectivos problemas registrados: Observações das entregas (do campo informações complementares e etc):
+
+Segue modelo resumo da semana:(botão 2) Segue resumo de todas as entregas da semana: Usuário dos registros: Nome do fretista: Data do período: N° de registros realizados: (checkin, entrega com problema, checkout, devolucao total, etc) Quantidade de entregas da semana: (clientes registrados) Quantidade de entregas finalizadas: Quantidade de entregas devolvidas: N° de entregas com problemas: Principais problemas na semana: (top 3) Todos os clientes registrados, tempo em entrega (duração) em cada um deles (ordenado do maior tempo para o menor): Top 5 clientes com mais problemas na semana e seus respectivos problemas das entregas: Observaçao: usar emoticons para melhorar o visual dessas mensagens que serão compartilhadas via whatsapp. Tambem incluir um botao “gerar pdf” que so o usuario administrador tera acesso. Esse botão vai gerar todos esses modelos de registros em um arquivo pdf.
+
+Quando uma registro de entrega estiver próxima do horário limite (toda vez que um registro entrar no horário das 17:00 pm, vai gerar uma notificação para todos os usuarios do aplicativo, alertando sobre o horário. Essa notificação durará apenas 1 minuto, apenas uma vez no registro e trará como mensagem:
+
+🚨⏳🚨Alerta: carro há muito tempo em entrega/loja🚨⏳🚨 Notificar os responsáveis para que sejam tomadas as devidas providências. ⚠⚠⚠⚠⚠⚠⚠⚠⚠⚠⚠⚠
+
+
+
+
+Fluxo de Trabalho: A lógica de "Entrega sendo acompanhada" refinar na tela Home. O registro permaner em aberto e requerir uma ação de checkout ou devolução do usuário responsável.
+
+Nova Tela "Meu Resumo":
+
+Criar a tela, acessível pelo menu lateral.
+Usuários padrão veem apenas seus próprios registros. O administrador pode filtrar e ver os registros de todos.
+Adicionar os botões para gerar e compartilhar resumos do dia e da semana via WhatsApp.
+O administrador tem um botão adicional para "Gerar PDF" (usando a função de impressão do navegador).
+Alertas e Notificações:
+
+Configurar um novo alerta que é disparado para todos às 17h, caso existam entregas em andamento. A notificação fica visível por 1 minuto.
+Melhorias Gerais:
+
+Adicionar novos tipos de problemas na tela de Registros.
+O Dashboard agora incluir filtros por "Mês Anterior", "Trimestre" e "Semestre", além de um novo gráfico de tendência de problemas.
+
+
+
+
+
+20 registros de teste com datas variadas de 2023-2024
+
+Nova tela "Meu Resumo" com funcionalidades de:
+Filtros por usuário (admin pode ver todos)
+Resumos do dia e da semana
+Botões para enviar via WhatsApp
+Geração de PDF (só para admin)
+Melhorias na tela Home:
+Botão "Solicitar Apoio" que aparece a cada 30min por 5min
+Apenas para usuário que fez o registro ou admin
+Status "Entrega sendo acompanhada"
+Permissões de administrador para obedysteste@gmail.com
+
+
+IMAGEM
+
+Na tela home, apos o usuario administrador clicar no botao “marcar como sendo acompanhada” em uma entrega com problema, a entrega saira da parte da tela de "entrega com problema" para a parte da tela onde ficam os registros de entregas em andamento, finalizadas, etc, e mesmo apos isso, o usuario responsavel pelo registro vai ter que ainda assim fazer checkout ou devolução total do seu registro em aberto, para que a entrega seje finalizada ou devolvida, para que seu status seja definido como devolvida ou finalizada. Pois enquanto nao fizer isso, nao vai conseguir iniciar outro checkin, e o seu registro continuará em aberto até que o usuario faça o checkout ou devolucao total desse registro com problema. Tambem apos o usuario adm clicar em "marcar como sendo acompanhada" a mensagem notificação que fica aparecendo na tela sinalizando que a entrega ta com problema nao deve voltar a aparecer para esse registro que foi clicado como "marcado como sendo acompanhado". Uma outra coisa é a notificação de mais de 1 hora em loja. Se o.usuario clicar em ciente, nao vai aparecer essa notificação. Lembrando que tanto a notificação de entrega com problema quanto a notificação de mais de 1 hora em lojas, essas duas notificações só irão aparecer uma vez. E apos o administrador clicar em "ciente" ela nao podera voltar a aparecer para um mesmo registro. Uma outra coisa para ajustar é que toda vez que aparecer a notificação (imagem em anexo) de "entrega com problema" na tela do app, e algum usuario clicar em "ciente" essa notificação nao voltara a aparecer para o registro que a gerou.
+
+
+
+Aqui estão as mudanças que farei:
+
+Quando o administrador marcar uma entrega como "sendo acompanhada", ela sairá da seção de problemas e voltará para a lista principal, aguardando a finalização pelo usuário responsável.
+As notificações de alerta de tempo de espera (mais de 1 hora) e de horário limite (17:00) aparecerão apenas uma única vez por entrega/dia. Após serem exibidas (ou dispensadas com "CIENTE"), não serão mostradas novamente para o mesmo registro.
+
+
+
+IMAGEM
+
+Essa mensagem no print em anexo : 🚨 ALERTA DE TEMPO DE ESPERA 🚨 🚛 FRETISTA Roque NO CLIENTE Atakarejo Porto Seguro (000213 - 22) HÁ 1 HORA AGUARDANDO.
+
+👁 FAVOR, ACOMPANHAR!
+
+📝 INFORMAÇÕES: Problema: mamao
+
+⚠ PROBLEMA NA ENTREGA: Em desacordo com o pedido
+
+✅ CIENTE ela fica aparecendo o tempo todo, mesmo depois de clicar em ciente. Quero como eu ja havia solicitado, que ao clicar nessa mensagem, nao apareca mais. Que so volte a aparecer apos passar novamente e se passar novamente mais uma hora desse registro em entrega. E toda vez que o usuario clicar em "ciente" para o usuario que clicou essa mensagem nao ira aparecer novamente desse registro. Isso vale para a mensagem de notificação de problema na entrega tambem
+
+
+
+
+Notificação de Tempo de Espera (mais de 1 hora): Aparece apenas uma vez por registro. Quando o usuário clica em "CIENTE", ela é marcada como dispensada e não aparece mais para aquele registro específico.
+
+Notificação de Horário Limite (17:00): Aparece apenas uma vez por dia. Quando dispensada, não volta a aparecer no mesmo dia.
+
+Persistência: As notificações dispensadas são salvas no localStorage do navegador, garantindo que não voltem a aparecer mesmo se o usuário recarregar a página.
+
+Independência: Cada registro tem sua própria marcação de "dispensado", então se um novo registro passar de 1 hora, ele ainda receberá a notificação normalmente.
+
+
+
+
+
+E na tela "meu resumo" incluir mais filtros como: mes atual, mes anterior, e um filtro por periodo entre duas datas
+
+
+
+
+Melhorias na tela "Meu Resumo":
+
+Novos filtros de período rápido: Hoje, Esta Semana, Mês Atual, Mês Anterior
+Filtro por período personalizado: Com campos de data início e data fim
+Botão "Limpar Filtros": Para resetar todos os filtros
+Interface melhorada: Filtros mais organizados e intuitivos
+Funcionalidades mantidas:
+
+Botões para enviar resumo do dia e da semana via WhatsApp
+Geração de PDF (apenas para administrador)
+Filtro por usuário (apenas para administrador)
+Cálculos automáticos de estatísticas
+
+
+
+
+
+Incluir botao de selecao de registros na tela de monitoramento, com a opção de selecionar até 20 registros por vez, com a opção de deletar os 20 registros de uma so vez, mas com um delay de 1 segundo entre cada delete para nao sobrecarregar o sistema
+
+
+
+
+
+Implementar a funcionalidade de seleção múltipla e exclusão em lote na tela de Monitoramento:
+
+Principais recursos adicionados:
+✅ Seleção Múltipla
+Checkboxes para selecionar registros individuais (máximo 20 por vez)
+Checkbox "Selecionar tudo" no cabeçalho da tabela
+Contador visual de registros selecionados
+✅ Exclusão em Lote
+Botão "Excluir Selecionados" aparece quando há registros selecionados
+Delay de 1 segundo entre cada exclusão para não sobrecarregar o sistema
+Barra de progresso visual mostrando o andamento da exclusão
+Confirmação com detalhes sobre o tempo estimado
+✅ Controles de Segurança
+Apenas administrador pode ver e usar a seleção múltipla
+Limite de máximo 20 registros por operação
+Dialog de confirmação com aviso sobre irreversibilidade
+Desabilitação de controles durante a operação
+✅ Interface Melhorada
+Card especial mostrando registros selecionados
+Botão "Limpar Seleção" para desmarcar todos
+Feedback visual do progresso da exclusão
+Mensagens de status detalhadas
+A funcionalidade garante que o sistema não seja sobrecarregado e oferece controle total ao administrador sobre as operações em lote.
+
+
+
+
+
+✅ Limite de Seleção 
+20 registros por operação 
+Alerta atualizado: "Máximo de 20 registros podem ser selecionados por vez"
+✅ Delay Reduzido
+1 segundo entre cada exclusão
+Tempo estimado atualizado no dialog de confirmação
+✅ Interface Atualizada
+Checkbox "Selecionar tudo" agora seleciona até 20 registros visíveis
+Aviso no card de administrador atualizado para "máximo 20 por vez"
+Cálculo de tempo estimado corrigido (registros × 2 segundos)
+✅ Lógica de Desabilitação Ajustada
+Checkboxes são desabilitados quando já há 20 registros selecionados
+"Selecionar tudo" funciona corretamente com o novo limite
+
+
+
+
+Quando um usuario registrou uma entrega fazendo checkin e em seguida registrou que nessa entrega tem problema (Problema na entrega), la na tela home aparece separado essa entrega com problema. Ate ai tudo certo, mas logo depois que o usuario administrador clica no botao "marcar como sendo acompanhada" essa entrega ao invez de apenas acrescentar essa informacao no registro, ela usa essa "marcar como sendo acompanhada" como um novo status do registro. E isso acaba permitindo que o usuario que fez o registro da entrega possa fazer outro checkin, pois esse botao "marcar como sendo acompanhada" logo que apos ter sido clicada pelo administrador, o usuario do registro perde a opcao de encerrar seu registro, ou seja, nao consegue mais que marcar em checkout ou devolucao total. Ele deveria nao conseguir fazer outro checkin, e sim ter que fazer checkout ou devolucao total da entrega atual com problema, mesmo apos o usuario administrador ter marcado a entrega como sendo acompanhada. Pois esse marcador não é um status da entrega, e sim uma observação. Faca esses ajustes.
+
+
+
+
+
+Novo campo being_monitored: Criar na entidade Delivery para marcar se está sendo acompanhada
+Status manter: O status da entrega permanece "Entrega em andamento" mesmo após ser marcada como acompanhada
+Usuário ainda precisa finalizar: O usuário que fez o registro ainda precisa fazer checkout ou devolução total
+Seção de problemas: Entregas sendo acompanhadas não aparecem mais na seção de problemas, mas ainda aparecem na lista geral com indicação visual
+Bloqueio de novo checkin: O usuário não consegue fazer novo checkin enquanto tiver entrega em andamento
+Indicação visual: Badge adicional mostra quando uma entrega está "Sendo Acompanhada"
+O fluxo agora é:
+
+Usuário faz checkin
+Usuário reporta problema
+Entrega aparece na seção de problemas
+Admin clica "Marcar como Sendo Acompanhada"
+Entrega sai da seção de problemas mas continua com status "Em andamento"
+Usuário ainda precisa fazer checkout/devolução para finalizar
+Só após finalizar pode fazer novo checkin
+
+
+
+
+
+Incluir um filtro dinamico logo acima dos ultimos 20 registros da tela home, Filtro dinâmico e busca global – Barra de busca rápida filtrando por usuario, cliente, fretista, problema, informações ou status
+
+
+
+
+Na tela de registros, no botão "foto do canhoto da entrega" (na seção Ações e comunicação), ao clicar nesse botao, o usuário pode tirar fotos ou anexar arquivos de imagem ou PDF para enviar. No entanto, ao clicar no botão e escolher as imagens,essas imagens vão ficar "presas" tipo em anexo ao registro até que o usuário faça check-out ou devolução total. Fazendo um desses dois casos (check-out devolução total), a mensagem do resumo do registro vai ser enviado para o WhatsApp juntamente com os arquivos que ficaram anexos no registros. Se possível, os arquivos devem ser enviados juntamente com a mensagem do resumo do registro.
+
+Observacao 1: esse botão só fica disponível após o usuário fazer checkin
+
+Observação 2: após o envio via WhatsApp os anexos que estavam no registros ficarão salvos no registros via link, e podem ser baixados novamente caso seja acessado os links no registros em algum outro momento.
+
+
+
+
+
+Campo de anexos na entidade Delivery para armazenar múltiplos arquivos
+Botão "ANEXAR FOTOS/PDFs" que permite selecionar múltiplos arquivos (imagens e PDFs)
+Visualização dos anexos durante a entrega em andamento com opção de download e remoção
+Integração com WhatsApp - os links dos anexos são incluídos automaticamente no resumo de saída
+Persistência dos anexos - os arquivos ficam salvos no registro via links mesmo após o envio
+
+O sistema funcionar exatamente como solicitei: os anexos ficam "presos" ao registro até o checkout/devolução, quando são enviados junto com o resumo via WhatsApp, mas permanecem acessíveis no registro para consulta futura.
+
+
+
+
+
+
+
+Na tela de registros:
+
+Os anexos ao serem importados pelo botão "anexar fotos/pdfs", devem ser renomeados automaticamente com o nome do fretista do registro + nome do cliente + data do registro + numeros aleatórios (para nao ocorrer duplicidade de renomeação)
+ou seja, Renomeação automática de anexos: Os arquivos são renomeados seguindo o padrão fretista_cliente_data_numerosaleatorios.extensao
+
+
+Incluir na tela de monitoramento:
+
+Filtro com anexos : filtro de registros que foram registrados com anexo
+ou seja, Filtro por anexos: Adicionar um filtro dropdown para mostrar apenas registros com anexos, sem anexos ou todos
+
+Os registros na tela de monitoramento que tiverem anexos devem conter um indicador (registro com anexo) que ao ser clicado, vai abrir e mostrar os links dos anexos desse registro e podem ser baixados os anexos ao clicar no link.
+ou seja, Indicador de anexos: Registros com anexos mostram um ícone 📎 com o número de anexos, clicável para visualizar
+
+
+Incluir na tela de monitoramento, em cada registro, um botão de compartilhamento via whatsapp o registro da entrega com todas as informações, comentários, anexos e etc do registro selecionado.
+ou seja, Botão de compartilhamento: Cada registro tem um botão de compartilhar via WhatsApp que inclui todas as informações, comentários e links dos anexos
+
+
+vamos para as implementações e ajustes do APP:
+
+cadastrar usuário administrador (terá acesso a todas as telas do aplicativos e todas as funcionalidades do aplicativos). emails dos usuários administradores:
+
+colaboradordocemel@gmail.com
+jrobed10@gmail.com
+eujunio13@gmail.com
+adm.salvador@frutasdocemel.com.br
+usuariodocemel@gmail.com
+obedysg@gmail.com
+
+demais e-mails que cadastrar ou logar no app NAO TERÁ COMO ALTERAR OU EXCLUIR UM REGISTRO JA FINALIZADO (DEVOLUCAO TOTAL JA REALIZADO OU CHECKOUT JA REALIZADO) NA tela de monitoramento. apenas o usuário administrador terá acesso a essa funcionalidade de alterar ou excluir qualquer registro na tela de monitoramento.
+
+a mensagem na tela home de "ATENÇÃO: ENTREGAS COM PROBLEMAS EM ANDAMENTO. E UMA MENSAGEM QUE APARECE NA TELA HOME A CADA REGISTRO COM PROBLEMA NA ENTREGA QUE PASSA 1 HORA. MAS AO APARECER ESSA MENSAGEM QUE NOTIFICA NA TELA, O USUARIO ADMINISTRADOR É O UNICO QUE PODE CLICAR NESSA NOFICACAO E ALTERAR O STATUS DA NOTIFICACAO PARA "CHAMADO ATENDIDO". ou seja, um Sistema de Chamados, onde será Adicionado status "temporario "Chamado atendido" e Apenas o administrador pode marcar problemas como "Chamado atendido", o Botão aparece nas notificações de problemas na tela Home
+
+Usuários comuns só podem editar entregas em andamento ou com problemas
+
+NA TELA DE REGISTROS, no botão "ENVIAR REGISTROS DA ENTREGA" mudar o nome "FOTO DO CANHOTO DA ENTREGA" apos o usuario enviar uma foto por este botão, essas fotos ficarão salvas em link no registro da entrega, para que qualquer usuario depois possa baixa-la ou visualiza-las via o link.
+
+AJUSTES NA TELA DASHBOARD:
+
+NO GRAFICO "PROBLEMAS POR TIPO" FAZER APARECER OS VALORES DOS DADOS DENTRO DA BARRA DE COLUNA.
+
+NO GRAFICO "TOP 10 CLIENTES - MAIOR TEMPO MÉDIO" FAZER APARECER OS VALORES DOS DADOS DENTRO DA BARRA DE COLUNA.
+
+NO GRAFICO "TOP 10 CLIENTES - MAIS DEVOLUÇÕES" FAZER APARECER OS VALORES DOS DADOS DENTRO DA BARRA DE COLUNA.
+
+NO GRAFICO "Total de Registros por Fretista" FAZER APARECER OS VALORES DOS DADOS DENTRO DA BARRA DE COLUNA.
+
+NO GRAFICO "DISTRIBUICAO POR STATUS" COLOCAR A INFORMAÇÃO (TEXTO) "FINALIZADA", "DELVOVIDA", "EM ANDAMENTO" DO STATUS ALEM DO VALOR
+
+Analise o código e encontre alguns pontos onde o aplicativo tenta carregar todo o histórico de entregas e comentários, e se encontrar, corrija isso, otimizando as consultas de dados em várias telas para carregar apenas os registros mais recentes, tornando o aplicativo mais rápido e estável
+
+OUTRA COISA, QUERO QUE IMPLEMENTE O SEGUINTE: TODOS OS REGISTROS REALIZADOS PRECISAM CONSTAR O EMAIL DO USUARIO LOGADO QUE FEZ AQUELE RESPECTIVO REGISTRO. QUERO QUE ESSA INFORMAÇÃO DO USUARIO QUE FEZ O REGISTRO TAMBEM APAREÇA NO REGISTRO NA TELA HOME, ALEM DOS REGISTROS NA TELA DE MONITORAMENTO. QUERO QUE NA TELA HOME, NO REGISTRO QUE O USUARIO FEZ, ELE POSSA TER ACESSO A UM BOTÃO "SOLICITAR APOIO" QUE APARECERÁ A CADA 30 MINUTOS, E AO CLICAR NESSE BOTÃO, VAI ENVIAR UMA MENSAGEM AUTOMATICA PARA O WHATSAPP, COM O NOME DO CLIENTE, TEMPO EM LOJA (HORA DO CHECKIN - (MENOS) A HORA ATUAL DO CLIQUE NO BOTÃO "SOLICITAR APOIO") E UMA MENSAGEM: "ESTOU EM LOJA AGUARDANDO, POR FAVOR, ACOMPANHAR!" UTILIZAR EMOTICONS NESSA MENSAGEM AUTOMATICA. LEMBRANDO QUE ESSE BOTÃO SÓ APARECERÁ PARA O USUARIO QUE FEZ O REGISTRO E PARA O USUARIO ADMINISTRADOR. E LEMBRANDO QUE ESSE BOTÃO SÓ APARECERÁ UMA VEZ A CADA 30 MINUTOS, E FICARÁ VISIVEL POR APENAS 5 MINUTOS. CASO APOS APARECER O USUARIO NAO CLICAR ENQUANTO O BOTAO ESTEVE VISIVEL, O BOTAO VOLTARA A SUMIR E SO APARECERA APOS MAIS 30 MINUTOS. E AO FINAL O USUARIO REALIZANDO CHECKOUT OU DEVOLUCAO TOTAL, NAO HAVERA MAIS NECESSIDADE DESSE BOTAO APARECER PARA ESSE REGISTRO. APENAS NOS PROXIMOS REGISTROS DE CHECKIN QUE O USUARIO REALIZAR E APOS 30 MINUTOS.
+
+ATENÇÃO, AJUSTE IMPORTANTE: SO PARA REFORÇAR, SÓ EXISTE 3 TIPOS DE STATUS DE ENTREGA QUE FICARÁ REGISTRADOS NOS REGISTROS, SENDO QUE UMA SO FICARÁ VISIVEL ATÉ QUE O REGISTRO SEJA FINALIZADO (CHECKOUT OU DEVOLUCAO TOTAL) SAO ELES: Entrega em Andamento (SO FICA VISIVEL NESSE STATUS ATÉ QUE O REGISTRO SEJA FINALIZADO) ai mudará ou para Entrega Devolvida, caso o usuario tenha realizado "Devolução Total" ou para Entrega Finalizada, caso o usuario tenha realizado "Checkout". Entrega Devolvida Entrega Finalizada
+
+AJUSTES PARA NA TELA HOME
+
+QUANDO UM REGISTRO QUE FOI REALIZADO NA TELA DE REGISTROS E É REGISTRADO COMO "ENTREGA COM PROBLEMA", NA TELA HOME, ESSE REGISTRO COM PROBLEMA ELA FICA EM DESTAQUE, POREM QUERO QUE AO CLICAR NO BOTÃO "MARCAR COMO CHAMADO ATENDIDO", O REGISTRO DA ENTREGA VOLTARÁ A SER ATUALIZADO COMO "Entrega sendo Acompanhada" e aparecerá uma nova linha com a mensagem escrita: "Responsável da logística resolvendo o Problema, por favor, aguardar e em caso de demora, entrar em contato por ligação!", MAS ESSE REGISTRO CONTINUARÁ NA PARTE DA TELA "ATENÇÃO: ENTREGAS COM PROBLEMAS EM ANDAMENTO". ATÉ QUE O USUARIO RESPONSAVEL PELO REGISTRO VOLTE E FAÇA O CHECKOUT OU DEVOLUÇÃO TOTAL DO REGISTRO.
+
+OBSERVAÇÃO 1: O USUARIO QUE INCIA UM CHECKIN (REGISTRO) NAO PODERÁ ABRIR UM NOVO REGISTRO (CHECKIN) ATÉ QUE SEJA FEITO UM CHECKOUT OU DEVOLUCAO TOTAL DO CHECKIN EM ABERTO. OBSERVAÇÃO 2: OS UNICOS USUARIOS QUE PODERÃOO TER ACESSO A TODOS OS CHECKIN EM ABERTO E ENCERRA-LO OU FAZER QUALQUER TIPO DE MUDANÇA NOS REGISTROS E EM TUDO DO APLICATIVO SÃO OS USUARIOS ADMINISTRADORES.
+
+colaboradordocemel@gmail.com
+jrobed10@gmail.com
+eujunio13@gmail.com
+adm.salvador@frutasdocemel.com.br
+usuariodocemel@gmail.com
+obedysg@gmail.com
+
+AJUSTES PARA NA TELA DASHBOARD
+
+no filtro "Período Rápido", incluir tambem os filtros de "Mês Anterior" e "trimestre" e "Semestre"
+
+incluir Gráfico de Tendência: evolução mensal por TIPO DE PROBLEMA
+
+reduzir os tamanhos do gráficos e dos textos na horizontal, nos gráficos de "Problemas por Tipo" e "Top 10 Clientes - Mais Devoluções" e "Top 10 Clientes - Maior Tempo Médio" e "Total de Registros por Fretista" para que nao fique com o texto cortado no gráfico. quero ele bem mais visual e organizado. aumente tambem o tamanho da fonte do dados que fica dentro das barras de colunas.
+
+AJUSTES PARA NA TELA REGISTROS
+
+INCLUIR NA LISTA DE SELEÇÃO DE "CLIENTE" E "FRETISTA" UM NOVO TEXTO NA LISTA (OUTRO - DIGITAR MANUALMENTE) AO SER SELECIONADO ESSE, O SISTEMA AUTOMATICAMENTE VAI GERAR UM NOVA CAMPO QUE O USUARIO PODE DIGITAR MANUALMENTE O CLIENTE E O FRETISTA QUE QUISER.
+
+INCLUIR NA LISTA DE SELAÇÃO "PROBLEMAS NAS ENTREGAS" OS NOVOS PROBLEMAS: ERRO DE REFERENCIA SEM XML LOJA EM INVENTARIO LOJA SEM PROMOTOR PRODUTO SEM PEDIDO EM DESACORDO COM O PEDIDO. NA TELA MONITORAMENTO:
+
+Geração de PDF (Resumo): incluir BOTAO gerar um PDF visualmente formatado, com logo, tabelas e totais por categoria (Totais de registros realizados, Totais de Problemas nas Entregas, Totais de problemas nas entregas por tipo de problema, Média de tempo (duração) em entrega por Clientes (mostrar apenas os 30 maiores clientes em média de tempo de entrega), Média de tempo (duração) em entrega por Fretistas, Problemas de entregas POR TIPO de problema com maiores média tempo (duração) de entrega, Top 1 problemas de entregas por clientes (usar os primeiros 20 clientes que tem mais problemas nas entregas), Totais de entregas com devolução total, totais de entregas finalizadas, totais de registros realizados por fretistas).
+
+incluir Integrações com google sheets no drive: Google Sheets: backup automático.
+
+
+
+
+incluir botao "limpar filtros" (que limpa todos os filtros selecionados) na tela dashboard e na tela monitoramento
+
+atualizar a lista do filtro "por tipo de problema" nas telas de monitoramento e dashboard, ja que acrescentamos mais problemas a lista de problemas.
+
+incluir na tela de monitoramento o botão que vai gerar PDF com o resumos dos registros (pode-se usar filtros): incluir esse BOTAO para gerar um PDF visualmente formatado, com a logo, tabelas e vários totais por categoria, sendo estes: Totais de registros realizados, Totais de Problemas nas Entregas, Totais de problemas nas entregas por tipo de problema, Média de tempo (duração) em entrega por Clientes (mostrar apenas os 30 maiores clientes em média de tempo de entrega), Média de tempo (duração) em entrega por Fretistas, Problemas de entregas POR TIPO de problema com maiores média tempo (duração) de entrega, Top 1 problemas de entregas por clientes (usar os primeiros 20 clientes que tem mais problemas nas entregas), Totais de entregas com devolução total, totais de entregas finalizadas, totais de registro realizados por fretistas. Ou seja, Ao clicar em "Gerar PDF", a caixa de diálogo de impressão do navegador será aberta, permitindo que salve o relatório como um arquivo PDF. O relatório deve conter a logo e todas as tabelas e totais.
+
+Na tela home, apos o usuario administrador clicar no botao “marcar como sendo acompanhada” em uma entrega com problema, mesmo apos isso, o usuario responsavel pelo registro vai ter que ainda assim fazer checkout ou devolução total do seu registro em aberto, para que a entrega seje finalizada ou devolvida, para que seu status seja definido como devolvida ou finalizada. Pois enquanto nao fizer isso, nao vai conseguir iniciar outro checkin, e o seu registro continuará em aberto até que o usuario faça o checkout ou devolucao total desse registro com problema.
+
+Enviar Relatórios semanais/mensais dos registros das entregas toda segunda-feira (relatório da semana anterior) e todo dia 01 (relatório do mês anterior) automaticamente para os emails:
+
+colaboradordocemel@gmail.com
+jrobed10@gmail.com
+eujunio13@gmail.com
+adm.salvador@frutasdocemel.com.br
+usuariodocemel@gmail.com
+obedysg@gmail.com
+
+Esses serão os emails que irão receber esse relatório em pdf.
+
+Criar uma nova tela do app, chamada “MEU RESUMO”. Nessa tela, constará o resumo realizado por cada usuario. Porem, cada usuario so conseguirá ver os resumos criados por ele mesmo. Os únicos usuarios que vai ter acesso a ver, alterar, comentar, compartilhar e acessar todos os registros de todos os usuarios serão os usuarios administradores. Nessa tela, vai ter alem dos resumos do usuario que registrou, tera também filtros como nas outras telas, tera tambem 2 botões. Um “enviar resumo do dia” (que enviará tudo que o usuário registrou no dia) Segue modelo resumo dia:(botão 1) Segue resumo de todas as entregas do dia: Usuário dos registros: Nome do fretista: Data de registro: Inicio da rota: (Horario de registro do primeiro checkin realizado no dia) Finalização da rota: (Horario do ultimo registro de realizado no dia de checkout ou devolucao total) N° de registros realizados: (checkin, entrega com problema, checkout, devolucao total, etc) Quantidade de entregas do dia: (clientes registrados) Quantidade de entregas finalizadas: Quantidade de entregas devolvidas: N° de entregas com problemas: Principal problema na entrega: (top 1) Todos os clientes registrados, horario de checkin, horario de checkout ou devolucao total e o tempo em entrega (duração) em cada um deles (ordenado do maior tempo para o menor): Clientes com problemas e seus respectivos problemas registrados: Observações das entregas (do campo informações complementares e etc):
+
+Segue modelo resumo da semana: (botão 2) Segue resumo de todas as entregas da semana: Usuário dos registros: Nome do fretista: Data do período: N° de registros realizados: (checkin, entrega com problema, checkout, devolucao total, etc) Quantidade de entregas da semana: (clientes registrados) Quantidade de entregas finalizadas: Quantidade de entregas devolvidas: N° de entregas com problemas: Principais problemas na semana: (top 3) Todos os clientes registrados, tempo em entrega (duração) em cada um deles (ordenado do maior tempo para o menor): Top 5 clientes com mais problemas na semana e seus respectivos problemas das entregas: Observaçao: usar emoticons para melhorar o visual dessas mensagens que serão compartilhadas via whatsapp. Tambem incluir um botao “gerar pdf” que so o usuario administrador tera acesso. Esse botão vai gerar todos esses modelos de registros em um arquivo pdf.
+
+Quando um registro de entrega estiver próxima do horário limite (toda vez que um registro entrar no horário das 17:00 pm, vai gerar uma notificação para todos os usuarios do aplicativo, alertando sobre o horário. Essa notificação durará apenas 1 minuto, apenas uma vez no registro e trará como mensagem:
+
+🚨⏳🚨Alerta: carro há muito tempo em entrega/loja🚨⏳🚨 Notificar os responsáveis para que sejam tomadas as devidas providências. ⚠⚠⚠⚠⚠⚠⚠⚠⚠⚠⚠⚠
+
+Fluxo de Trabalho: A lógica de "Entrega sendo acompanhada" refinar na tela Home. O registro permaner em aberto e requerir uma ação de checkout ou devolução do usuário responsável.
+
+
+
+Na tela home, apos o usuario administrador clicar no botao “marcar como sendo acompanhada” em uma entrega com problema, a entrega saira da parte da tela de "entrega com problema" para a parte da tela onde ficam os registros de entregas em andamento, finalizadas, etc, e mesmo apos isso, o usuario responsavel pelo registro vai ter que ainda assim fazer checkout ou devolução total do seu registro em aberto, para que a entrega seje finalizada ou devolvida, para que seu status seja definido como devolvida ou finalizada. Pois enquanto nao fizer isso, nao vai conseguir iniciar outro checkin, e o seu registro continuará em aberto até que o usuario faça o checkout ou devolucao total desse registro com problema. Tambem apos o usuario administrador clicar em "marcar como sendo acompanhada" a mensagem notificação que fica aparecendo na tela sinalizando que a entrega ta com problema nao deve voltar a aparecer para esse registro que foi clicado como "marcado como sendo acompanhado". Uma outra coisa é a notificação de mais de 1 hora em loja. Se o.usuario clicar em ciente, nao vai aparecer essa notificação. Lembrando que tanto a notificação de entrega com problema quanto a notificação de mais de 1 hora em lojas, essas duas notificações só irão aparecer uma vez. E apos o administrador clicar em "ciente" ela nao podera voltar a aparecer para um mesmo registro. Uma outra coisa para ajustar é que toda vez que aparecer a notificação (imagem em anexo) de "entrega com problema" na tela do app, e algum usuario clicar em "ciente" essa notificação nao voltara a aparecer para o registro que a gerou.
+
+Quando o administrador marcar uma entrega como "sendo acompanhada", ela sairá da seção de problemas e voltará para a lista principal, aguardando a finalização pelo usuário responsável.
+
+As notificações de alerta de tempo de espera (mais de 1 hora) e de horário limite (17:00) aparecerão apenas uma única vez por entrega/dia. Após serem exibidas (ou dispensadas com "CIENTE"), não serão mostradas novamente para o mesmo registro.
+
+
+
+ 
+Essa mensagem no print em anexo : 🚨 ALERTA DE TEMPO DE ESPERA 🚨 🚛 FRETISTA Roque NO CLIENTE Atakarejo Porto Seguro (000213 - 22) HÁ 1 HORA AGUARDANDO.
+
+👁 FAVOR, ACOMPANHAR!
+
+📝 INFORMAÇÕES: Problema: mamao
+
+⚠ PROBLEMA NA ENTREGA: Em desacordo com o pedido
+
+✅ CIENTE 
+
+ela fica aparecendo o tempo todo, mesmo depois de clicar em ciente. Quero como eu ja havia solicitado, que ao clicar nessa mensagem, nao apareca mais. Que so volte a aparecer apos passar novamente e se passar novamente mais uma hora desse registro em entrega. E toda vez que o usuario clicar em "ciente" para o usuario que clicou essa mensagem nao ira aparecer novamente desse registro. Isso vale para a mensagem de notificação de problema na entrega tambem
+
+
+ou seja, ajustar para a Notificação de Tempo de Espera (mais de 1 hora) Aparecer apenas uma vez por registro. Quando o usuário clica em "CIENTE", ela é marcada como dispensada e não aparece mais para aquele registro específico.
+
+ou seja, ajustar para a Notificação de Horário Limite (17:00)  Aparecer apenas uma vez por dia. Quando dispensada, não volta a aparecer no mesmo dia.
+
+ou seja, ajustar para a Persistência das notificações dispensadas são salvas no localStorage do navegador, garantindo que não voltem a aparecer mesmo se o usuário recarregar a página.
+
+ou seja, ajustar para a Independência de Cada registro ter sua própria marcação de "dispensado", então se um novo registro passar de 1 hora, ele ainda receberá a notificação normalmente.
+
+Melhorias na tela "Meu Resumo"
+
+incluir mais filtros como: mes atual, mes anterior, e um filtro por periodo entre duas datas
+
+Novos filtros de período rápido: Hoje, Esta Semana, Mês Atual, Mês Anterior
+
+Filtro por período personalizado: Com campos de data início e data fim
+
+Botão "Limpar Filtros": Para resetar todos os filtros
+
+Interface melhorada: Filtros mais organizados e intuitivos
+
+Botões para enviar resumo do dia e da semana via WhatsApp
+
+Geração de PDF (apenas para administrador)
+
+Filtro por usuário (apenas para administrador)
+
+Cálculos automáticos de estatísticas
+
+Incluir botao de selecao de registros na tela de monitoramento, com a opção de selecionar até 20 registros por vez, com a opção de deletar os 20 registros de uma so vez, mas com um delay de 1 segundo entre cada delete para nao sobrecarregar o sistema
+
+Implementar a funcionalidade de seleção múltipla e exclusão em lote na tela de Monitoramento:
+
+Principais recursos a adicionar:
+Seleção Múltipla: Checkboxes para selecionar registros individuais (máximo 20 por vez)
+Checkbox "Selecionar tudo" no cabeçalho da tabela
+Contador visual de registros selecionados
+Exclusão em Lote: Botão "Excluir Selecionados" aparece quando há registros selecionados
+Delay de 1 segundo entre cada exclusão para não sobrecarregar o sistema
+Barra de progresso visual mostrando o andamento da exclusão
+Confirmação com detalhes sobre o tempo estimado
+Controles de Segurança: Apenas administradores pode ver e usar a seleção múltipla
+Limite de máximo 20 registros por operação
+Dialog de confirmação com aviso sobre irreversibilidade
+Desabilitação de controles durante a operação
+Interface Melhorada: Card especial mostrando registros selecionados
+Botão "Limpar Seleção" para desmarcar todos
+Feedback visual do progresso da exclusão
+Mensagens de status detalhadas
+Limite de Seleção: 20 registros por operação 
+Alerta atualizado: "Máximo de 20 registros podem ser selecionados por vez"
+Delay Reduzido: 1 segundo entre cada exclusão
+Tempo estimado atualizado no dialog de confirmação
+Interface Atualizada: Checkbox "Selecionar tudo" agora seleciona até 20 registros visíveis
+Aviso no card de administrador atualizado para "máximo 20 por vez"
+Lógica de Desabilitação Ajustada: Checkboxes são desabilitados quando já há 20 registros selecionados
+"Selecionar tudo" funcionar corretamente
+
+
+Quando um usuario registrou uma entrega fazendo checkin e em seguida registrou que nessa entrega tem problema (Problema na entrega), la na tela home aparece separado essa entrega com problema. Ate ai tudo certo, mas logo depois que o usuario administrador clica no botao "marcar como sendo acompanhada" essa entrega ao invez de apenas acrescentar essa informacao no registro, ela usa essa "marcar como sendo acompanhada" como um novo status do registro. E isso acaba permitindo que o usuario que fez o registro da entrega possa fazer outro checkin, pois esse botao "marcar como sendo acompanhada" logo que apos ter sido clicada pelo administrador, o usuario do registro perde a opcao de encerrar seu registro, ou seja, nao consegue mais que marcar em checkout ou devolucao total. Ele deveria nao conseguir fazer outro checkin, e sim ter que fazer checkout ou devolucao total da entrega atual com problema, mesmo apos o usuario administrador ter marcado a entrega como sendo acompanhada. Pois esse marcador não é um status da entrega, e sim uma observação. Faca esses ajustes. ou seja, um Novo campo em being_monitored: Criar na entidade Delivery para marcar se está sendo acompanhada
+
+Status manter: O status da entrega permanece "Entrega em andamento" mesmo após ser marcada como acompanhada
+
+Usuário ainda precisa finalizar: O usuário que fez o registro ainda precisa fazer checkout ou devolução total
+
+Seção de problemas: Entregas sendo acompanhadas não aparecem mais na seção de problemas, mas ainda aparecem na lista geral com indicação visual
+
+Bloqueio de novo checkin: O usuário não consegue fazer novo checkin enquanto tiver entrega em andamento
+
+Indicação visual: Badge adicional mostra quando uma entrega está "Sendo Acompanhada"
+
+O fluxo agora é:
+Usuário faz checkin
+Usuário reporta problema
+Entrega aparece na seção de problemas
+Admin clica "Marcar como Sendo Acompanhada"
+Entrega sai da seção de problemas mas continua com status "Em andamento"
+Usuário ainda precisa fazer checkout/devolução para finalizar
+Só após finalizar pode fazer novo checkin
+
+Incluir um filtro dinamico logo acima dos ultimos 20 registros da tela home, Filtro dinâmico e busca global – Barra de busca rápida filtrando por usuario, cliente, fretista, problema, informações ou status
+
+
+Na tela de registros, no botão "foto do canhoto da entrega" (na seção Ações e comunicação), ao clicar nesse botao, o usuário pode tirar fotos e videos, ou anexar arquivos de imagem, videos ou PDF para enviar. No entanto, ao clicar no botão e escolher as imagens,essas imagens vão ficar "presas" tipo em anexo ao registro até que o usuário faça check-out ou devolução total. Fazendo um desses dois casos (check-out devolução total), a mensagem do resumo do registro vai ser enviado para o WhatsApp juntamente com os arquivos que ficaram anexos no registros. Se possível, os arquivos devem ser enviados juntamente com a mensagem do resumo do registro.
+
+Observacao 1: esse botão só fica disponível após o usuário fazer checkin
+
+Observação 2: após o envio via WhatsApp os anexos que estavam no registros ficarão salvos no registros via link, e podem ser baixados novamente caso seja acessado os links no registros em algum outro momento.
+
+
+Campo de anexos na entidade Delivery para armazenar múltiplos arquivos
+
+Botão "ANEXAR FOTOS/PDFs" que permite selecionar múltiplos arquivos (imagens e PDFs)
+
+Visualização dos anexos durante a entrega em andamento com opção de download e remoção
+
+Integração com WhatsApp - os links dos anexos são incluídos automaticamente no resumo de saída
+
+Persistência dos anexos - os arquivos ficam salvos no registro via links mesmo após o envio
+
+O sistema funcionar de forma que os anexos ficam "presos" ao registro até o checkout/devolução, quando são enviados junto com o resumo via WhatsApp, mas permanecem acessíveis no registro para consulta futura.
+
+
+Na tela de registros
+
+Os anexos ao serem importados pelo botão "anexar fotos/pdfs", devem ser renomeados automaticamente com o nome do fretista do registro + nome do cliente + data do registro + numeros aleatórios (para nao ocorrer duplicidade de renomeação), ou seja, Renomeação automática de anexos: Os arquivos são renomeados seguindo o padrão fretista_cliente_data_numerosaleatorios.extensao
+
+
+Incluir na tela de monitoramento
+
+Filtro com anexos : filtro de registros que foram registrados com anexo. ou seja, Filtro por anexos: Adicionar um filtro dropdown para mostrar apenas registros com anexos, sem anexos ou todos
+
+Os registros na tela de monitoramento que tiverem anexos devem conter um indicador (registro com anexo) que ao ser clicado, vai abrir e mostrar os links dos anexos desse registro e podem ser baixados os anexos ao clicar no link. ou seja, Indicador de anexos: Registros com anexos mostram um ícone 📎 com o número de anexos, clicável para visualizar
+
+
+Incluir na tela de monitoramento, em cada registro, um botão de compartilhamento via whatsapp o registro da entrega com todas as informações, comentários, anexos e etc do registro selecionado. ou seja, Botão de compartilhamento: Cada registro tem um botão de compartilhar via WhatsApp que inclui todas as informações, comentários e links dos anexos
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Antes de começar com as mudanças, quero que voce apague os registros realizados anteriormente.
+
+na tela de monitoramento, incluir o botão que gera o relatorio em pdf. segue modelo de relatorio em anexo.
+
+na tela de monitoramento, incluir os botões de alterar, excluir, compartilhar e comentar os registros. segue print do modelo dos botão em anexo.
+
+na tela de monitoramento, incluir a parte da seleção multipla para excluisão de registros, conforme solicitei anteriormente. segue imagem visual com o modelo de seleçao para exclusao de registro que quero que voce implemente. Lembrando que pode ser selecionado até 20 registros no maximo de uma vez, e cada registro será excluido com um segundo entre um e o proximo, para nao sobrecarregar o sistema.
+
+na tela dashboard, na tela de monitoramento, na tela de meu resumo e na tela home, atualizar todos os filtros, onde:
+
+no filtro de periodo, incluir: Trimestre atual, semestre atual, ontem, semana passada, mês passado, trimestre passado, semestre passado, ano passado. (atualizar em todas as telas que tem esse filtro por periodo)
+
+na tela de monitoramento, em cada registro que tiver um anexo ou mais, quando o usuario clicar no registro, ele vai abrir por completo e vai mostrar os anexos visualizando.
+
+atualizar a lista de clientes, excluir a anterior e substituir por esta:
+
+NOVA LISTA DE CLIENTES
+
+        Assai Paralela       Rmix Alphaville       Assai Pau Da Lima       Rmix Imbui       Gbarbosa Cd Bahia       Cdp Armacao Stiep Loja 14       Assai Vasco Da Gama       Redemix Rio Vermelho       Rmix Pitubinha       Rmix Amazonas       Rmix Masani       Rmix Buraquinho       Rmix Stella Maris       Atakarejo Lauro de Freitas       Trielo Ceasa BA       Cdp Rodoviaria Loja 17       Rmix Ondina       Rmix Vitoria       Rmix Horto       Assai Calcada       Cdp Sete Portas Loja 09       Deli E Cia Graca       Cdp Catu Loja 12       Cdp Super Centro Mata Loja 10       Cdp Alagoinhas Loja 11       Cdp Centro Dias Davila       Cdp Centro - Mata S.J. Sede       Mateus Juazeiro       Assai Sr Do Bonfim       Rf Supermercado Brasil       Frutos Da Terra       Feirao Das Frutas Atras Banca       Feirao Das Frutas Maria Auxiliadora       Assai Juazeiro       Bontempo Supermercados       Flor Da Chapada Itaberaba       Sams Aracaju       G. Barbosa Francisco Porto       Gbarbosa Hiper Sul       G. Barbosa  - Rio Mar       Supermercado Bombom Aracaju       Atakarejo Patamares       Rmix Ponto Verde Vila Laura       Sams Pituba       Assai Cabula       Sams Bonoco       Assai Paripe       Sams Lauro De Freitas       Assai Camacari       Atakarejo Cd Simoes Filho       Hiperideal Piata Orlando Gomes       Hiperideal Patamares Lj23       Hiperideal Piata Otavio Mangabeira       Hiperideal Horto       Atakarejo Vasco da Gama       Hiperideal Jardins (Juracy Acm)       Hiperideal Buraquinho       Assai Barris       Hiperideal Caminho Das Arvores       Hiperideal Manoel Dias Pituba       Hiperideal Itaigara       Atacadão Camaçari       Hiperideal Amazonas       Perini Pituba       Hiperideal Pituba Rua Ceara       Hiperideal Barra       Hiperideal Canela       Hiperideal - Vitoria       Perini Graca       Redemix Chame-Chame       Atacadao Camacari       Hiperideal Guarajuba       Atakarejo Itacimirim       Hiperideal Feira De Santana       Atakarejo Feira De Santana       Sams Feira De Santana       Atakarejo Ilheus       Atakarejo Aracaju       Mateus Jose Conrado Aracaju       Mateus Santa Monica       Assai Petrolina       Mateus Cd - Feira De Santana       Economart Feira De Santana       Paris Delicatessen       Atakarejo Boca Do Rio       Hiperideal Praia Do Forte       Hiperideal Parque Shopping       Gbarbosa Jardins       G Barbosa Farolandia       Hiper Carnes Barra Dos Coqueiros       HiperCarnes Jabotiana Aracaju       Gran Hortifruti Pituba       Assai Rotula       A. Cecilio Mota Jacobina       Pga Juazeiro       Gbarbosa 035 Costa Azul       Gbarbosa-302 - Horto Bela Vista       Supermercado Jhones Itaberaba       Supermercado Jl Itaberaba       Gbarbosa 108 Lauro De Freitas       Atakarejo Ilha Itaparica       Gbarbosa-274-Guarajuba       Hiperideal Orla       Hiperideal Armacao       Gbarbosa 037 Alagoinhas       Gbarbosa 015 Feira De Santana       Hiperideal Stella Maris II       Gbarbosa Luzia       Gbarbosa    Sao Cristovao       Atakarejo Cd Vitoria Da Conquista       Hiperideal Vila Laura       Gbarbosa 029 Brotas       Mercado Mel Aracaju       Atakarejo Porto Seguro       Atakarejo Vit Conquista       Hiperideal Stella Maris I       Gral Paniville Pituba       Assai Mussurunga       Gbarbosa 074 Sobradinho       Hiperideal Jardim Apipema       Hiperideal Patamares Lj13       Atakarejo Alagoinhas       Cdp Cd Monte Libano Mata S.J.       Mercadinho Economico Petrolina       Hiper Ideal Cd       Roselly Ferreira       Gbarbosa Cd Sergipe       Atakarejo Camacari       Massimo Farolandia       Atacadao Petrolina       Economart Vitoria Da Conquista       Atakarejo Simoes Filho Lj       Perboni Petrolina       Economart Jequie       Massimo Luzia       Gbarbosa 017 Feira De Santana       Atakarejo Patamares II       Dist Sao Roque  Mangabeira       Dist Sao Roque Sta Monica       Sao Roque Artemia Pires       Atakarejo Piata       Atakarejo Iguatemi       Gbarbosa 038 Alagoinhas       Gbarbosa 076 Feira Tomba       Atakarejo    S. Goncalo Dos Campos       Cdp Mata S. J. Premium       Atakarejo Salvador       Atakarejo Baixa De Quintas       Cdp Ogunjá       Cdp Marechal       Le Delis Delicatessen       Hiperideal Graca       Cdp Boca Do Rio Loja 07       Exito Supermercado Lagarto       Massimo - Barra dos Coqueiros       Rmix Ponto Verde Sete Portas       Rmix Simoes Filho       Rmix Itapua       Assai Feira Sobradinho       Assai Feira Tomba       Cdp Mata S. J. Lj 2       Dist Sao Roque Sim       Atakarejo Pernambues       Megga Distribuidora       Dist Sao Roque Centro       Dist Sao Roque Calumbi       Dist Sao Roque Sto Estevao       Assai Lauro De Freitas       G Barbosa Hiper Norte       Gbarbosa-133 -Juazeiro Centro       Gbarbosa-125-Juazeiro Sa Antonio       Rmix Ponto Verde Iapi       Rmix Coageli Lauro       Rmix Cogeali Paripe       Total Atacado Lauro       Cdp Boca Do Rio Lj 01       Gb CD N. Sra. Do Socorro       Gb Feira de Santana II       Cdp São Caetano       Cdp Manoel Dia D'Avila Loja 04       Trielo Paulista PE       Gb Vit Conquista I       Gb vit Conquista II       Gb Cabula       MultiFrios Premium I       MultiFrios Premium II       Sao Roque Conceicao       Mateus Petrolina       Cdp Castelo Branco       Cbd Costa Azul       Mateus Jacobina       Mateus Conceicao Do Coite       Mateus Vitoria Da Conquista       Mateus Porto Seguro       Compre Bem Alagoinhas I       Mateus Gloria       Mateus Eunapolis       Mateus Itabuna       Carballo Alphaville       Carballo Horto       Economart Luis Eduardo       Carballo Pituba       Caravelas Supermercado       Jns Comercio       Jn Comercio       Compre Bem Alagoinhas II       S N Soares E Cia       Trielo CD Simoes Filho BA       Assai Jose Conrado       Assai Aeroporto       Assai Inacio Barbosa       Assai N. Sra. Socorro       Cdp Alagoinhas I       Super BomBom Estancia       Nunes Peixoto Itabaiana       Nunes Peixoto N. Sra Gloria       Mix Litoral       Bompreço CD Palmares       Perini Vasco       Unimar Arembepe       Unimar Barra Pojuca       Atacadão Mares       Compre Bem Alagoinhas III       Compre Bem Alagoinhas IV    Outro (digitar)
+
+observação 1: toda vez que o usuario escolher a opção "Outro (digitar) vai gerar um novo campo onde o usuario pode digitar o nome do cliente que quiser.
+
+observação 2: atualizar a lista de clientes em todos os filtros de clientes de todas as telas.
+
+Agora quero que voce faça umas mudanças no aplicativo, sendo estas mudanças:
+
+Na tela de registro, Incluir novos campos que so aparecerão apos o usuario preencher o campo "Cliente" ("Vendedor", "Rede", "UF") que serão preenchidos automaticamente após o usuario escolher o cliente, ou seja, o cliente será escolhido e automaticamente esses 3 campos serão preenchidos. 
+
+Observação: O unico campo desses automatico que o usuario poderá alterar é o campo "Vendedor")
+
+Segue o relatorio onde mostra na sequencia "Cliente", "Vendedor", "Rede" e "UF":
+
+              Nome Fantasia   Vendedor   Rede   UF       Assai Paralela   Nixon   Assai   BA       Rmix Alphaville   Vinicius   Redemix   BA       Assai Pau Da Lima   Nixon   Assai   BA       Rmix Imbui   Vinicius   Redemix   BA       Gbarbosa Cd Bahia   Vinicius   G Barbosa   BA       Cdp Armacao Stiep Loja 14   Ricardo Santos   Cesta Do Povo   BA       Assai Vasco Da Gama   Nixon   Assai   BA       Redemix Rio Vermelho   Vinicius   Redemix   BA       Rmix Pitubinha   Vinicius   Redemix   BA       Rmix Amazonas   Vinicius   Redemix   BA       Rmix Masani   Vinicius   Redemix   BA       Rmix Buraquinho   Vinicius   Redemix   BA       Rmix Stella Maris   Vinicius   Redemix   BA       Atakarejo Lauro de Freitas   Ricardo Santos   Atakarejo Lojas   BA       Trielo Ceasa BA   Filial   Trielo   BA       Cdp Rodoviaria Loja 17   Ricardo Santos   Cesta Do Povo   BA       Rmix Ondina   Vinicius   Redemix   BA       Rmix Vitoria   Vinicius   Redemix   BA       Rmix Horto   Vinicius   Redemix   BA       Assai Calcada   Nixon   Assai   BA       Cdp Sete Portas Loja 09   Ricardo Santos   Cesta Do Povo   BA       Deli E Cia Graca   Ricardo Santos   Deli E Cia   BA       Cdp Catu Loja 12   Ricardo Santos   Outros   BA       Cdp Super Centro Mata Loja 10   Ricardo Santos   Cesta Do Povo   BA       Cdp Alagoinhas Loja 11   Ricardo Santos   Cesta Do Povo   BA       Cdp Centro Dias Davila   Ricardo Santos   Cesta Do Povo   BA       Cdp Centro - Mata S.J. Sede   Ricardo Santos   Cesta Do Povo   BA       Mateus Juazeiro   Antonio   Mateus Lojas   BA       Assai Sr Do Bonfim   Antonio   Assai   BA       Rf Supermercado Brasil   Antonio   Outros   BA       Frutos Da Terra   Antonio   Outros   PE       Feirao Das Frutas Atras Banca   Antonio   Feirao Das Frutas   PE       Feirao Das Frutas Maria Auxiliadora   Antonio   Feirao Das Frutas   PE       Assai Juazeiro   Antonio   Assai   BA       Bontempo Supermercados   Antonio   Outros   PE       Flor Da Chapada Itaberaba   Ricardo Santos   Outros   BA       Sams Aracaju   Vinicius   Sams   SE       G. Barbosa Francisco Porto   Vinicius   G Barbosa   SE       Gbarbosa Hiper Sul   Vinicius   G Barbosa   SE       G. Barbosa  - Rio Mar   Vinicius   G Barbosa   SE       Supermercado Bombom Aracaju   Vinicius   Outros   SE       Atakarejo Patamares   Ricardo Santos   Atakarejo Lojas   BA       Rmix Ponto Verde Vila Laura   Vinicius   Ponto Verde   BA       Sams Pituba   Vinicius   Sams   BA       Assai Cabula   Nixon   Assai   BA       Sams Bonoco   Vinicius   Sams   BA       Assai Paripe   Nixon   Assai   BA       Sams Lauro De Freitas   Vinicius   Sams   BA       Assai Camacari   Nixon   Assai   BA       Atakarejo Cd Simoes Filho   Ricardo Santos   Atakarejo Cds   BA       Hiperideal Piata Orlando Gomes   Ricardo Santos   Hiperideal   BA       Hiperideal Patamares Lj23   Ricardo Santos   Hiperideal   BA       Hiperideal Piata Otavio Mangabeira   Ricardo Santos   Hiperideal   BA       Hiperideal Horto   Ricardo Santos   Hiperideal   BA       Atakarejo Vasco da Gama   Ricardo Santos   Atakarejo Lojas   BA       Hiperideal Jardins (Juracy Acm)   Ricardo Santos   Hiperideal   BA       Hiperideal Buraquinho   Ricardo Santos   Hiperideal   BA       Assai Barris   Nixon   Assai   BA       Hiperideal Caminho Das Arvores   Ricardo Santos   Hiperideal   BA       Hiperideal Manoel Dias Pituba   Ricardo Santos   Hiperideal   BA       Hiperideal Itaigara   Ricardo Santos   Hiperideal   BA       Atacadão Camaçari   Nixon   Atacadao   BA       Hiperideal Amazonas   Ricardo Santos   Hiperideal   BA       Perini Pituba   Vinicius   Perini   BA       Hiperideal Pituba Rua Ceara   Ricardo Santos   Hiperideal   BA       Hiperideal Barra   Ricardo Santos   Hiperideal   BA       Hiperideal Canela   Ricardo Santos   Hiperideal   BA       Hiperideal - Vitoria   Ricardo Santos   Hiperideal   BA       Perini Graca   Vinicius   Perini   BA       Redemix Chame-Chame   Vinicius   Redemix   BA       Atacadao Camacari   Nixon   Atacadao   BA       Hiperideal Guarajuba   Ricardo Santos   Hiperideal   BA       Atakarejo Itacimirim   Ricardo Santos   Atakarejo Lojas   BA       Hiperideal Feira De Santana   Ricardo Santos   Hiperideal   BA       Atakarejo Feira De Santana   Ricardo Santos   Atakarejo Lojas   BA       Sams Feira De Santana   Vinicius   Sams   BA       Atakarejo Ilheus   Ricardo Santos   Atakarejo Lojas   BA       Atakarejo Aracaju   Ricardo Santos   Atakarejo Lojas   SE       Mateus Jose Conrado Aracaju   Ricardo Santos   Mateus Lojas   SE       Mateus Santa Monica   Ricardo Santos   Mateus Lojas   SE       Assai Petrolina   Antonio   Assai   PE       Mateus Cd - Feira De Santana   Ricardo Santos   Mateus Cds   BA       Economart Feira De Santana   Ricardo Santos   Economart   BA       Paris Delicatessen   Ricardo Santos   Outros   BA       Atakarejo Boca Do Rio   Ricardo Santos   Atakarejo Lojas   BA       Hiperideal Praia Do Forte   Ricardo Santos   Hiperideal   BA       Hiperideal Parque Shopping   Ricardo Santos   Hiperideal   BA       Gbarbosa Jardins   Vinicius   G Barbosa   SE       G Barbosa Farolandia   Vinicius   G Barbosa   SE       Hiper Carnes Barra Dos Coqueiros   Vinicius   Outros   SE       HiperCarnes Jabotiana Aracaju   Vinicius   Outros   SE       Gran Hortifruti Pituba   Ricardo Santos   Outros   BA       Assai Rotula   Nixon   Assai   BA       A. Cecilio Mota Jacobina   Antonio   Cesta Do Povo   BA       Pga Juazeiro   Antonio   Outros   BA       Gbarbosa 035 Costa Azul   Vinicius   G Barbosa   BA       Gbarbosa-302 - Horto Bela Vista   Vinicius   G Barbosa   BA       Supermercado Jhones Itaberaba   Ricardo Santos   Outros   BA       Supermercado Jl Itaberaba   Ricardo Santos   Outros   BA       Gbarbosa 108 Lauro De Freitas   Vinicius   G Barbosa   BA       Atakarejo Ilha Itaparica   Ricardo Santos   Atakarejo Lojas   BA       Gbarbosa-274-Guarajuba   Vinicius   G Barbosa   BA       Hiperideal Orla   Ricardo Santos   Hiperideal   BA       Hiperideal Armacao   Ricardo Santos   Hiperideal   BA       Gbarbosa 037 Alagoinhas   Vinicius   G Barbosa   BA       Gbarbosa 015 Feira De Santana   Vinicius   G Barbosa   BA       Hiperideal Stella Maris II   Ricardo Santos   Hiperideal   BA       Gbarbosa Luzia   Vinicius   G Barbosa   SE       Gbarbosa    Sao Cristovao   Vinicius   G Barbosa   SE       Atakarejo Cd Vitoria Da Conquista   Ricardo Santos   Atakarejo Cds   BA       Hiperideal Vila Laura   Ricardo Santos   Hiperideal   BA       Gbarbosa 029 Brotas   Vinicius   G Barbosa   BA       Mercado Mel Aracaju   Vinicius   Outros   SE       Atakarejo Porto Seguro   Ricardo Santos   Atakarejo Lojas   BA       Atakarejo Vit Conquista   Ricardo Santos   Atakarejo Lojas   BA       Hiperideal Stella Maris I   Ricardo Santos   Hiperideal   BA       Gral Paniville Pituba   Ricardo Santos   Outros   BA       Assai Mussurunga   Nixon   Assai   BA       Gbarbosa 074 Sobradinho   Vinicius   G Barbosa   BA       Hiperideal Jardim Apipema   Ricardo Santos   Hiperideal   BA       Hiperideal Patamares Lj13   Ricardo Santos   Hiperideal   BA       Atakarejo Alagoinhas   Ricardo Santos   Atakarejo Lojas   BA       Cdp Cd Monte Libano Mata S.J.   Ricardo Santos   Cesta Do Povo   BA       Mercadinho Economico Petrolina   Antonio   Super Economico   PE       Hiper Ideal Cd   Ricardo Santos   Hiperideal   BA       Roselly Ferreira   Vinicius   Outros   BA       Gbarbosa Cd Sergipe   Vinicius   G Barbosa   SE       Atakarejo Camacari   Ricardo Santos   Atakarejo Lojas   BA       Massimo Farolandia   Vinicius   Massimo   SE       Atacadao Petrolina   Antonio   Atacadao   PE       Economart Vitoria Da Conquista   Ricardo Santos   Economart   BA       Atakarejo Simoes Filho Lj   Ricardo Santos   Atakarejo Lojas   BA       Perboni Petrolina   Antonio   Outros   PE       Economart Jequie   Ricardo Santos   Economart   BA       Massimo Luzia   Vinicius   Massimo   SE       Gbarbosa 017 Feira De Santana   Vinicius   G Barbosa   BA       Atakarejo Patamares II   Ricardo Santos   Atakarejo Lojas   BA       Dist Sao Roque  Mangabeira   Ricardo Santos   Dist Sao Roque   BA       Dist Sao Roque Sta Monica   Ricardo Santos   Dist Sao Roque   BA       Sao Roque Artemia Pires   Ricardo Santos   Dist Sao Roque   BA       Atakarejo Piata   Ricardo Santos   Atakarejo Lojas   BA       Atakarejo Iguatemi   Ricardo Santos   Atakarejo Lojas   BA       Gbarbosa 038 Alagoinhas   Vinicius   G Barbosa   BA       Gbarbosa 076 Feira Tomba   Vinicius   G Barbosa   BA       Atakarejo    S. Goncalo Dos Campos   Ricardo Santos   Atakarejo Lojas   BA       Cdp Mata S. J. Premium   Ricardo Santos   Cesta Do Povo   BA       Atakarejo Salvador   Ricardo Santos   Atakarejo Lojas   BA       Atakarejo Baixa De Quintas   Ricardo Santos   Atakarejo Lojas   BA       Cdp Ogunjá   Ricardo Santos   Cesta Do Povo   BA       Cdp Marechal   Ricardo Santos   Cesta Do Povo   BA       Le Delis Delicatessen   Ricardo Santos   Outros   BA       Hiperideal Graca   Ricardo Santos   Hiperideal   BA       Cdp Boca Do Rio Loja 07   Ricardo Santos   Cesta Do Povo   BA       Exito Supermercado Lagarto   Ricardo Santos   Outros   SE       Massimo - Barra dos Coqueiros   Vinicius   Massimo   SE       Rmix Ponto Verde Sete Portas   Vinicius   Ponto Verde   BA       Rmix Simoes Filho   Vinicius   Redemix   BA       Rmix Itapua   Vinicius   Redemix   BA       Assai Feira Sobradinho   Nixon   Assai   BA       Assai Feira Tomba   Nixon   Assai   BA       Cdp Mata S. J. Lj 2   Ricardo Santos   Cesta Do Povo   BA       Dist Sao Roque Sim   Ricardo Santos   Dist Sao Roque   BA       Atakarejo Pernambues   Ricardo Santos   Atakarejo Lojas   BA       Megga Distribuidora   Vinicius   Outros   SE       Dist Sao Roque Centro   Ricardo Santos   Dist Sao Roque   BA       Dist Sao Roque Calumbi   Ricardo Santos   Dist Sao Roque   BA       Dist Sao Roque Sto Estevao   Ricardo Santos   Dist Sao Roque   BA       Assai Lauro De Freitas   Nixon   Assai   BA       G Barbosa Hiper Norte   Vinicius   G Barbosa   SE       Gbarbosa-133 -Juazeiro Centro   Antonio   G Barbosa   BA       Gbarbosa-125-Juazeiro Sa Antonio   Antonio   G Barbosa   BA       Rmix Ponto Verde Iapi   Vinicius   Ponto Verde   BA       Rmix Coageli Lauro   Vinicius   Redemix   BA       Rmix Cogeali Paripe   Vinicius   Cogeali   BA       Total Atacado Lauro   Vinicius   Total Atac   BA       Cdp Boca Do Rio Lj 01   Ricardo Santos   Cesta Do Povo   BA       Gb CD N. Sra. Do Socorro   Vinicius   G Barbosa   SE       Gb Feira de Santana II   Vinicius   G Barbosa   BA       Cdp São Caetano   Ricardo Santos   Cesta Do Povo   BA       Cdp Manoel Dia D'Avila Loja 04   Ricardo Santos   Cesta Do Povo   BA       Trielo Paulista PE   Filial   Trielo   PE       Gb Vit Conquista I   Vinicius   G Barbosa   BA       Gb vit Conquista II   Vinicius   G Barbosa   BA       Gb Cabula   Vinicius   G Barbosa   BA       MultiFrios Premium I   Antonio   Outros   BA       MultiFrios Premium II   Antonio   Outros   BA       Sao Roque Conceicao   Ricardo Santos   Dist Sao Roque   BA       Mateus Petrolina   Antonio   Mateus Lojas   PE       Cdp Castelo Branco   Ricardo Santos   Cesta Do Povo   BA       Cbd Costa Azul   Ricardo Santos   Pao de Acucar   BA       Mateus Jacobina   Antonio   Mateus Lojas   BA       Mateus Conceicao Do Coite   Ricardo Santos   Mateus Lojas   BA       Mateus Vitoria Da Conquista   Ricardo Santos   Mateus Lojas   BA       Mateus Porto Seguro   Ricardo Santos   Mateus Lojas   BA       Compre Bem Alagoinhas I   Ricardo Santos   Cesta Do Povo   BA       Mateus Gloria   Ricardo Santos   Mateus Lojas   SE       Mateus Eunapolis   Ricardo Santos   Mateus Lojas   BA       Mateus Itabuna   Ricardo Santos   Mateus Lojas   BA       Carballo Alphaville   Ricardo Santos   Outros   BA       Carballo Horto   Ricardo Santos   Outros   BA       Economart Luis Eduardo   Ricardo Santos   Economart   BA       Carballo Pituba   Ricardo Santos   Outros   BA       Caravelas Supermercado   Ricardo Santos   Outros   BA       Jns Comercio   Ricardo Santos   Outros   BA       Jn Comercio   Ricardo Santos   Outros   BA       Compre Bem Alagoinhas II   Ricardo Santos   Cesta Do Povo   BA       S N Soares E Cia   Ricardo Santos   Outros   BA       Trielo CD Simoes Filho BA   Filial   Trielo   BA       Assai Jose Conrado   Nixon   Assai   SE       Assai Aeroporto   Nixon   Assai   SE       Assai Inacio Barbosa   Nixon   Assai   SE       Assai N. Sra. Socorro   Nixon   Assai   SE       Cdp Alagoinhas I   Ricardo Santos   Cesta Do Povo   BA       Super BomBom Estancia   Vinicius   Outros   SE       Nunes Peixoto Itabaiana   Vinicius   Outros   SE       Nunes Peixoto N. Sra Gloria   Vinicius   Outros   SE       Mix Litoral   Ricardo Santos   Outros   BA       Bompreço CD Palmares   Vinicius   Bompreço   BA       Perini Vasco   Vinicius   Perini   BA       Unimar Arembepe   Nixon   Outros   BA       Unimar Barra Pojuca   Nixon   Outros   BA       Atacadão Mares   Nixon   Atacadao   BA       Compre Bem Alagoinhas III   Ricardo Santos   Cesta Do Povo   BA       Compre Bem Alagoinhas IV   Ricardo Santos   Cesta Do Povo   BA
+
+Segue relacionamento no pdf clientes2
+
+
+
+
+NA TELA HOME, VERIFICAR SE FOI IMPLEMENTADO A FUNCAO DA NOTIFICACAO QUE PEDI ANTERIORMENTE 
+
+SEGUE PRINT DO MODELO EM ANEXO COM O NOME: mensagem notificacao.png
+
+NA TELA HOME, VERIFICAR SE FOI IMPLEMENTADO A FUNCAO DE DESTAQUE DE ENTREGA COM STATUS "problema na entrega", juntamente com o botão de status "Marcar como sendo acompanhada" que so o usuario administradores terão acesso de marcar, e que fará a mesangem notificacao para de ser notificada na tela para o respectivo registro, da forma que pedi anteriormente.
+
+SEGUE PRINT DO MODELO EM ANEXO COM O NOME: mensagem problema.png
+
+NA TELA HOME, VERIFICAR SE FOI IMPLEMENTADO A FUNCAO DO BOTÃO DE "SOLICITAR APOIO" NOS REGISTROS EM DESTAQUE DE ENTREGA COM STATUS "problema na entrega" QUE PEDI ANTERIORMENTE.
+
+SEGUE PRINT DO MODELO EM ANEXO COM O NOME: mensagem status solicitacao de apoio.png
+
+
+
+
+AJUSTES:
+
+Os registros realizados nao estão sendo sicronizados na tela de monitoramento.
+Ou seja, nao aparece lá de forma alguma, independente do status do registro. Ajuste isso!
+
+na tela de dashboard, mas especificamente no filtro de clientes, nao esta atualizado de acordo com a nova lista de clientes que enviei. Ajuste isso!
+
+Incluir um filtro de "Vendedor" na tela "HOME"
+
+Incluir os filtros de "Vendedor", "Rede" e "UF" nas telas de "monitoramento" , "meu resumo" e "dashboard"
+
+seguir as listas que enviei
+
+Na tela dashboard, incluir grafico de tabela onde mostrará o top 5 vendedores com mais registros de entregas com problemas registrados.
+
+Na tela dashboard, incluir grafico de tabela onde mostrará o top 5 Redes com mais registros de entregas com problemas registrados.
+
+Na tela dashboard, incluir um grafico de colunas, do mesmo modelo do grafico "Total de Registros por Fretista", porem, sera um grafico que trará a quantidade de registros de entregas com problemas por "UF" mas quero em percentual do total geral de registros com problemas.
+
+Na tela dashboard, incluir 3 CARDS:
+
+Top 1 Vendedor (registros com problemas)
+Top 1 Rede (registros com problemas)
+Top 1 Cliente (registros com problemas)
+
+
+Na tela de localização, incluir a seguinte informação:
+
+Toda vez que um usuario qualquer iniciar o rastreamento, se esse usuario tiver com um registro em aberto, logo no maps irá mostrar uma informação com o nome do cliente e o tempo em que esse registro está em aberto, ou seja, a duração + o nome do cliente (alem da informação do nome do usuario que já aparece abaixo do maps)
+
+Notei que o criação do pdf ficou diferente do que eu enviei como modelo, com totais, historico, tops, cards, graficos, informaçoes por clientes, vendedor, rede, uf, problemas, etc...
+faça o ajuste e crie o modelo mais parecido com este que enviei em anexo aqui agora. nome do arquivo: Modelo PDF.pdf
+
+a funcionalidade "modo noturno ou escuro" está funcionando, porem, toda vez que troco de tela, a tela volta pro "modo claro"
+faça essa correção, quero que mesmo que o usuario troque de tela, o modo escuro permaneça, que so volte para o modo claro quando o usuario mudar clicando no botao.
+
+o botão de importar a imagem da rota do dia nao poderá ser acesso por outro usuario alem dos usuarios administradores
+
+incluir mais 2 usuarios administradores:
+
+faturamentosalvador@frutasdocemel.com.br
+jessica.louvores@frutasdocemel.com.br
+
+-----------------------------------
+
+ajustes:
+
+verificar porque os filtros de data nao tao filtrando baseado na data do registro
+ou seja, quando eu faço um registro com a data de hoje, eu so consigo filtrar esse registro se eu por a data do dia seguinte, nao era pra acontecer isso. verifique e faça o ajuste
+isso está acontecendo em todas as telas que tem filtro de data ou periodo.
+
+atualizar incluindo mais informações as listas:
+
+na lista de fretistas, acrescentar:
+João
+Edmilson
+Robson
+Borges
+Miguel
+Kelven
+
+
+na lista de problemas, acrescentar:
+Estoque cheio
+Erro de Digitação
+Erro de cadastro
+Fora do Horário de Recebimento
+Nota em tratamento
+Nota fora do coletor
+
+os botões de gerar o resumo e o relatorio em pdf nas telas de "meu resumo" e de "Monitoramento" nao estão gerando o pdf da forma que pedi. vou enviar print do modelo que quero que gere. sao 4 print onde mostra um pdf gerado via esse botao:
+
+print 1 (modelo do print)
+print 2 (modelo do print)
+print 3 (modelo do print)
+print 3* (criar modelo 4 com os relatorios e totais de registros por UF, VENDEDOR E REDE) e com top 5 por problemas, tempo de entrega
+
+na tela dashboard, incluir um botão de salvar em pdf, onde vai gerar todos os cards, graficos dessa tela e salvar em pdf.
+
+na tela de monitoramento, os registros realizados ao inves de ficarem com o status da entrega (em andamento, finalizada, devolvida) foram substituidos pelo o status do problema (motivo do problema). nao quero que faça isso. Então, para corrigir essa situação, na tela de monitoramento os registros serão salvos da seguinte forma:
+
+Data, cliente, fretista, usuario, check-in, chek-out (que também será a hora do "devolução total"), duração, informação, status problema (sem xml, Erro de referência, etc), status da entrega (Em andamento, devolvida, finalizada), e por ultimo um emoticon de um "clipe de papel" que vai representar se o registro tem anexo ou não. E logo em seguida os botões de ações (comentario, compartilhamento, edição, exclusão)
+
+observação: a parte dos botões, para usuario administrador vao aparecer todos os botões, já para usuario comum, vai aparecer apenas os botoes de comentarios e de compartilhamento.
+
+
+

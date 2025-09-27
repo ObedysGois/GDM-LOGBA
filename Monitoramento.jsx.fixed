@@ -1,0 +1,17 @@
+// Arquivo temporário com a correção do problema de sintaxe
+
+// Trecho problemático corrigido:
+/*
+      try {
+        // Tentar abrir WhatsApp
+        window.open(whatsappUrl, '_blank');
+      } catch (error) {
+        console.error('Erro ao abrir WhatsApp:', error);
+        // Fallback: copiar para clipboard
+        navigator.clipboard.writeText(message).then(() => {
+          alert('Mensagem copiada para a área de transferência! Cole no WhatsApp.');
+        }).catch(() => {
+          alert(`Mensagem gerada:\n\n${message}`);
+        });
+      }
+*/

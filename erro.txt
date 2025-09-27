@@ -1,0 +1,132 @@
+Compiled with problems:
+×
+ERROR in ./src/Pages/Monitoramento.jsx
+Module build failed (from ./node_modules/babel-loader/lib/index.js):
+SyntaxError: C:\Users\BAMG\Downloads\LOGISTICA_BA\src\Pages\Monitoramento.jsx: Expecting Unicode escape sequence \uXXXX. (1466:58)
+
+  1464 |       
+  1465 |       // Codificar a mensagem para URL
+> 1466 |       const encodedMessage = encodeURIComponent(message);\n      \n      // Detectar dispositivo móvel
+       |                                                           ^
+  1467 |       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);\n      \n      let whatsappUrl;\n      if (isMobile) {\n        // Para mobile, tentar abrir app diretamente\n        whatsappUrl = `whatsapp://send?text=${encodedMessage}`;\n      } else {\n        // Para desktop/web, usar api.whatsapp.com\n        whatsappUrl = `https://api.whatsapp.com/send?text=${encodedMessage}`;\n      }\n\n      try {\n        // Tentar abrir WhatsApp\n        window.open(whatsappUrl, '_blank');\n      } catch (error) {\n        console.error('Erro ao abrir WhatsApp:', error);\n        // Fallback: copiar para clipboard\n        navigator.clipboard.writeText(message).then(() => {\n          alert('Mensagem copiada para a área de transferência! Cole no WhatsApp.');\n        }).catch(() => {\n          alert('Mensagem gerada:\\n\\n' + message);\n        });\n      }
+  1468 |     } catch (error) {
+  1469 |       console.error('Erro ao compartilhar registro:', error);
+    at constructor (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:367:19)
+    at FlowParserMixin.raise (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:6627:19)
+    at FlowParserMixin.readWord1 (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:6587:16)
+    at FlowParserMixin.readWord (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:6607:23)
+    at FlowParserMixin.getTokenFromCode (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:6326:14)
+    at FlowParserMixin.getTokenFromCode (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:4827:11)
+    at FlowParserMixin.getTokenFromCode (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:3225:13)
+    at FlowParserMixin.nextToken (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:5810:10)
+    at FlowParserMixin.next (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:5720:10)
+    at FlowParserMixin.eat (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:5724:12)
+    at FlowParserMixin.isLineTerminator (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:6919:17)
+    at FlowParserMixin.semicolon (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:6922:25)
+    at FlowParserMixin.parseVarStatement (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:13231:10)
+    at FlowParserMixin.parseStatementContent (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:12851:23)
+    at FlowParserMixin.parseStatementLike (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:12767:17)
+    at FlowParserMixin.parseStatementLike (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:2946:24)
+    at FlowParserMixin.parseStatementListItem (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:12747:17)
+    at FlowParserMixin.parseBlockOrModuleBlockBody (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:13316:61)
+    at FlowParserMixin.parseBlockBody (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:13309:10)
+    at FlowParserMixin.parseBlock (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:13297:10)
+    at FlowParserMixin.parseTryStatement (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:13205:23)
+    at FlowParserMixin.parseStatementContent (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:12804:21)
+    at FlowParserMixin.parseStatementLike (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:12767:17)
+    at FlowParserMixin.parseStatementLike (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:2946:24)
+    at FlowParserMixin.parseStatementListItem (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:12747:17)
+    at FlowParserMixin.parseBlockOrModuleBlockBody (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:13316:61)
+    at FlowParserMixin.parseBlockBody (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:13309:10)
+    at FlowParserMixin.parseBlock (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:13297:10)
+    at FlowParserMixin.parseFunctionBody (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:12101:24)
+    at C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:2920:63
+    at FlowParserMixin.forwardNoArrowParamsConversionAt (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:3096:16)
+    at FlowParserMixin.parseFunctionBody (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:2920:12)
+    at FlowParserMixin.parseArrowExpression (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:12076:10)
+    at FlowParserMixin.parseAsyncArrowFromCallExpression (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:11259:10)
+    at FlowParserMixin.parseAsyncArrowFromCallExpression (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:3517:18)
+    at FlowParserMixin.parseCoverCallAndAsyncArrowHead (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:11189:27)
+    at FlowParserMixin.parseSubscript (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:11115:19)
+    at FlowParserMixin.parseSubscript (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:3680:18)
+    at FlowParserMixin.parseSubscripts (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:11089:19)
+    at FlowParserMixin.parseSubscripts (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:3646:18)
+    at FlowParserMixin.parseExprSubscripts (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:11080:17)
+    at FlowParserMixin.parseUpdate (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:11061:21)
+    at FlowParserMixin.parseMaybeUnary (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:11041:23)
+    at FlowParserMixin.parseMaybeUnaryOrPrivate (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:10894:61)
+    at FlowParserMixin.parseExprOps (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:10899:23)
+    at FlowParserMixin.parseMaybeConditional (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:10876:23)
+    at FlowParserMixin.parseMaybeAssign (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:10826:21)
+    at FlowParserMixin.parseMaybeAssign (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:3579:18)
+    at C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:10795:39
+    at FlowParserMixin.allowInAnd (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:12422:16)
+ERROR in ./src/Pages/Registros.jsx
+Module build failed (from ./node_modules/babel-loader/lib/index.js):
+SyntaxError: C:\Users\BAMG\Downloads\LOGISTICA_BA\src\Pages\Registros.jsx: Expecting Unicode escape sequence \uXXXX. (527:37)
+
+  525 |     message += `\n🍇🥦🍉🥝🍎🍍🫑🍅🍋🧄🫚🍏`;
+  526 |     
+> 527 |     if (anexosParaUsar.length > 0) {\n      message += `\\n\\ud83d\\udcce Anexos: ${anexosParaUsar.length} arquivo(s)\\n`;\n      anexosParaUsar.forEach((attachment, index) => {\n        if (attachment.file_url) {\n          message += `   \\ud83d\\udcce ${attachment.original_name || attachment.file_name}: ${attachment.file_url}\\n`;\n        }\n      });\n    }\n    \n    message += `\\n\\n\\ud83c\\udf47\\ud83e\\udd66\\ud83c\\udf49\\ud83c\\udf50\\ud83c\\udf4e\\ud83c\\udf4d\\ud83e\\udd51\\ud83c\\udf45\\ud83c\\udf4b\\ud83e\\uddc4\\ud83e\\uddca\\ud83c\\udf4f\\n\\n`;\n    \n    const encodedMessage = encodeURIComponent(message);\n    \n    // Detectar dispositivo móvel\n    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);\n    \n    let whatsappUrl;\n    if (isMobile) {\n      // Para mobile, tentar abrir app diretamente\n      whatsappUrl = `whatsapp://send?text=${encodedMessage}`;\n    } else {\n      // Para desktop/web, usar api.whatsapp.com\n      whatsappUrl = `https://api.whatsapp.com/send?text=${encodedMessage}`;\n    }\n\n    try {\n      // Tentar abrir WhatsApp\n      window.open(whatsappUrl, '_blank');\n    } catch (error) {\n      console.error('Erro ao abrir WhatsApp:', error);\n      // Fallback: copiar para clipboard\n      navigator.clipboard.writeText(message).then(() => {\n        alert('Mensagem copiada para a área de transferência! Cole no WhatsApp.');\n      }).catch(() => {\n        alert('Mensagem gerada:\\n\\n' + message);\n      });\n    }
+      |                                      ^
+  528 |   };
+  529 |
+  530 |   const resetForm = () => {
+    at constructor (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:367:19)
+    at FlowParserMixin.raise (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:6627:19)
+    at FlowParserMixin.readWord1 (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:6587:16)
+    at FlowParserMixin.readWord (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:6607:23)
+    at FlowParserMixin.getTokenFromCode (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:6326:14)
+    at FlowParserMixin.getTokenFromCode (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:4827:11)
+    at FlowParserMixin.getTokenFromCode (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:3225:13)
+    at FlowParserMixin.nextToken (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:5810:10)
+    at FlowParserMixin.next (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:5720:10)
+    at FlowParserMixin.eat (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:5724:12)
+    at FlowParserMixin.expect (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:6926:15)
+    at FlowParserMixin.parseBlock (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:13293:10)
+    at FlowParserMixin.parseStatementContent (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:12858:21)
+    at FlowParserMixin.parseStatementLike (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:12767:17)
+    at FlowParserMixin.parseStatementLike (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:2946:24)
+    at FlowParserMixin.parseStatementOrSloppyAnnexBFunctionDeclaration (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:12757:17)
+    at FlowParserMixin.parseIfStatement (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:13130:28)
+    at FlowParserMixin.parseStatementContent (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:12796:21)
+    at FlowParserMixin.parseStatementLike (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:12767:17)
+    at FlowParserMixin.parseStatementLike (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:2946:24)
+    at FlowParserMixin.parseStatementListItem (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:12747:17)
+    at FlowParserMixin.parseBlockOrModuleBlockBody (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:13316:61)
+    at FlowParserMixin.parseBlockBody (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:13309:10)
+    at FlowParserMixin.parseBlock (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:13297:10)
+    at FlowParserMixin.parseFunctionBody (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:12101:24)
+    at C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:2920:63
+    at FlowParserMixin.forwardNoArrowParamsConversionAt (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:3096:16)
+    at FlowParserMixin.parseFunctionBody (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:2920:12)
+    at FlowParserMixin.parseArrowExpression (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:12076:10)
+    at FlowParserMixin.parseParenAndDistinguishExpression (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:11686:12)
+    at FlowParserMixin.parseParenAndDistinguishExpression (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:3621:18)
+    at FlowParserMixin.parseExprAtom (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:11326:23)
+    at FlowParserMixin.parseExprAtom (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:4794:20)
+    at FlowParserMixin.parseExprSubscripts (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:11076:23)
+    at FlowParserMixin.parseUpdate (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:11061:21)
+    at FlowParserMixin.parseMaybeUnary (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:11041:23)
+    at FlowParserMixin.parseMaybeUnaryOrPrivate (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:10894:61)
+    at FlowParserMixin.parseExprOps (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:10899:23)
+    at FlowParserMixin.parseMaybeConditional (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:10876:23)
+    at FlowParserMixin.parseMaybeAssign (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:10826:21)
+    at FlowParserMixin.parseMaybeAssign (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:3579:18)
+    at C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:10795:39
+    at FlowParserMixin.allowInAnd (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:12422:16)
+    at FlowParserMixin.parseMaybeAssignAllowIn (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:10795:17)
+    at FlowParserMixin.parseVar (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:13384:91)
+    at FlowParserMixin.parseVarStatement (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:13230:10)
+    at FlowParserMixin.parseStatementContent (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:12851:23)
+    at FlowParserMixin.parseStatementLike (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:12767:17)
+    at FlowParserMixin.parseStatementLike (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:2946:24)
+    at FlowParserMixin.parseStatementListItem (C:\Users\BAMG\Downloads\LOGISTICA_BA\node_modules\@babel\parser\lib\index.js:12747:17)
+ERROR
+[eslint] 
+src\Pages\Monitoramento.jsx
+  Line 1466:58:  Parsing error: Expecting Unicode escape sequence \uXXXX. (1466:58)
+
+src\Pages\Registros.jsx
+  Line 527:37:  Parsing error: Expecting Unicode escape sequence \uXXXX. (527:37)
+

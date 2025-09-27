@@ -1,0 +1,39 @@
+{
+  "name": "UserLocation",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string",
+      "description": "Email do usuário"
+    },
+    "user_name": {
+      "type": "string",
+      "description": "Nome do usuário"
+    },
+    "latitude": {
+      "type": "number",
+      "description": "Latitude da localização"
+    },
+    "longitude": {
+      "type": "number",
+      "description": "Longitude da localização"
+    },
+    "last_update": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Última atualização da localização"
+    },
+    "is_online": {
+      "type": "boolean",
+      "default": true,
+      "description": "Se o usuário está online"
+    }
+  },
+  "required": [
+    "user_email",
+    "user_name",
+    "latitude",
+    "longitude",
+    "last_update"
+  ]
+}

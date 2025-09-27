@@ -1,0 +1,34 @@
+{
+    "name": "NotificationDismissal",
+    "type": "object",
+    "properties": {
+      "user_email": {
+        "type": "string",
+        "description": "Email do usuário que dispensou a notificação"
+      },
+      "delivery_id": {
+        "type": "string",
+        "description": "ID da entrega relacionada"
+      },
+      "notification_type": {
+        "type": "string",
+        "enum": [
+          "time_alert",
+          "problem_alert",
+          "hour_limit"
+        ],
+        "description": "Tipo da notificação dispensada"
+      },
+      "dismissed_at": {
+        "type": "string",
+        "format": "date-time",
+        "description": "Quando foi dispensada"
+      }
+    },
+    "required": [
+      "user_email",
+      "delivery_id",
+      "notification_type",
+      "dismissed_at"
+    ]
+  }

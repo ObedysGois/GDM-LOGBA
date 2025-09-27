@@ -1,0 +1,24 @@
+{
+    "name": "RouteImage",
+    "type": "object",
+    "properties": {
+      "image_url": {
+        "type": "string",
+        "description": "URL da imagem da rota"
+      },
+      "date": {
+        "type": "string",
+        "format": "date",
+        "description": "Data da rota"
+      },
+      "user_email": {
+        "type": "string",
+        "description": "Email do usuário que enviou"
+      }
+    },
+    "required": [
+      "image_url",
+      "date",
+      "user_email"
+    ]
+  }

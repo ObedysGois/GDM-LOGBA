@@ -1,0 +1,23 @@
+{
+    "name": "DeliveryComment",
+    "type": "object",
+    "properties": {
+      "delivery_id": {
+        "type": "string",
+        "description": "ID da entrega"
+      },
+      "comment": {
+        "type": "string",
+        "description": "Comentário sobre a entrega"
+      },
+      "user_email": {
+        "type": "string",
+        "description": "Email do usuário que comentou"
+      }
+    },
+    "required": [
+      "delivery_id",
+      "comment",
+      "user_email"
+    ]
+  }
