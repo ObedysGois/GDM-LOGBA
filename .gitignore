@@ -1,5 +1,5 @@
 # Dependencies
-/node_modules
+node_modules/
 /.pnp
 .pnp.js
 
@@ -23,3 +23,10 @@ yarn-error.log*
 
 # Cache files
 .cache/
+**/node_modules/
+**/.cache/
+*.pack
+
+# Large files
+*.log
+*.tmp
