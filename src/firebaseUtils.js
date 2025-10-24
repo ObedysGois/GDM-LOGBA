@@ -1,7 +1,7 @@
 import { collection, addDoc, query, orderBy, limit, getDocs, doc, updateDoc, deleteDoc, where, Timestamp, getDoc } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
+import { ref, deleteObject } from 'firebase/storage';
 import { db, storage } from './firebaseConfig.js';
-import { uploadRouteImage as uploadRouteImageSupabase, uploadDeliveryAttachment, validateFileType, validateFileSize, uploadFileWithFallback } from './supabaseUtils.js';
+import { uploadRouteImage as uploadRouteImageSupabase, uploadDeliveryAttachment, validateFileType, validateFileSize } from './supabaseUtils.js';
 
 // Lista atualizada de clientes com vendedor, rede e UF
 export const clientData = {
@@ -322,6 +322,56 @@ export const getLatestDeliveryRecords = async (numRecords = 10) => {
   }
 };
 
+// Function to get latest delivery records with permission filters
+export const getLatestDeliveryRecordsWithPermissions = async (numRecords = 10, currentUser) => {
+  try {
+    if (!currentUser) {
+      throw new Error('Usuário não autenticado');
+    }
+
+    // Verificar se o usuário é admin ou colaborador
+    const userIsAdmin = await isAdmin(currentUser.email);
+    const userIsCollaborator = await isCollaborator(currentUser);
+
+    let q;
+    if (userIsAdmin || userIsCollaborator) {
+      // Admin e colaborador veem todos os registros
+      q = query(collection(db, "deliveries"), orderBy("timestamp", "desc"), limit(numRecords));
+    } else {
+      // Para fretistas, usar uma abordagem que não precisa de índice composto
+      // Primeiro buscar todos os registros do usuário, depois ordenar no cliente
+      q = query(
+        collection(db, "deliveries"), 
+        where("userEmail", "==", currentUser.email),
+        limit(numRecords * 2) // Buscar mais registros para compensar a ordenação no cliente
+      );
+    }
+
+    const querySnapshot = await getDocs(q);
+    let records = [];
+    querySnapshot.forEach((doc) => {
+      records.push({ id: doc.id, ...doc.data() });
+    });
+
+    // Se não é admin/colaborador, ordenar no cliente e limitar
+    if (!userIsAdmin && !userIsCollaborator) {
+      records = records
+        .sort((a, b) => {
+          const timestampA = a.timestamp?.toDate?.() || new Date(a.timestamp);
+          const timestampB = b.timestamp?.toDate?.() || new Date(b.timestamp);
+          return timestampB.getTime() - timestampA.getTime();
+        })
+        .slice(0, numRecords);
+    }
+
+    return records;
+  } catch (e) {
+    console.error("Error getting latest documents with permissions: ", e);
+    // Retornar array vazio em caso de erro para evitar loop infinito
+    return [];
+  }
+};
+
 // Function to get all delivery records (with optional filters later)
 export const getAllDeliveryRecords = async () => {
   try {
@@ -450,6 +500,61 @@ export const getDeliveryRecordsWithFilters = async (filters = {}) => {
     return records;
   } catch (e) {
     console.error("Error getting filtered documents: ", e);
+    throw e;
+  }
+};
+
+// Nova função para buscar registros com base nas permissões do usuário
+export const getDeliveryRecordsPaginatedWithPermissions = async (page = 1, pageSize = 100, user) => {
+  try {
+    let allRecords;
+    
+    // Se o usuário é admin ou colaborador, busca todos os registros
+    if (user && (user.type === 'admin' || user.type === 'colaborador' || isAdmin(user.email))) {
+      allRecords = await getAllDeliveryRecords();
+    } else {
+      // Se é fretista ou outro tipo, busca apenas os próprios registros
+      allRecords = await getDeliveryRecordsByUser(user.email);
+    }
+    
+    // Calcular paginação
+    const totalRecords = allRecords.length;
+    const totalPages = Math.ceil(totalRecords / pageSize);
+    const startIndex = (page - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    const records = allRecords.slice(startIndex, endIndex);
+    
+    return {
+      records,
+      totalPages,
+      totalRecords,
+      currentPage: page,
+      hasPrevious: page > 1,
+      hasNext: page < totalPages
+    };
+  } catch (e) {
+    console.error("Error getting paginated records with permissions: ", e);
+    throw e;
+  }
+};
+
+// Nova função para buscar registros com filtros e permissões
+export const getDeliveryRecordsWithFiltersAndPermissions = async (filters = {}, user) => {
+  try {
+    let records;
+    
+    // Se o usuário é admin ou colaborador, busca com filtros normais
+    if (user && (user.type === 'admin' || user.type === 'colaborador' || isAdmin(user.email))) {
+      records = await getDeliveryRecordsWithFilters(filters);
+    } else {
+      // Se é fretista, adiciona filtro por userEmail automaticamente
+      const userFilters = { ...filters, userEmail: user.email };
+      records = await getDeliveryRecordsWithFilters(userFilters);
+    }
+    
+    return records;
+  } catch (e) {
+    console.error("Error getting filtered records with permissions: ", e);
     throw e;
   }
 };

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BarChart3, Filter, Download, TrendingUp, Users, Building, ShoppingCart, AlertTriangle, Clock, CheckCircle, XCircle, Loader2 } from 'lucide-react';
-import { getDeliveryRecordsWithFilters, clientData, fretistas, problemTypes } from '../firebaseUtils.js';
+import { getDeliveryRecordsWithFilters, getDeliveryRecordsWithFiltersAndPermissions, clientData, fretistas, problemTypes } from '../firebaseUtils.js';
 import '../App.css';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend, LineChart, Line
@@ -8,8 +8,10 @@ import {
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../AuthContext.js';
 
 function Dashboard() {
+  const { currentUser } = useAuth();
   const [filterPeriod, setFilterPeriod] = useState('currentMonth');
   const [filterClient, setFilterClient] = useState('');
   const [filterFretista, setFilterFretista] = useState('');
@@ -203,7 +205,7 @@ function Dashboard() {
       }
 
       // Buscar registros
-      const allRecords = await getDeliveryRecordsWithFilters(filters);
+      const allRecords = await getDeliveryRecordsWithFiltersAndPermissions(filters, currentUser);
       
       // Filtrar por período
       const filteredRecords = allRecords.filter(record => {

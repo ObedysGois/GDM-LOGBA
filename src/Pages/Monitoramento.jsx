@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Monitor, Filter, Trash2, Share2, Edit, MessageSquare, Download, Search, ChevronLeft, ChevronRight } from 'lucide-react';
-import { getDeliveryRecordsPaginated, clientData, fretistas, problemTypes, updateDeliveryRecord, deleteDeliveryRecord, addDeliveryComment, getAttachmentFromLocalStorage } from '../firebaseUtils.js';
+import { getDeliveryRecordsPaginated, getDeliveryRecordsPaginatedWithPermissions, clientData, fretistas, problemTypes, updateDeliveryRecord, deleteDeliveryRecord, addDeliveryComment, getAttachmentFromLocalStorage } from '../firebaseUtils.js';
 import { supabase, STORAGE_BUCKETS } from '../supabaseConfig.js';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
@@ -319,18 +319,13 @@ function Monitoramento() {
     loadRecords(currentPage);
   }, [currentPage]);
 
-  useEffect(() => {
-    if (currentUser && currentUser.type !== 'admin' && currentUser.type !== 'colaborador') {
-      alert('Acesso negado! Apenas administradores e colaboradores podem acessar o Monitoramento.');
-      navigate('/');
-    }
-  }, [currentUser, navigate]);
+  // Removido o useEffect que bloqueava o acesso - agora as permissões são controladas pela função de busca
 
   const loadRecords = async (page = 1) => {
     setLoading(true);
     setError(null);
     try {
-      const data = await getDeliveryRecordsPaginated(page, recordsPerPage);
+      const data = await getDeliveryRecordsPaginatedWithPermissions(page, recordsPerPage, currentUser);
       setRecords(data.records);
       setTotalPages(data.totalPages);
       setTotalRecords(data.totalRecords);

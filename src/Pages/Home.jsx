@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useAuth } from '../AuthContext.js';
 import { ToastContext } from '../App.js';
-import { getLatestDeliveryRecords, updateDeliveryRecord, isAdmin, uploadRouteImage, getCurrentRouteImage, deleteRouteImage, isCollaborator, addDeliveryComment, problemTypes } from '../firebaseUtils.js';
+import { getLatestDeliveryRecordsWithPermissions, updateDeliveryRecord, isAdmin, uploadRouteImage, deleteRouteImage, isCollaborator, addDeliveryComment, problemTypes } from '../firebaseUtils.js';
 import { getAllRouteImages } from '../firebaseUtils.js';
 import '../App.css';
 import ToastNotification from '../Components/ToastNotification.jsx';
@@ -127,57 +127,24 @@ function Home() {
     localStorage.setItem('supportCooldown', JSON.stringify(supportCooldown));
   }, [supportCooldown]);
 
-  // Carregar registros, verificar notificações e carregar imagem da rota
-  useEffect(() => {
-    loadLatestRecords();
-    loadCurrentRouteImage();
-    // Carregar notificações descartadas do localStorage
-    const dismissed = JSON.parse(localStorage.getItem('dismissedNotifications') || '{}');
-    setDismissedNotifications(dismissed);
-    
-    const interval = setInterval(checkNotifications, 60000); // Verificar a cada minuto
-    return () => clearInterval(interval);
-  }, []);
-
-  // Verificar notificações quando os registros mudarem
-  useEffect(() => {
-    if (latestRecords.length > 0) {
-      checkNotifications();
-    }
-  }, [latestRecords]);
-
-  // Mostrar toast sempre que uma nova notificação for criada
-  useEffect(() => {
-    if (notifications.length > 0) {
-      // Mostra apenas a primeira notificação como toast
-      const n = notifications[0];
-      let type = 'info';
-      if (n.type === 'problem') type = 'warning';
-      if (n.type === 'time_wait') type = 'danger';
-      if (n.type === 'time_limit') type = 'info';
-      setToast({ open: true, type, message: n.message });
-    } else {
-      setToast({ open: false, type: 'info', message: '' });
-    }
-  }, [notifications]);
-
   // [NOVO] Hook para atualizar o tempo em aberto a cada segundo
   useEffect(() => {
     const interval = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(interval);
   }, []);
 
-  const loadLatestRecords = async () => {
+  const loadLatestRecords = useCallback(async () => {
     try {
       setLoadingRecords(true);
-      const records = await getLatestDeliveryRecords(20);
-      setLatestRecords(records);
+      const records = await getLatestDeliveryRecordsWithPermissions(20, user);
+      setLatestRecords(records || []); // Garantir que sempre seja um array
     } catch (error) {
       console.error('Erro ao carregar registros:', error);
+      setLatestRecords([]); // Definir array vazio em caso de erro
     } finally {
       setLoadingRecords(false);
     }
-  };
+  }, [user]);
 
   const loadCurrentRouteImage = async () => {
     try {
@@ -203,7 +170,7 @@ function Home() {
     }
   };
 
-  const checkNotifications = () => {
+  const checkNotifications = useCallback(() => {
     const now = new Date();
     const newNotifications = [];
     const timeWaitRecords = [];
@@ -264,18 +231,16 @@ function Home() {
       
       if (lastProblemNotified !== hourKey) {
         const notificationKey = 'problem_group';
-        if (!dismissedNotifications[notificationKey]) {
-          newNotifications.push({
-            id: notificationKey,
-            type: 'problem',
-            records: problemRecords,
-            message: `⚠️ ENTREGA(S) COM PROBLEMA ⚠️\n${problemRecords.length} entrega(s) com problemas em andamento.\n📝 Verificar detalhes abaixo.`,
-            time: now
-          });
-          localStorage.setItem('lastProblemNotification', hourKey);
-        }
-        }
+        newNotifications.push({
+          id: notificationKey,
+          type: 'problem',
+          records: problemRecords,
+          message: `⚠️ ENTREGA(S) COM PROBLEMA ⚠️\n${problemRecords.length} entrega(s) com problemas em andamento.\n📝 Verificar detalhes abaixo.`,
+          time: now
+        });
+        localStorage.setItem('lastProblemNotification', hourKey);
       }
+    }
 
     // Notificação global de horário limite (1 vez por hora para todos)
     // Só mostrar se houver registros em andamento com mais de 1 hora
@@ -299,7 +264,48 @@ function Home() {
     }
 
     setNotifications(newNotifications);
-  };
+  }, [latestRecords, dismissedNotifications]);
+
+  // Carregar registros, verificar notificações e carregar imagem da rota
+  useEffect(() => {
+    loadLatestRecords();
+    loadCurrentRouteImage();
+    // Carregar notificações descartadas do localStorage
+    const dismissed = JSON.parse(localStorage.getItem('dismissedNotifications') || '{}');
+    setDismissedNotifications(dismissed);
+  }, [loadLatestRecords]); // Separando a lógica inicial
+
+  // Configurar intervalo para verificar notificações
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (latestRecords.length > 0) {
+        checkNotifications();
+      }
+    }, 60000); // Verificar a cada minuto
+    return () => clearInterval(interval);
+  }, [latestRecords.length, checkNotifications]); // Incluindo latestRecords.length como dependência
+
+  // Verificar notificações quando os registros mudarem
+  useEffect(() => {
+    if (latestRecords.length > 0) {
+      checkNotifications();
+    }
+  }, [latestRecords.length, checkNotifications]); // Usando latestRecords.length para evitar dependência do array completo
+
+  // Mostrar toast sempre que uma nova notificação for criada
+  useEffect(() => {
+    if (notifications.length > 0) {
+      // Mostra apenas a primeira notificação como toast
+      const n = notifications[0];
+      let type = 'info';
+      if (n.type === 'problem') type = 'warning';
+      if (n.type === 'time_wait') type = 'danger';
+      if (n.type === 'time_limit') type = 'info';
+      setToast({ open: true, type, message: n.message });
+    } else {
+      setToast({ open: false, type: 'info', message: '' });
+    }
+  }, [notifications]);
 
   const dismissNotification = (notificationId) => {
     setDismissedNotifications(prev => ({
@@ -350,6 +356,13 @@ function Home() {
     // Só mostra para o usuário que fez o registro ou para admin
     if (record.userEmail !== user.email && !isAdmin(user.email)) return false;
     return true;
+  };
+
+  // Permissão de comentário (admin/colaborador em todos, fretista só o próprio)
+  const canComment = (record) => {
+    if (!user) return false;
+    if (isAdmin(user?.email) || isCollaborator(user)) return true;
+    return record?.userEmail === user?.email;
   };
 
   // Função para solicitar apoio e iniciar cooldown
@@ -1724,6 +1737,7 @@ function Home() {
                   </button>
                 )}
                   {/* Botão de comentário */}
+                  {canComment(record) && (
                   <button 
                     onClick={() => {
                       setCommentModal({ open: true, record });
@@ -1745,6 +1759,7 @@ function Home() {
                   >
                     💬 COMENTAR
                   </button>
+                  )}
                 </div>
               </div>
             </div>
@@ -1955,7 +1970,7 @@ function Home() {
                       color: '#94a3b8',
                       fontStyle: 'italic'
                     }}>
-                      {comment.timestamp ? new Date(comment.timestamp).toLocaleString('pt-BR') : 'Agora'}
+                      {comment.timestamp ? (comment.timestamp?.toDate ? comment.timestamp.toDate().toLocaleString('pt-BR') : new Date(comment.timestamp).toLocaleString('pt-BR')) : 'Agora'}
                     </div>
                   </div>
                   <div style={{
@@ -1977,6 +1992,7 @@ function Home() {
               display: 'flex',
               gap: 12
             }}>
+              {canComment(viewCommentsModal.record) && (
               <button
                 onClick={() => {
                   setViewCommentsModal({open: false, record: null});
@@ -2002,6 +2018,7 @@ function Home() {
                 <span style={{fontSize: 18}}>💬</span>
                 Adicionar Comentário
               </button>
+              )}
               
               <button
                 onClick={() => setViewCommentsModal({open: false, record: null})}
