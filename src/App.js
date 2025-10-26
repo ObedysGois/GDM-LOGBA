@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './AuthContext.js';
+import { ThemeProvider } from './contexts/ThemeContext.js';
 import Layout from './Layout.js';
 import Login from './Pages/Login.jsx';
 import Home from './Pages/Home.jsx';
@@ -30,14 +31,15 @@ function App() {
   };
 
   return (
-    <AuthProvider>
-      <ToastContext.Provider value={{ showToast }}>
-    <Router
-      future={{
-        v7_startTransition: true,
-        v7_relativeSplatPath: true
-      }}
-    >
+    <ThemeProvider>
+      <AuthProvider>
+        <ToastContext.Provider value={{ showToast }}>
+      <Router
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true
+        }}
+      >
           <div className="App">
             <Routes>
               <Route path="/login" element={<Login />} />
@@ -65,6 +67,7 @@ function App() {
         </Router>
       </ToastContext.Provider>
       </AuthProvider>
+    </ThemeProvider>
   );
 }
 

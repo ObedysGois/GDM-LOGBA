@@ -1,11 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  Home, 
+  FileText, 
+  BarChart3, 
+  MapPin, 
+  ClipboardList, 
+  Eye, 
+  User, 
+  LogOut, 
+  Menu,
+  Truck
+} from 'lucide-react';
 import { useAuth } from './AuthContext.js';
+import { useTheme } from './contexts/ThemeContext.js';
 import { ToastContext } from './App.js';
-import './App.css';
+import ThemeToggle from './Components/ThemeToggle.jsx';
 
 function Layout() {
   const { currentUser, loading, logout } = useAuth();
+  const { isDarkMode, colors } = useTheme();
   const { showToast } = React.useContext(ToastContext);
   const navigate = useNavigate();
   const location = useLocation();
@@ -36,15 +51,19 @@ function Layout() {
 
   if (loading) {
     return (
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        fontSize: '18px',
-        color: '#218838'
-      }}>
-        Carregando...
+      <div className={`
+        flex justify-center items-center h-screen
+        ${isDarkMode ? 'bg-dark-bg text-dark-text' : 'bg-light-bg text-light-text'}
+        transition-colors duration-300
+      `}>
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          className={`w-8 h-8 border-4 border-t-transparent rounded-full mr-3
+            ${isDarkMode ? 'border-dark-primary' : 'border-light-primary'}
+          `}
+        />
+        <span className="text-lg font-medium">Carregando...</span>
       </div>
     );
   }
@@ -59,82 +78,208 @@ function Layout() {
   const canAccessProfile = currentUser.type === 'admin' || currentUser.type === 'colaborador';
 
   const menuItems = [
-    { path: '/', icon: '🏠', label: 'Home' },
-    { path: '/registros', icon: '📝', label: 'Registros' },
-    { path: '/dashboard', icon: '📊', label: 'Dashboard' },
-    ...(canAccessLocalizacao ? [{ path: '/localizacao', icon: '📍', label: 'Localização' }] : []),
-    { path: '/meu-resumo', icon: '📋', label: 'Meu Resumo' },
-    ...(canAccessMonitoramento ? [{ path: '/monitoramento', icon: '👁️', label: 'Monitoramento' }] : []),
-    ...(canAccessProfile ? [{ path: '/profile', icon: '👤', label: 'Perfil' }] : [])
+    { path: '/', icon: Home, label: 'Home' },
+    { path: '/registros', icon: FileText, label: 'Registros' },
+    { path: '/dashboard', icon: BarChart3, label: 'Dashboard' },
+    ...(canAccessLocalizacao ? [{ path: '/localizacao', icon: MapPin, label: 'Localização' }] : []),
+    { path: '/meu-resumo', icon: ClipboardList, label: 'Meu Resumo' },
+    ...(canAccessMonitoramento ? [{ path: '/monitoramento', icon: Eye, label: 'Monitoramento' }] : []),
+    ...(canAccessProfile ? [{ path: '/profile', icon: User, label: 'Perfil' }] : [])
   ];
 
   return (
-    <div className="app-main">
+    <div className={`
+      min-h-screen transition-colors duration-300
+      ${isDarkMode ? 'bg-dark-bg text-dark-text' : 'bg-light-bg text-light-text'}
+    `}>
       {/* Sidebar */}
-      <div className={`sidebar ${sidebarOpen ? 'sidebar-open' : ''}`}>
-        <div className="sidebar-header">
-          <img src="/assets/logodocemel.png" alt="Logo" className="sidebar-logo" />
-        </div>
-        
-        <nav className="sidebar-nav">
-          {menuItems.map((item) => (
-            <a
-              key={item.path}
-              href={item.path}
-              className={`sidebar-link ${location.pathname === item.path ? 'active' : ''}`}
-              onClick={(e) => {
-                e.preventDefault();
-                navigate(item.path);
-              }}
+      <AnimatePresence>
+        {sidebarOpen && (
+          <>
+            <motion.div
+              initial={{ x: -300 }}
+              animate={{ x: 0 }}
+              exit={{ x: -300 }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className={`
+                fixed top-0 left-0 h-full w-80 z-50 shadow-2xl
+                ${isDarkMode ? 'bg-dark-card border-dark-border' : 'bg-light-card border-light-border'}
+                border-r transition-colors duration-300
+              `}
             >
-              <span className="sidebar-icon">{item.icon}</span>
-              <span className="sidebar-text">{item.label}</span>
-            </a>
-          ))}
-        </nav>
+              {/* Logo Section */}
+              <div className={`
+                p-6 border-b
+                ${isDarkMode ? 'border-dark-border' : 'border-light-border'}
+              `}>
+                <div className="flex items-center space-x-3">
+                  <div className={`
+                    p-3 rounded-xl
+                    ${isDarkMode ? 'bg-dark-primary' : 'bg-light-primary'}
+                  `}>
+                    <Truck className="w-8 h-8 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-bold">Logística BA</h2>
+                    <p className={`text-sm ${isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'}`}>
+                      Sistema de Transporte
+                    </p>
+                  </div>
+                </div>
+              </div>
 
-        <div className="sidebar-footer">
-          <div className="user-info">
-            <span className="user-icon">👤</span>
-            <span className="user-email">{currentUser.email}</span>
-          </div>
-          <button onClick={handleLogout} className="logout-button">
-            <span className="logout-icon">🚪</span>
-            Sair
-          </button>
-        </div>
-      </div>
+              {/* Navigation Menu */}
+              <nav className="p-4 space-y-2">
+                {menuItems.map((item) => {
+                  const IconComponent = item.icon;
+                  const isActive = location.pathname === item.path;
+                  
+                  return (
+                    <motion.button
+                      key={item.path}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => {
+                        navigate(item.path);
+                        setSidebarOpen(false);
+                      }}
+                      className={`
+                        w-full flex items-center space-x-3 p-4 rounded-xl
+                        transition-all duration-200 text-left
+                        ${isActive 
+                          ? isDarkMode 
+                            ? 'bg-dark-primary text-white shadow-lg' 
+                            : 'bg-light-primary text-white shadow-lg'
+                          : isDarkMode
+                            ? 'hover:bg-dark-hover text-dark-text'
+                            : 'hover:bg-light-hover text-light-text'
+                        }
+                      `}
+                    >
+                      <IconComponent className="w-5 h-5" />
+                      <span className="font-medium">{item.label}</span>
+                    </motion.button>
+                  );
+                })}
+              </nav>
+
+              {/* User Info & Logout */}
+              <div className={`
+                absolute bottom-0 left-0 right-0 p-4 border-t
+                ${isDarkMode ? 'border-dark-border bg-dark-card' : 'border-light-border bg-light-card'}
+              `}>
+                <div className="flex items-center space-x-3 mb-4">
+                  <div className={`
+                    w-10 h-10 rounded-full flex items-center justify-center
+                    ${isDarkMode ? 'bg-dark-primary' : 'bg-light-primary'}
+                  `}>
+                    <User className="w-5 h-5 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-medium text-sm">{currentUser?.nome || 'Usuário'}</p>
+                    <p className={`text-xs ${isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'}`}>
+                      {currentUser?.tipo || 'Motorista'}
+                    </p>
+                  </div>
+                </div>
+                
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={handleLogout}
+                  className={`
+                    w-full flex items-center justify-center space-x-2 p-3 rounded-xl
+                    transition-all duration-200
+                    ${isDarkMode 
+                      ? 'bg-red-600 hover:bg-red-700 text-white' 
+                      : 'bg-red-500 hover:bg-red-600 text-white'
+                    }
+                  `}
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span className="font-medium">Sair</span>
+                </motion.button>
+              </div>
+            </motion.div>
+
+            {/* Overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSidebarOpen(false)}
+              className="fixed inset-0 bg-black bg-opacity-50 z-40"
+            />
+          </>
+        )}
+      </AnimatePresence>
 
       {/* Topbar */}
-      <div className="topbar">
-        <div className="topbar-content">
-          <button
-            className="menu-toggle"
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-          >
-            ☰
-          </button>
-          <h1 className="topbar-title">
-            <span className="topbar-icon">🚛</span>
-            Logística BA
-          </h1>
+      <header className={`
+        fixed top-0 left-0 right-0 z-30 h-16 shadow-lg
+        ${isDarkMode ? 'bg-dark-card border-dark-border' : 'bg-light-card border-light-border'}
+        border-b transition-colors duration-300
+      `}>
+        <div className="flex items-center justify-between h-full px-4">
+          <div className="flex items-center space-x-4">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className={`
+                p-2 rounded-lg transition-colors duration-200
+                ${isDarkMode 
+                  ? 'hover:bg-dark-hover text-dark-text' 
+                  : 'hover:bg-light-hover text-light-text'
+                }
+              `}
+            >
+              <Menu className="w-6 h-6" />
+            </motion.button>
+            
+            <div className="flex items-center space-x-3">
+              <div className={`
+                p-2 rounded-lg
+                ${isDarkMode ? 'bg-dark-primary' : 'bg-light-primary'}
+              `}>
+                <Truck className="w-6 h-6 text-white" />
+              </div>
+              <h1 className="text-xl font-bold hidden sm:block">Logística BA</h1>
+            </div>
+          </div>
+
+          <div className="flex items-center space-x-4">
+            <ThemeToggle />
+            
+            <div className="flex items-center space-x-2">
+              <div className={`
+                w-8 h-8 rounded-full flex items-center justify-center
+                ${isDarkMode ? 'bg-dark-primary' : 'bg-light-primary'}
+              `}>
+                <User className="w-4 h-4 text-white" />
+              </div>
+              <span className="font-medium text-sm hidden md:block">
+                {currentUser?.nome || 'Usuário'}
+              </span>
+            </div>
+          </div>
         </div>
-      </div>
+      </header>
 
       {/* Main Content */}
-      <main className="main-content">
-        <Outlet />
+      <main className="pt-16 min-h-screen">
+        <div className="p-4 md:p-6 lg:p-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Outlet />
+          </motion.div>
+        </div>
       </main>
-
-      {/* Sidebar Overlay */}
-      {sidebarOpen && (
-        <div
-          className="sidebar-overlay"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
     </div>
   );
 } 
 
-export default Layout; 
+export default Layout;

@@ -1,39 +1,9 @@
-:root {
-  /* Cores do tema */
-  --primary-green: #2E7D32;
-  --primary-green-hover: #1B5E20;
-  --primary-orange: #FF6F00;
-  --primary-orange-hover: #E65100;
-  --secondary-green: #4CAF50;
-  --secondary-orange: #FF9800;
-  
-  /* Cores neutras */
-  --white: #FFFFFF;
-  --light-gray: #F5F5F5;
-  --gray: #9E9E9E;
-  --dark-gray: #424242;
-  --text-primary: #212121;
-  --text-secondary: #757575;
-  
-  /* Sombras e bordas */
-  --shadow-light: 0 2px 4px rgba(0,0,0,0.1);
-  --shadow-medium: 0 4px 8px rgba(0,0,0,0.15);
-  --shadow-heavy: 0 8px 16px rgba(0,0,0,0.2);
-  --border-radius: 8px;
-  --border-radius-small: 4px;
-  
-  /* Espaçamentos */
-  --spacing-xs: 4px;
-  --spacing-sm: 8px;
-  --spacing-md: 16px;
-  --spacing-lg: 24px;
-  --spacing-xl: 32px;
-  
-  /* Breakpoints */
-  --mobile: 768px;
-  --tablet: 1024px;
-  --desktop: 1200px;
-}
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 * {
   box-sizing: border-box;
@@ -41,13 +11,12 @@
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: 'Inter', 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--white);
-  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
   line-height: 1.6;
 }
 

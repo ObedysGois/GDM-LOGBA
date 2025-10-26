@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../AuthContext.js';
+import { useTheme } from '../contexts/ThemeContext.js';
 import { ToastContext } from '../App.js';
 import { addDeliveryRecord, updateDeliveryRecord, getClientData, clientData, fretistas, uploadDeliveryAttachments, getDeliveryRecordsByUser, problemTypes } from '../firebaseUtils.js';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebaseConfig.js';
 import { FileText, Clock, CheckCircle, XCircle, AlertTriangle, Camera, Send, RefreshCw } from 'lucide-react';
 import '../App.css';
+import PageHeader from '../Components/PageHeader.jsx';
 
 // Função utilitária para buscar um registro pelo ID
 async function getDeliveryRecordById(id) {
@@ -19,6 +21,7 @@ async function getDeliveryRecordById(id) {
 
 function Registros() {
   const { currentUser: user } = useAuth();
+  const { isDarkMode } = useTheme();
   const { showToast } = React.useContext(ToastContext);
   const [selectedClient, setSelectedClient] = useState('');
   const [otherClient, setOtherClient] = useState('');
@@ -655,14 +658,14 @@ ${message}`);
     return (
       <>
         <span>
-          {text.slice(0, maxLength)}... <span style={{color:'#1976d2',cursor:'pointer',fontWeight:600}} onClick={()=>setModalOpen(true)}>ver mais</span>
+          {text.slice(0, maxLength)}... <span style={{color: isDarkMode ? '#60a5fa' : '#1976d2',cursor:'pointer',fontWeight:600}} onClick={()=>setModalOpen(true)}>ver mais</span>
         </span>
         {modalOpen && (
           <div style={{position:'fixed',top:0,left:0,width:'100vw',height:'100vh',background:'rgba(0,0,0,0.35)',zIndex:9999,display:'flex',alignItems:'center',justifyContent:'center'}}>
-            <div style={{background:'#fff',borderRadius:16,padding:32,minWidth:320,maxWidth:400,boxShadow:'0 8px 32px #0005',position:'relative',wordBreak:'break-word'}}>
-              <button onClick={()=>setModalOpen(false)} style={{position:'absolute',top:16,right:16,fontSize:22,background:'none',border:'none',cursor:'pointer',color:'#888'}} title="Fechar">×</button>
-              <h2 style={{fontWeight:700, fontSize:'1.1rem', color:'#1976d2', marginBottom:18}}>Observação Completa</h2>
-              <div style={{fontSize:16, color:'#333', wordBreak:'break-word', whiteSpace:'pre-wrap'}}>{text}</div>
+            <div style={{background: isDarkMode ? '#374151' : '#fff',borderRadius:16,padding:32,minWidth:320,maxWidth:400,boxShadow:'0 8px 32px #0005',position:'relative',wordBreak:'break-word'}}>
+              <button onClick={()=>setModalOpen(false)} style={{position:'absolute',top:16,right:16,fontSize:22,background:'none',border:'none',cursor:'pointer',color: isDarkMode ? '#d1d5db' : '#888'}} title="Fechar">×</button>
+              <h2 style={{fontWeight:700, fontSize:'1.1rem', color: isDarkMode ? '#60a5fa' : '#1976d2', marginBottom:18}}>Observação Completa</h2>
+              <div style={{fontSize:16, color: isDarkMode ? '#f3f4f6' : '#333', wordBreak:'break-word', whiteSpace:'pre-wrap'}}>{text}</div>
             </div>
           </div>
         )}
@@ -673,54 +676,23 @@ ${message}`);
   return (
     <div className="registros-container" style={{maxWidth: '1200px', margin: '0 auto', padding: '24px 0'}}>
       {/* Cabeçalho moderno padrão localização */}
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '32px 12px 24px 12px',
-        background: 'linear-gradient(135deg, #1de9b6 0%, #1dc8e9 100%)',
-        borderRadius: 24,
-        marginBottom: 24,
-        maxWidth: '100%',
-        wordBreak: 'break-word',
-        overflowWrap: 'break-word',
-      }}>
-        <div style={{fontSize: 64, marginBottom: 8}}><i className="fas fa-file-alt" /></div>
-        <h1 style={{
-          fontSize: 'clamp(1.5rem, 6vw, 2.5rem)',
-          fontWeight: 800,
-          color: '#fff',
-          margin: 0,
-          textAlign: 'center',
-          maxWidth: '100%',
-          wordBreak: 'break-word',
-          overflowWrap: 'break-word',
-        }}>Registros de Entrega</h1>
-        <div style={{
-          color: '#fff',
-          fontSize: 'clamp(1rem, 3vw, 1.2rem)',
-          textAlign: 'center',
-          marginTop: 8,
-          maxWidth: '100%',
-          wordBreak: 'break-word',
-          overflowWrap: 'break-word',
-        }}>
-          Gerencie check-ins, check-outs e problemas de entrega
-        </div>
-      </div>
+      <PageHeader
+        title="Registros de Entrega"
+        subtitle="Gerencie check-ins, check-outs e problemas de entrega"
+        icon={FileText}
+      />
 
       <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: 24}}>
         {/* Formulário de Seleção */}
         <div className="card" style={{padding: 24}}>
-          <h3 style={{fontSize: '1.3rem', color: '#218838', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8}}>
+          <h3 style={{fontSize: '1.3rem', color: isDarkMode ? '#10b981' : '#218838', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8}}>
             <FileText style={{width: 20, height: 20}} />
             Seleção de Cliente e Fretista
           </h3>
           
           <div style={{display: 'flex', flexDirection: 'column', gap: 16}}>
             <div>
-              <label style={{display: 'block', fontWeight: 600, color: '#495057', marginBottom: 8}}>👤 Cliente:</label>
+              <label style={{display: 'block', fontWeight: 600, color: isDarkMode ? '#d1d5db' : '#495057', marginBottom: 8}}>👤 Cliente:</label>
               <select
                 value={selectedClient}
                 onChange={(e) => {
@@ -730,7 +702,10 @@ ${message}`);
                   }
                 }}
                 disabled={hasCheckedIn}
-                style={{width: '100%', padding: '12px 16px', border: '1px solid #e0e0e0', borderRadius: 8, fontSize: 15, background: hasCheckedIn ? '#f8f9fa' : '#fff'}}
+                className={`w-full p-3 rounded-lg border text-sm ${isDarkMode 
+                  ? 'bg-gray-800 border-gray-600 text-white focus:border-blue-400' 
+                  : 'bg-white border-gray-300 text-gray-900 focus:border-blue-500'
+                } ${hasCheckedIn ? (isDarkMode ? 'bg-gray-700' : 'bg-gray-50') : ''} focus:outline-none focus:ring-2 focus:ring-blue-500/20`}
               >
                 <option value="">Selecione um cliente</option>
                 {clients.map((client) => (
@@ -745,13 +720,16 @@ ${message}`);
                   value={otherClient}
                   onChange={(e) => setOtherClient(e.target.value)}
                   disabled={hasCheckedIn}
-                  style={{width: '100%', padding: '12px 16px', border: '1px solid #e0e0e0', borderRadius: 8, fontSize: 15, marginTop: 8, background: hasCheckedIn ? '#f8f9fa' : '#fff'}}
+                  className={`w-full p-3 rounded-lg border text-sm mt-2 ${isDarkMode 
+                    ? 'bg-gray-800 border-gray-600 text-white focus:border-blue-400 placeholder-gray-400' 
+                    : 'bg-white border-gray-300 text-gray-900 focus:border-blue-500 placeholder-gray-500'
+                  } ${hasCheckedIn ? (isDarkMode ? 'bg-gray-700' : 'bg-gray-50') : ''} focus:outline-none focus:ring-2 focus:ring-blue-500/20`}
                 />
               )}
             </div>
 
             <div>
-              <label style={{display: 'block', fontWeight: 600, color: '#495057', marginBottom: 8}}>🚛 Fretista:</label>
+              <label style={{display: 'block', fontWeight: 600, color: isDarkMode ? '#d1d5db' : '#495057', marginBottom: 8}}>🚛 Fretista:</label>
               <select
                 value={selectedFretista}
                 onChange={(e) => {
@@ -761,7 +739,10 @@ ${message}`);
                   }
                 }}
                 disabled={hasCheckedIn}
-                style={{width: '100%', padding: '12px 16px', border: '1px solid #e0e0e0', borderRadius: 8, fontSize: 15, background: hasCheckedIn ? '#f8f9fa' : '#fff'}}
+                className={`w-full p-3 rounded-lg border text-sm ${isDarkMode 
+                  ? 'bg-gray-800 border-gray-600 text-white focus:border-blue-400' 
+                  : 'bg-white border-gray-300 text-gray-900 focus:border-blue-500'
+                } ${hasCheckedIn ? (isDarkMode ? 'bg-gray-700' : 'bg-gray-50') : ''} focus:outline-none focus:ring-2 focus:ring-blue-500/20`}
               >
                 <option value="">Selecione um fretista</option>
                 {fretistas.map((fretista) => (
@@ -776,7 +757,10 @@ ${message}`);
                   value={otherFretista}
                   onChange={(e) => setOtherFretista(e.target.value)}
                   disabled={hasCheckedIn}
-                  style={{width: '100%', padding: '12px 16px', border: '1px solid #e0e0e0', borderRadius: 8, fontSize: 15, marginTop: 8, background: hasCheckedIn ? '#f8f9fa' : '#fff'}}
+                  className={`w-full p-3 rounded-lg border text-sm mt-2 ${isDarkMode 
+                    ? 'bg-gray-800 border-gray-600 text-white focus:border-blue-400 placeholder-gray-400' 
+                    : 'bg-white border-gray-300 text-gray-900 focus:border-blue-500 placeholder-gray-500'
+                  } ${hasCheckedIn ? (isDarkMode ? 'bg-gray-700' : 'bg-gray-50') : ''} focus:outline-none focus:ring-2 focus:ring-blue-500/20`}
                 />
               )}
             </div>
@@ -785,31 +769,40 @@ ${message}`);
             {selectedClient && selectedClient !== 'OUTRO - DIGITAR MANUALMENTE' && (
               <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 12}}>
                 <div>
-                  <label style={{display: 'block', fontWeight: 600, color: '#495057', marginBottom: 8}}>👨‍💼 Vendedor:</label>
+                  <label style={{display: 'block', fontWeight: 600, color: isDarkMode ? '#d1d5db' : '#495057', marginBottom: 8}}>👨‍💼 Vendedor:</label>
                   <input
                     type="text"
                     value={vendedor}
                     onChange={(e) => setVendedor(e.target.value)}
                     disabled={hasCheckedIn}
-                    style={{width: '100%', padding: '12px 16px', border: '1px solid #e0e0e0', borderRadius: 8, fontSize: 15, background: hasCheckedIn ? '#f8f9fa' : '#fff'}}
+                    className={`w-full p-3 rounded-lg border text-sm ${isDarkMode 
+                      ? 'bg-gray-800 border-gray-600 text-white focus:border-blue-400' 
+                      : 'bg-white border-gray-300 text-gray-900 focus:border-blue-500'
+                    } ${hasCheckedIn ? (isDarkMode ? 'bg-gray-700' : 'bg-gray-50') : ''} focus:outline-none focus:ring-2 focus:ring-blue-500/20`}
                   />
                 </div>
                 <div>
-                  <label style={{display: 'block', fontWeight: 600, color: '#495057', marginBottom: 8}}>🏪 Rede:</label>
+                  <label style={{display: 'block', fontWeight: 600, color: isDarkMode ? '#d1d5db' : '#495057', marginBottom: 8}}>🏪 Rede:</label>
                   <input
                     type="text"
                     value={rede}
                     disabled={true}
-                    style={{width: '100%', padding: '12px 16px', border: '1px solid #e0e0e0', borderRadius: 8, fontSize: 15, background: '#f8f9fa'}}
+                    className={`w-full p-3 rounded-lg border text-sm ${isDarkMode 
+                      ? 'bg-gray-700 border-gray-600 text-gray-300' 
+                      : 'bg-gray-50 border-gray-300 text-gray-700'
+                    }`}
                   />
                 </div>
                 <div>
-                  <label style={{display: 'block', fontWeight: 600, color: '#495057', marginBottom: 8}}>📍 UF:</label>
+                  <label style={{display: 'block', fontWeight: 600, color: isDarkMode ? '#d1d5db' : '#495057', marginBottom: 8}}>📍 UF:</label>
                   <input
                     type="text"
                     value={uf}
                     disabled={true}
-                    style={{width: '100%', padding: '12px 16px', border: '1px solid #e0e0e0', borderRadius: 8, fontSize: 15, background: '#f8f9fa'}}
+                    className={`w-full p-3 rounded-lg border text-sm ${isDarkMode 
+                      ? 'bg-gray-700 border-gray-600 text-gray-300' 
+                      : 'bg-gray-50 border-gray-300 text-gray-700'
+                    }`}
                   />
                 </div>
               </div>
@@ -819,28 +812,28 @@ ${message}`);
 
         {/* Status Atual */}
         <div className="card" style={{padding: 24}}>
-          <h3 style={{fontSize: '1.3rem', color: '#218838', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8}}>
+          <h3 style={{fontSize: '1.3rem', color: isDarkMode ? '#10b981' : '#218838', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8}}>
             <Clock style={{width: 20, height: 20}} />
             Status Atual da Entrega
           </h3>
           
           <div style={{display: 'flex', flexDirection: 'column', gap: 12}}>
-            <div style={{background: '#f8f9fa', padding: 16, borderRadius: 12}}>
-              <p style={{margin: '0 0 8px 0', fontWeight: 600, color: '#495057'}}>👤 Cliente: <span style={{color: '#218838'}}>{selectedClient === 'OUTRO - DIGITAR MANUALMENTE' ? otherClient : selectedClient || 'N/A'}</span></p>
-              <p style={{margin: '0 0 8px 0', fontWeight: 600, color: '#495057'}}>🚛 Fretista: <span style={{color: '#218838'}}>{selectedFretista === 'OUTRO - DIGITAR MANUALMENTE' ? otherFretista : selectedFretista || 'N/A'}</span></p>
-              {vendedor && <p style={{margin: '0 0 8px 0', fontWeight: 600, color: '#495057'}}>👨‍💼 Vendedor: <span style={{color: '#218838'}}>{vendedor}</span></p>}
-              {rede && <p style={{margin: '0 0 8px 0', fontWeight: 600, color: '#495057'}}>🏪 Rede: <span style={{color: '#218838'}}>{rede}</span></p>}
-              {uf && <p style={{margin: '0 0 8px 0', fontWeight: 600, color: '#495057'}}>📍 UF: <span style={{color: '#218838'}}>{uf}</span></p>}
+            <div style={{background: isDarkMode ? '#374151' : '#f8f9fa', padding: 16, borderRadius: 12}}>
+              <p style={{margin: '0 0 8px 0', fontWeight: 600, color: isDarkMode ? '#d1d5db' : '#495057'}}>👤 Cliente: <span style={{color: isDarkMode ? '#10b981' : '#218838'}}>{selectedClient === 'OUTRO - DIGITAR MANUALMENTE' ? otherClient : selectedClient || 'N/A'}</span></p>
+              <p style={{margin: '0 0 8px 0', fontWeight: 600, color: isDarkMode ? '#d1d5db' : '#495057'}}>🚛 Fretista: <span style={{color: isDarkMode ? '#10b981' : '#218838'}}>{selectedFretista === 'OUTRO - DIGITAR MANUALMENTE' ? otherFretista : selectedFretista || 'N/A'}</span></p>
+              {vendedor && <p style={{margin: '0 0 8px 0', fontWeight: 600, color: isDarkMode ? '#d1d5db' : '#495057'}}>👨‍💼 Vendedor: <span style={{color: isDarkMode ? '#10b981' : '#218838'}}>{vendedor}</span></p>}
+              {rede && <p style={{margin: '0 0 8px 0', fontWeight: 600, color: isDarkMode ? '#d1d5db' : '#495057'}}>🏪 Rede: <span style={{color: isDarkMode ? '#10b981' : '#218838'}}>{rede}</span></p>}
+              {uf && <p style={{margin: '0 0 8px 0', fontWeight: 600, color: isDarkMode ? '#d1d5db' : '#495057'}}>📍 UF: <span style={{color: isDarkMode ? '#10b981' : '#218838'}}>{uf}</span></p>}
             </div>
             
-            <div style={{background: '#f8f9fa', padding: 16, borderRadius: 12}}>
-              <p style={{margin: '0 0 8px 0', fontWeight: 600, color: '#495057'}}>🟨 Check-in: <span style={{color: '#ff9800'}}>{checkinTime ? checkinTime.toLocaleTimeString() : 'N/A'}</span></p>
-              <p style={{margin: '0 0 8px 0', fontWeight: 600, color: '#495057'}}>✅ Check-out: <span style={{color: '#4caf50'}}>{checkoutTime ? checkoutTime.toLocaleTimeString() : 'N/A'}</span></p>
-              <p style={{margin: '0 0 8px 0', fontWeight: 600, color: '#495057'}}>⏳ Duração: <span style={{color: '#1976d2'}}>{duration || 'N/A'}</span></p>
-              <p style={{margin: '0 0 8px 0', fontWeight: 600, color: '#495057'}}>📊 Status: <span style={{color: '#218838'}}>{deliveryStatus}</span></p>
-              {problemType && <p style={{margin: '0 0 8px 0', fontWeight: 600, color: '#495057'}}>⚠️ Problema: <span style={{color: '#e65100'}}>{problemType}</span></p>}
-              <p style={{margin: '0 0 8px 0', fontWeight: 600, color: '#495057'}}>📝 Informações: <span style={{color: '#666'}}><CollapsibleText text={info || 'N/A'} /></span></p>
-              {attachments.length > 0 && <p style={{margin: 0, fontWeight: 600, color: '#495057'}}>📎 Anexos: <span style={{color: '#1976d2'}}>{attachments.length} arquivo(s)</span></p>}
+            <div style={{background: isDarkMode ? '#374151' : '#f8f9fa', padding: 16, borderRadius: 12}}>
+              <p style={{margin: '0 0 8px 0', fontWeight: 600, color: isDarkMode ? '#d1d5db' : '#495057'}}>🟨 Check-in: <span style={{color: '#ff9800'}}>{checkinTime ? checkinTime.toLocaleTimeString() : 'N/A'}</span></p>
+              <p style={{margin: '0 0 8px 0', fontWeight: 600, color: isDarkMode ? '#d1d5db' : '#495057'}}>✅ Check-out: <span style={{color: '#4caf50'}}>{checkoutTime ? checkoutTime.toLocaleTimeString() : 'N/A'}</span></p>
+              <p style={{margin: '0 0 8px 0', fontWeight: 600, color: isDarkMode ? '#d1d5db' : '#495057'}}>⏳ Duração: <span style={{color: isDarkMode ? '#60a5fa' : '#1976d2'}}>{duration || 'N/A'}</span></p>
+              <p style={{margin: '0 0 8px 0', fontWeight: 600, color: isDarkMode ? '#d1d5db' : '#495057'}}>📊 Status: <span style={{color: isDarkMode ? '#10b981' : '#218838'}}>{deliveryStatus}</span></p>
+              {problemType && <p style={{margin: '0 0 8px 0', fontWeight: 600, color: isDarkMode ? '#d1d5db' : '#495057'}}>⚠️ Problema: <span style={{color: '#e65100'}}>{problemType}</span></p>}
+              <p style={{margin: '0 0 8px 0', fontWeight: 600, color: isDarkMode ? '#d1d5db' : '#495057'}}>📝 Informações: <span style={{color: isDarkMode ? '#9ca3af' : '#666'}}><CollapsibleText text={info || 'N/A'} /></span></p>
+              {attachments.length > 0 && <p style={{margin: 0, fontWeight: 600, color: isDarkMode ? '#d1d5db' : '#495057'}}>📎 Anexos: <span style={{color: isDarkMode ? '#60a5fa' : '#1976d2'}}>{attachments.length} arquivo(s)</span></p>}
             </div>
           </div>
         </div>
@@ -848,7 +841,7 @@ ${message}`);
 
       {/* Botões de Ação */}
       <div className="card" style={{padding: 24, marginTop: 24}}>
-        <h3 style={{fontSize: '1.3rem', color: '#218838', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8}}>
+        <h3 style={{fontSize: '1.3rem', color: isDarkMode ? '#10b981' : '#218838', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8}}>
           <CheckCircle style={{width: 20, height: 20}} />
           Ações de Entrega
         </h3>
@@ -859,7 +852,7 @@ ${message}`);
               className="btn btn-green"
               onClick={handleCheckin}
               disabled={loading}
-              style={{fontSize: 16, padding: '14px 32px', display: 'inline-flex', alignItems: 'center', gap: 8}}
+              style={{fontSize: 14, padding: '10px 24px', display: 'inline-flex', alignItems: 'center', gap: 8}}
             >
               <Clock style={{width: 18, height: 18}} />
               {loading ? 'Processando...' : 'Check-in'}
@@ -872,7 +865,7 @@ ${message}`);
                 className="btn btn-green"
                 onClick={handleCheckout}
                 disabled={loading}
-                style={{fontSize: 16, padding: '14px 32px', display: 'inline-flex', alignItems: 'center', gap: 8}}
+                style={{fontSize: 14, padding: '10px 24px', display: 'inline-flex', alignItems: 'center', gap: 8}}
               >
                 <CheckCircle style={{width: 18, height: 18}} />
                 {loading ? 'Processando...' : 'Check-out'}
@@ -881,7 +874,7 @@ ${message}`);
                 className="btn btn-red"
                 onClick={handleDevolucaoTotal}
                 disabled={loading}
-                style={{fontSize: 16, padding: '14px 32px', display: 'inline-flex', alignItems: 'center', gap: 8}}
+                style={{fontSize: 14, padding: '10px 24px', display: 'inline-flex', alignItems: 'center', gap: 8}}
               >
                 <XCircle style={{width: 18, height: 18}} />
                 {loading ? 'Processando...' : 'DEVOLUÇÃO TOTAL'}
@@ -894,7 +887,7 @@ ${message}`);
                   setProblemInfo('');
                 }}
                 disabled={loading}
-                style={{fontSize: 16, padding: '14px 32px', display: 'inline-flex', alignItems: 'center', gap: 8}}
+                style={{fontSize: 14, padding: '10px 24px', display: 'inline-flex', alignItems: 'center', gap: 8}}
               >
                 <AlertTriangle style={{width: 18, height: 18}} />
                 ENTREGA COM PROBLEMA
@@ -911,7 +904,7 @@ ${message}`);
       {/* Anexos e Comunicação */}
       {hasCheckedIn && (
         <div className="card" style={{padding: 24, marginTop: 24}}>
-          <h3 style={{fontSize: '1.3rem', color: '#218838', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8}}>
+          <h3 style={{fontSize: '1.3rem', color: isDarkMode ? '#10b981' : '#218838', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8}}>
             <Camera style={{width: 20, height: 20}} />
             Ações e Comunicação
           </h3>
@@ -935,20 +928,20 @@ ${message}`);
                 />
             {/* Área de anexos visualmente moderna */}
             {attachments.length > 0 && (
-              <div style={{display:'flex', flexWrap:'wrap', gap:16, marginTop:18, background:'#f8f9fa', borderRadius:12, padding:16, border:'1.5px solid #e0e0e0'}}>
+              <div style={{display:'flex', flexWrap:'wrap', gap:16, marginTop:18, background: isDarkMode ? '#374151' : '#f8f9fa', borderRadius:12, padding:16, border: `1.5px solid ${isDarkMode ? '#4b5563' : '#e0e0e0'}`}}>
                   {attachments.map((attachment, index) => (
-                  <div key={`${attachment.file.name}-${attachment.file.size}`} style={{position:'relative', width:90, height:90, borderRadius:10, overflow:'hidden', background:'#fff', boxShadow:'0 2px 8px #0001', display:'flex', alignItems:'center', justifyContent:'center'}}>
+                  <div key={`${attachment.file.name}-${attachment.file.size}`} style={{position:'relative', width:90, height:90, borderRadius:10, overflow:'hidden', background: isDarkMode ? '#1f2937' : '#fff', boxShadow:'0 2px 8px #0001', display:'flex', alignItems:'center', justifyContent:'center'}}>
                     <img
                       src={URL.createObjectURL(attachment.file)}
                       alt={attachment.name}
-                      style={{width:'100%', height:'100%', objectFit:'cover', borderRadius:10, border:'1px solid #e0e0e0'}}
+                      style={{width:'100%', height:'100%', objectFit:'cover', borderRadius:10, border: `1px solid ${isDarkMode ? '#4b5563' : '#e0e0e0'}`}}
                     />
                     <button onClick={() => removeAttachment(index)} style={{position:'absolute',top:4,right:4,background:'#e53935',color:'#fff',border:'none',borderRadius:'50%',width:22,height:22,display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700,cursor:'pointer',boxShadow:'0 1px 4px #0002'}}>×</button>
                     </div>
                   ))}
               </div>
             )}
-            <p style={{color:'#888', fontSize:15, margin:'14px 0 0 0', fontStyle:'italic', textAlign:'left'}}>Selecione ou fotografe imagens nítidas do canhoto da entrega. Máx: 10 imagens.</p>
+            <p style={{color: isDarkMode ? '#9ca3af' : '#888', fontSize:15, margin:'14px 0 0 0', fontStyle:'italic', textAlign:'left'}}>Selecione ou fotografe imagens nítidas do canhoto da entrega. Máx: 10 imagens.</p>
           </div>
         </div>
       )}
@@ -994,7 +987,7 @@ ${message}`);
           justifyContent: 'center'
         }}>
           <div style={{
-            background: '#fff',
+            background: isDarkMode ? '#374151' : '#fff',
             borderRadius: 16,
             padding: 32,
             minWidth: 400,
@@ -1012,7 +1005,7 @@ ${message}`);
                 background: 'none',
                 border: 'none',
                 cursor: 'pointer',
-                color: '#888'
+                color: isDarkMode ? '#d1d5db' : '#888'
               }}
               title="Fechar"
             >
@@ -1023,14 +1016,14 @@ ${message}`);
               <h2 style={{
                 fontWeight: 700,
                 fontSize: '1.5rem',
-                color: '#43a047',
+                color: isDarkMode ? '#10b981' : '#43a047',
                 marginBottom: 8
               }}>
                 📝 Informações Adicionais (Opcional)
               </h2>
               <p style={{
                 fontSize: '1rem',
-                color: '#64748b',
+                color: isDarkMode ? '#9ca3af' : '#64748b',
                 margin: 0
               }}>
                 Adicione observações sobre a entrega e envie o resumo via WhatsApp
@@ -1041,7 +1034,7 @@ ${message}`);
               <label style={{
                 display: 'block',
                 fontWeight: 600,
-                color: '#333',
+                color: isDarkMode ? '#d1d5db' : '#333',
                 marginBottom: 8
               }}>
                 📝 Observações:
@@ -1054,11 +1047,13 @@ ${message}`);
                 style={{
                   width: '100%',
                   padding: '16px',
-                  border: '1.5px solid #e2e8f0',
+                  border: `1.5px solid ${isDarkMode ? '#4b5563' : '#e2e8f0'}`,
                   borderRadius: 12,
                   fontSize: 16,
                   resize: 'vertical',
-                  fontFamily: 'inherit'
+                  fontFamily: 'inherit',
+                  background: isDarkMode ? '#1f2937' : '#fff',
+                  color: isDarkMode ? '#f3f4f6' : '#000'
                 }}
               />
             </div>
@@ -1073,21 +1068,21 @@ ${message}`);
                 style={{
                   padding: '12px 24px',
                   borderRadius: 8,
-                  border: '1px solid #e2e8f0',
-                  background: '#f8fafc',
-                  color: '#64748b',
+                  border: `1px solid ${isDarkMode ? '#4b5563' : '#e2e8f0'}`,
+                  background: isDarkMode ? '#374151' : '#f8fafc',
+                  color: isDarkMode ? '#9ca3af' : '#64748b',
                   fontWeight: 600,
                   fontSize: 16,
                   cursor: 'pointer',
                   transition: 'all 0.2s ease'
                 }}
                 onMouseOver={(e) => {
-                  e.target.style.background = '#e2e8f0';
-                  e.target.style.color = '#475569';
+                  e.target.style.background = isDarkMode ? '#4b5563' : '#e2e8f0';
+                  e.target.style.color = isDarkMode ? '#d1d5db' : '#475569';
                 }}
                 onMouseOut={(e) => {
-                  e.target.style.background = '#f8fafc';
-                  e.target.style.color = '#64748b';
+                  e.target.style.background = isDarkMode ? '#374151' : '#f8fafc';
+                  e.target.style.color = isDarkMode ? '#9ca3af' : '#64748b';
                 }}
               >
                 Pular
@@ -1132,12 +1127,39 @@ ${message}`);
       {/* Modal de confirmação de devolução total */}
       {showDevolucaoModal && (
         <div style={{position:'fixed',top:0,left:0,width:'100vw',height:'100vh',background:'rgba(0,0,0,0.35)',zIndex:9999,display:'flex',alignItems:'center',justifyContent:'center'}}>
-          <div style={{background:'#fff',borderRadius:16,padding:32,minWidth:320,maxWidth:400,boxShadow:'0 8px 32px #0005',position:'relative',textAlign:'center'}}>
-            <h2 style={{fontWeight:700,fontSize:'1.2rem',color:'#e53935',marginBottom:18}}>Confirmar Devolução Total</h2>
-            <p style={{fontSize:16,color:'#333',marginBottom:24}}>Tem certeza que deseja registrar <b>Devolução Total</b>?</p>
+          <div style={{
+            background: isDarkMode ? '#374151' : '#fff',
+            borderRadius:16,
+            padding:32,
+            minWidth:320,
+            maxWidth:400,
+            boxShadow:'0 8px 32px #0005',
+            position:'relative',
+            textAlign:'center'
+          }}>
+            <h2 style={{
+              fontWeight:700,
+              fontSize:'1.2rem',
+              color: isDarkMode ? '#ef4444' : '#e53935',
+              marginBottom:18
+            }}>Confirmar Devolução Total</h2>
+            <p style={{
+              fontSize:16,
+              color: isDarkMode ? '#f3f4f6' : '#333',
+              marginBottom:24
+            }}>Tem certeza que deseja registrar <b>Devolução Total</b>?</p>
             <div style={{display:'flex',justifyContent:'center',gap:16}}>
-              <button onClick={()=>{setShowDevolucaoModal(false);setOnConfirmDevolucao(null);}} style={{padding:'10px 24px',borderRadius:8,border:'none',background:'#e0e0e0',color:'#333',fontWeight:700,fontSize:16,cursor:'pointer'}}>Cancelar</button>
-              <button onClick={onConfirmDevolucao} style={{padding:'10px 24px',borderRadius:8,border:'none',background:'linear-gradient(90deg,#e53935 0%,#ff9800 100%)',color:'#fff',fontWeight:700,fontSize:16,cursor:'pointer'}}>Confirmar</button>
+              <button onClick={()=>{setShowDevolucaoModal(false);setOnConfirmDevolucao(null);}} style={{
+                padding:'8px 20px',
+                borderRadius:8,
+                border:'none',
+                background: isDarkMode ? '#4b5563' : '#e0e0e0',
+                color: isDarkMode ? '#d1d5db' : '#333',
+                fontWeight:600,
+                fontSize:14,
+                cursor:'pointer'
+              }}>Cancelar</button>
+              <button onClick={onConfirmDevolucao} style={{padding:'8px 20px',borderRadius:8,border:'none',background:'linear-gradient(90deg,#e53935 0%,#ff9800 100%)',color:'#fff',fontWeight:600,fontSize:14,cursor:'pointer'}}>Confirmar</button>
             </div>
           </div>
         </div>
@@ -1152,19 +1174,66 @@ ${message}`);
           position:'fixed', top:0, left:0, width:'100vw', height:'100vh', background:'rgba(0,0,0,0.35)', zIndex:9999,
           display:'flex', alignItems:'center', justifyContent:'center'
         }}>
-          <div style={{background:'#fff', borderRadius:16, padding:32, minWidth:320, maxWidth:400, boxShadow:'0 8px 32px #0005', position:'relative'}}>
-            <button onClick={()=>setProblemModal({open:false})} style={{position:'absolute',top:16,right:16,fontSize:22,background:'none',border:'none',cursor:'pointer',color:'#888'}} title="Fechar">×</button>
-            <h2 style={{fontWeight:700, fontSize:'1.3rem', color:'#e53935', marginBottom:18}}>Registrar Problema</h2>
+          <div style={{
+            background: isDarkMode ? '#374151' : '#fff', 
+            borderRadius:16, 
+            padding:32, 
+            minWidth:320, 
+            maxWidth:400, 
+            boxShadow:'0 8px 32px #0005', 
+            position:'relative'
+          }}>
+            <button onClick={()=>setProblemModal({open:false})} style={{
+              position:'absolute',
+              top:16,
+              right:16,
+              fontSize:22,
+              background:'none',
+              border:'none',
+              cursor:'pointer',
+              color: isDarkMode ? '#d1d5db' : '#888'
+            }} title="Fechar">×</button>
+            <h2 style={{
+              fontWeight:700, 
+              fontSize:'1.3rem', 
+              color: isDarkMode ? '#ef4444' : '#e53935', 
+              marginBottom:18
+            }}>Registrar Problema</h2>
             <div style={{marginBottom:18}}>
-              <label style={{fontWeight:600, color:'#333', marginBottom:6, display:'block'}}>Tipo de Problema:</label>
-              <select value={selectedProblem} onChange={e=>setSelectedProblem(e.target.value)} style={{width:'100%',padding:10,borderRadius:8,border:'1.5px solid #eee',fontSize:16}}>
+              <label style={{
+                fontWeight:600, 
+                color: isDarkMode ? '#d1d5db' : '#333', 
+                marginBottom:6, 
+                display:'block'
+              }}>Tipo de Problema:</label>
+              <select 
+                value={selectedProblem} 
+                onChange={e=>setSelectedProblem(e.target.value)} 
+                className={`w-full p-3 rounded-lg border text-base ${isDarkMode 
+                  ? 'bg-gray-800 border-gray-600 text-white focus:border-blue-400' 
+                  : 'bg-white border-gray-300 text-gray-900 focus:border-blue-500'
+                } focus:outline-none focus:ring-2 focus:ring-blue-500/20`}
+              >
                 <option value="">Selecione...</option>
                 {problemTypes.map((p,i)=>(<option key={i} value={p}>{p}</option>))}
               </select>
             </div>
             <div style={{marginBottom:18}}>
-              <label style={{fontWeight:600, color:'#333', marginBottom:6, display:'block'}}>Observação (opcional):</label>
-              <textarea value={problemInfo} onChange={e=>setProblemInfo(e.target.value)} style={{width:'100%',padding:10,borderRadius:8,border:'1.5px solid #eee',fontSize:16,minHeight:60}} placeholder="Descreva o problema..."></textarea>
+              <label style={{
+                fontWeight:600, 
+                color: isDarkMode ? '#d1d5db' : '#333', 
+                marginBottom:6, 
+                display:'block'
+              }}>Observação (opcional):</label>
+              <textarea 
+                value={problemInfo} 
+                onChange={e=>setProblemInfo(e.target.value)} 
+                className={`w-full p-3 rounded-lg border text-base min-h-[60px] ${isDarkMode 
+                  ? 'bg-gray-800 border-gray-600 text-white focus:border-blue-400 placeholder-gray-400' 
+                  : 'bg-white border-gray-300 text-gray-900 focus:border-blue-500 placeholder-gray-500'
+                } focus:outline-none focus:ring-2 focus:ring-blue-500/20`}
+                placeholder="Descreva o problema..."
+              ></textarea>
             </div>
             <button
               className="btn btn-red"

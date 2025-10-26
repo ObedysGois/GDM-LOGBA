@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { motion } from 'framer-motion';
 import { auth } from '../firebaseConfig.js';
 import { useAuth } from '../AuthContext.js';
-import { LogIn, UserPlus, Mail, Lock, Loader2 } from 'lucide-react';
-import '../App.css';
+import { useTheme } from '../contexts/ThemeContext.js';
+import { LogIn, UserPlus, Mail, Lock, Loader2, Truck, Eye, EyeOff } from 'lucide-react';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [loginType, setLoginType] = useState('login'); // 'login' or 'register'
   const { currentUser } = useAuth();
+  const { isDarkMode, colors } = useTheme();
   const navigate = window.reactRouterNavigate || ((path) => { window.location.href = path; });
 
   React.useEffect(() => {
@@ -64,151 +67,295 @@ function Login() {
 
   if (currentUser) {
     return (
-      <div style={{
-        minHeight: '100vh',
-        width: '100vw',
-        background: `url('/assets/docemellogo1.png') center center/cover no-repeat, linear-gradient(135deg, #218838 0%, #43a047 100%)`,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        zIndex: 9999
-      }}>
-        <div style={{
-          background: 'rgba(255,255,255,0.97)',
-          borderRadius: 32,
-          boxShadow: '0 8px 32px rgba(33,136,56,0.18)',
-          padding: '64px 48px',
-          minWidth: 420,
-          minHeight: 420,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: 32
-        }}>
-          <img src="/assets/LOGBAENTREGAS.jpg" alt="Logo LOG.BA" style={{ width: 180, height: 180, objectFit: 'contain', borderRadius: 24, boxShadow: '0 4px 24px #21883833', marginBottom: 16 }} />
-          <h1 style={{
-            fontFamily: 'Inter, Segoe UI, Arial, sans-serif',
-            fontWeight: 900,
-            fontSize: 44,
-            color: '#218838',
-            margin: 0,
-            letterSpacing: 2,
-            textShadow: '0 2px 12px #21883822'
-          }}>
-            Bem-vindo!
-          </h1>
-          <p style={{
-            fontFamily: 'Inter, Segoe UI, Arial, sans-serif',
-            fontWeight: 500,
-            fontSize: 22,
-            color: '#333',
-            margin: 0,
-            textAlign: 'center',
-            textShadow: '0 1px 4px #21883811'
-          }}>
-            Você já está logado como<br /><span style={{color:'#218838', fontWeight:700}}>{currentUser.email}</span>
-          </p>
-          <div style={{marginTop: 24, color: '#218838', fontSize: 18, fontWeight: 600, letterSpacing: 1, textAlign: 'center'}}>
-            Redirecionando para o sistema...
+      <div className={`
+        min-h-screen flex items-center justify-center fixed inset-0 z-50
+        ${isDarkMode ? 'bg-dark-bg' : 'bg-light-bg'}
+        transition-colors duration-300
+      `}>
+        <motion.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className={`
+            p-16 rounded-3xl shadow-2xl max-w-md w-full mx-4
+            ${isDarkMode ? 'bg-dark-card' : 'bg-light-card'}
+            border ${isDarkMode ? 'border-dark-border' : 'border-light-border'}
+          `}
+        >
+          <div className="text-center space-y-6">
+            <motion.div
+              animate={{ rotate: [0, 360] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+              className={`
+                w-20 h-20 mx-auto rounded-2xl flex items-center justify-center
+                ${isDarkMode ? 'bg-dark-primary' : 'bg-light-primary'}
+              `}
+            >
+              <Truck className="w-10 h-10 text-white" />
+            </motion.div>
+            
+            <div>
+              <h1 className="text-3xl font-bold mb-2">Bem-vindo!</h1>
+              <p className={`text-lg ${isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'}`}>
+                Você já está logado como
+              </p>
+              <p className={`font-semibold ${isDarkMode ? 'text-dark-primary' : 'text-light-primary'}`}>
+                {currentUser.email}
+              </p>
+            </div>
+            
+            <motion.div
+              animate={{ opacity: [0.5, 1, 0.5] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+              className={`text-lg font-medium ${isDarkMode ? 'text-dark-primary' : 'text-light-primary'}`}
+            >
+              Redirecionando para o sistema...
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </div>
     );
   }
 
+  const handleSubmit = loginType === 'login' ? handleLogin : handleRegister;
+
   return (
-    <div className="login-container">
-      <div className="login-card">
-        <div className="login-header">
-          <img src="/assets/logodocemel.png" alt="Grupo Doce Mel Logo" className="login-logo" />
-          <h2>{loginType === 'login' ? 'Entrar no Sistema' : 'Criar Conta'}</h2>
-          <p>{loginType === 'login' ? 'Faça login para acessar o sistema' : 'Crie sua conta para começar'}</p>
+    <div className={`
+      min-h-screen flex items-center justify-center p-4
+      ${isDarkMode ? 'bg-dark-bg' : 'bg-light-bg'}
+      transition-colors duration-300
+    `}>
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0, y: 20 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className={`
+          w-full max-w-md p-8 rounded-3xl shadow-2xl
+          ${isDarkMode ? 'bg-dark-card' : 'bg-light-card'}
+          border ${isDarkMode ? 'border-dark-border' : 'border-light-border'}
+        `}
+      >
+        {/* Logo e Título */}
+        <div className="text-center mb-8">
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.2, duration: 0.5, type: "spring", stiffness: 200 }}
+            className={`
+              w-20 h-20 mx-auto mb-6 rounded-2xl flex items-center justify-center
+              ${isDarkMode ? 'bg-dark-primary' : 'bg-light-primary'}
+              shadow-lg
+            `}
+          >
+            <Truck className="w-10 h-10 text-white" />
+          </motion.div>
+          
+          <motion.h1
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+            className="text-3xl font-bold mb-2"
+          >
+            LOG.BA
+          </motion.h1>
+          
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.5 }}
+            className={`text-lg ${isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'}`}
+          >
+            Sistema de Logística
+          </motion.p>
         </div>
 
-        <form onSubmit={loginType === 'login' ? handleLogin : handleRegister} className="login-form">
-          <div className="form-group">
-            <div className="input-wrapper">
-              <Mail className="input-icon" size={20} />
+        {/* Botões de Alternância */}
+        <div className={`
+          flex rounded-2xl p-1 mb-8
+          ${isDarkMode ? 'bg-dark-bg' : 'bg-light-bg'}
+        `}>
+          <button
+            onClick={() => setLoginType('login')}
+            className={`
+              flex-1 py-3 px-4 rounded-xl font-medium transition-all duration-300
+              ${loginType === 'login'
+                ? `${isDarkMode ? 'bg-dark-primary text-white' : 'bg-light-primary text-white'} shadow-lg`
+                : `${isDarkMode ? 'text-dark-text-secondary hover:text-dark-text' : 'text-light-text-secondary hover:text-light-text'}`
+              }
+            `}
+          >
+            <LogIn className="w-4 h-4 inline mr-2" />
+            Entrar
+          </button>
+          <button
+            onClick={() => setLoginType('register')}
+            className={`
+              flex-1 py-3 px-4 rounded-xl font-medium transition-all duration-300
+              ${loginType === 'register'
+                ? `${isDarkMode ? 'bg-dark-primary text-white' : 'bg-light-primary text-white'} shadow-lg`
+                : `${isDarkMode ? 'text-dark-text-secondary hover:text-dark-text' : 'text-light-text-secondary hover:text-light-text'}`
+              }
+            `}
+          >
+            <UserPlus className="w-4 h-4 inline mr-2" />
+            Cadastrar
+          </button>
+        </div>
+
+        {/* Formulário */}
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Campo Email */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.5, duration: 0.5 }}
+          >
+            <label className={`
+              block text-sm font-medium mb-2
+              ${isDarkMode ? 'text-dark-text' : 'text-light-text'}
+            `}>
+              Email
+            </label>
+            <div className="relative">
+              <Mail className={`
+                absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5
+                ${isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'}
+              `} />
               <input
                 type="email"
-                id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Digite seu email"
                 required
-                disabled={isLoading}
+                placeholder="seu@email.com"
+                className={`
+                  w-full pl-12 pr-4 py-4 rounded-2xl border transition-all duration-300
+                  ${isDarkMode 
+                    ? 'bg-dark-bg border-dark-border text-dark-text placeholder-dark-text-secondary focus:border-dark-primary focus:ring-2 focus:ring-dark-primary/20' 
+                    : 'bg-light-bg border-light-border text-light-text placeholder-light-text-secondary focus:border-light-primary focus:ring-2 focus:ring-light-primary/20'
+                  }
+                  focus:outline-none
+                `}
               />
             </div>
-          </div>
+          </motion.div>
 
-          <div className="form-group">
-            <div className="input-wrapper">
-              <Lock className="input-icon" size={20} />
+          {/* Campo Senha */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.6, duration: 0.5 }}
+          >
+            <label className={`
+              block text-sm font-medium mb-2
+              ${isDarkMode ? 'text-dark-text' : 'text-light-text'}
+            `}>
+              Senha
+            </label>
+            <div className="relative">
+              <Lock className={`
+                absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5
+                ${isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'}
+              `} />
               <input
-                type="password"
-                id="password"
+                type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Digite sua senha"
-                maxLength={10}
                 required
-                disabled={isLoading}
+                placeholder="••••••••"
+                className={`
+                  w-full pl-12 pr-12 py-4 rounded-2xl border transition-all duration-300
+                  ${isDarkMode 
+                    ? 'bg-dark-bg border-dark-border text-dark-text placeholder-dark-text-secondary focus:border-dark-primary focus:ring-2 focus:ring-dark-primary/20' 
+                    : 'bg-light-bg border-light-border text-light-text placeholder-light-text-secondary focus:border-light-primary focus:ring-2 focus:ring-light-primary/20'
+                  }
+                  focus:outline-none
+                `}
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className={`
+                  absolute right-4 top-1/2 transform -translate-y-1/2 p-1 rounded-lg
+                  ${isDarkMode ? 'text-dark-text-secondary hover:text-dark-text' : 'text-light-text-secondary hover:text-light-text'}
+                  transition-colors duration-200
+                `}
+              >
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
+            </div>
+          </motion.div>
+
+          {/* Botão Principal */}
+          <motion.button
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7, duration: 0.5 }}
+            type="submit"
+            disabled={isLoading}
+            className={`
+              w-full py-4 px-6 rounded-2xl font-semibold text-white transition-all duration-300
+              ${isDarkMode ? 'bg-dark-primary hover:bg-dark-primary/90' : 'bg-light-primary hover:bg-light-primary/90'}
+              ${isLoading ? 'opacity-70 cursor-not-allowed' : 'hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]'}
+              focus:outline-none focus:ring-4 ${isDarkMode ? 'focus:ring-dark-primary/30' : 'focus:ring-light-primary/30'}
+            `}
+          >
+            {isLoading ? (
+              <div className="flex items-center justify-center">
+                <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                Processando...
+              </div>
+            ) : (
+              <div className="flex items-center justify-center">
+                {loginType === 'login' ? <LogIn className="w-5 h-5 mr-2" /> : <UserPlus className="w-5 h-5 mr-2" />}
+                {loginType === 'login' ? 'Entrar' : 'Cadastrar'}
+              </div>
+            )}
+          </motion.button>
+
+          {/* Divisor */}
+          <div className="relative my-8">
+            <div className={`absolute inset-0 flex items-center`}>
+              <div className={`w-full border-t ${isDarkMode ? 'border-dark-border' : 'border-light-border'}`}></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className={`
+                px-4 ${isDarkMode ? 'bg-dark-card text-dark-text-secondary' : 'bg-light-card text-light-text-secondary'}
+              `}>
+                ou
+              </span>
             </div>
           </div>
 
-          <button 
-            type="submit" 
-            className="btn btn-primary login-submit-btn"
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <>
-                <Loader2 className="spinner" size={20} />
-                {loginType === 'login' ? 'Entrando...' : 'Cadastrando...'}
-              </>
-            ) : (
-              <>
-                {loginType === 'login' ? <LogIn size={20} /> : <UserPlus size={20} />}
-                {loginType === 'login' ? 'Entrar' : 'Cadastrar'}
-              </>
-            )}
-          </button>
-        </form>
-
-        <div className="login-actions">
-          <button 
-            className="btn btn-secondary google-btn"
+          {/* Botão Google */}
+          <motion.button
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8, duration: 0.5 }}
+            type="button"
             onClick={handleGoogleLogin}
             disabled={isLoading}
+            className={`
+              w-full py-4 px-6 rounded-2xl font-semibold border-2 transition-all duration-300
+              ${isDarkMode 
+                ? 'border-dark-border text-dark-text hover:bg-dark-bg hover:border-dark-primary' 
+                : 'border-light-border text-light-text hover:bg-light-bg hover:border-light-primary'
+              }
+              ${isLoading ? 'opacity-70 cursor-not-allowed' : 'hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]'}
+              focus:outline-none focus:ring-4 ${isDarkMode ? 'focus:ring-dark-primary/30' : 'focus:ring-light-primary/30'}
+            `}
           >
-            <svg width="20" height="20" viewBox="0 0 24 24">
-              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-            </svg>
-            Continuar com Google
-          </button>
-
-          <div className="login-toggle">
-            <p>
-              {loginType === 'login' ? 'Não tem uma conta?' : 'Já tem uma conta?'}
-              <button 
-                className="toggle-btn"
-                onClick={() => setLoginType(loginType === 'login' ? 'register' : 'login')}
-                disabled={isLoading}
-              >
-                {loginType === 'login' ? 'Criar conta' : 'Fazer login'}
-              </button>
-            </p>
-          </div>
-        </div>
-      </div>
+            <div className="flex items-center justify-center">
+              <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+              </svg>
+              Continuar com Google
+            </div>
+          </motion.button>
+        </form>
+      </motion.div>
     </div>
   );
 }

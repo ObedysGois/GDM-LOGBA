@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Filter, Send, Download, Calendar, BarChart3, Clock, CheckCircle, XCircle, AlertTriangle, Loader2 } from 'lucide-react';
+import { Filter, Send, Download, Calendar, BarChart3, Clock, CheckCircle, XCircle, AlertTriangle, Loader2, User } from 'lucide-react';
 import { getDeliveryRecordsByUser } from '../firebaseUtils.js';
 import { useAuth } from '../AuthContext.js';
+import { useTheme } from '../contexts/ThemeContext';
 import '../App.css';
 import { useNavigate } from 'react-router-dom';
+import PageHeader from '../Components/PageHeader.jsx';
 
 function MeuResumo() {
   const { currentUser } = useAuth();
+  const { isDarkMode } = useTheme();
   const [filterPeriod, setFilterPeriod] = useState('today');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -485,59 +488,36 @@ function MeuResumo() {
   };
 
   return (
-    <div className="meu-resumo-container" style={{maxWidth: '1200px', margin: '0 auto', padding: '24px 0'}}>
+    <div className={`meu-resumo-container ${isDarkMode ? 'dark-theme' : ''}`} style={{maxWidth: '1200px', margin: '0 auto', padding: '24px 0', background: isDarkMode ? '#0a0a0a' : 'transparent', minHeight: '100vh'}}>
       {/* Cabeçalho moderno padrão localização */}
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '32px 12px 24px 12px',
-        background: 'linear-gradient(135deg, #1de9b6 0%, #1dc8e9 100%)',
-        borderRadius: 24,
-        marginBottom: 24,
-        maxWidth: '100%',
-        wordBreak: 'break-word',
-        overflowWrap: 'break-word',
-      }}>
-        <div style={{fontSize: 64, marginBottom: 8}}><i className="fas fa-user-circle" /></div>
-        <h1 style={{
-          fontSize: 'clamp(1.5rem, 6vw, 2.5rem)',
-          fontWeight: 800,
-          color: '#fff',
-          margin: 0,
-          textAlign: 'center',
-          maxWidth: '100%',
-          wordBreak: 'break-word',
-          overflowWrap: 'break-word',
-        }}>Meu Resumo</h1>
-        <div style={{
-          color: '#fff',
-          fontSize: 'clamp(1rem, 3vw, 1.2rem)',
-          textAlign: 'center',
-          marginTop: 8,
-          maxWidth: '100%',
-          wordBreak: 'break-word',
-          overflowWrap: 'break-word',
-        }}>
-          Veja seu desempenho e histórico de entregas
-        </div>
-      </div>
+      <PageHeader
+        title="Meu Resumo"
+        subtitle="Veja seu desempenho e histórico de entregas"
+        icon={User}
+      />
 
       {/* Filtros */}
-      <div className="card" style={{padding: 24, marginBottom: 24}}>
-        <h3 style={{fontSize: '1.3rem', color: '#218838', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8}}>
+      <div className={`card ${isDarkMode ? 'dark-card' : ''}`} style={{padding: 24, marginBottom: 24, background: isDarkMode ? '#1a1a1a' : '#fff', border: isDarkMode ? '1px solid #333' : '1px solid #e0e0e0'}}>
+        <h3 style={{fontSize: '1.3rem', color: isDarkMode ? '#00ff88' : '#218838', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8}}>
           <Filter style={{width: 20, height: 20}} />
           Filtros de Período
         </h3>
         
         <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16}}>
           <div>
-            <label style={{display: 'block', fontWeight: 600, color: '#495057', marginBottom: 8}}>📅 Período Rápido:</label>
+            <label style={{display: 'block', fontWeight: 600, color: isDarkMode ? '#ccc' : '#495057', marginBottom: 8}}>📅 Período Rápido:</label>
             <select
               value={filterPeriod}
               onChange={(e) => setFilterPeriod(e.target.value)}
-              style={{width: '100%', padding: '12px 16px', border: '1px solid #e0e0e0', borderRadius: 8, fontSize: 15}}
+              style={{
+                width: '100%', 
+                padding: '12px 16px', 
+                border: isDarkMode ? '1px solid #444' : '1px solid #e0e0e0', 
+                borderRadius: 8, 
+                fontSize: 15,
+                background: isDarkMode ? '#2a2a2a' : '#fff',
+                color: isDarkMode ? '#ccc' : '#333'
+              }}
             >
               <option value="today">Hoje</option>
               <option value="thisWeek">Esta Semana</option>
@@ -552,22 +532,38 @@ function MeuResumo() {
           </div>
 
           <div>
-            <label style={{display: 'block', fontWeight: 600, color: '#495057', marginBottom: 8}}>📅 Data Início:</label>
+            <label style={{display: 'block', fontWeight: 600, color: isDarkMode ? '#ccc' : '#495057', marginBottom: 8}}>📅 Data Início:</label>
             <input
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              style={{width: '100%', padding: '12px 16px', border: '1px solid #e0e0e0', borderRadius: 8, fontSize: 15}}
+              style={{
+                width: '100%', 
+                padding: '12px 16px', 
+                border: isDarkMode ? '1px solid #444' : '1px solid #e0e0e0', 
+                borderRadius: 8, 
+                fontSize: 15,
+                background: isDarkMode ? '#2a2a2a' : '#fff',
+                color: isDarkMode ? '#ccc' : '#333'
+              }}
             />
           </div>
 
           <div>
-            <label style={{display: 'block', fontWeight: 600, color: '#495057', marginBottom: 8}}>📅 Data Fim:</label>
+            <label style={{display: 'block', fontWeight: 600, color: isDarkMode ? '#ccc' : '#495057', marginBottom: 8}}>📅 Data Fim:</label>
             <input
               type="date"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              style={{width: '100%', padding: '12px 16px', border: '1px solid #e0e0e0', borderRadius: 8, fontSize: 15}}
+              style={{
+                width: '100%', 
+                padding: '12px 16px', 
+                border: isDarkMode ? '1px solid #444' : '1px solid #e0e0e0', 
+                borderRadius: 8, 
+                fontSize: 15,
+                background: isDarkMode ? '#2a2a2a' : '#fff',
+                color: isDarkMode ? '#ccc' : '#333'
+              }}
             />
           </div>
 
@@ -579,8 +575,8 @@ function MeuResumo() {
                 padding: '10px 18px',
                 borderRadius: 8,
                 border: 'none',
-                background: 'linear-gradient(90deg, #43a047 0%, #1976d2 100%)',
-                color: '#fff',
+                background: isDarkMode ? 'linear-gradient(90deg, #00ff88 0%, #ff9800 100%)' : 'linear-gradient(90deg, #43a047 0%, #1976d2 100%)',
+                color: isDarkMode ? '#000' : '#fff',
                 fontWeight: 700,
                 fontSize: 16,
                 cursor: 'pointer',
@@ -597,41 +593,56 @@ function MeuResumo() {
 
       {/* Métricas do Resumo */}
       <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 24, marginBottom: 32}}>
-        <div className="card" style={{padding: 24, textAlign: 'center'}}>
+        <div className={`card ${isDarkMode ? 'dark-card' : ''}`} style={{padding: 24, textAlign: 'center', background: isDarkMode ? '#1a1a1a' : '#fff', border: isDarkMode ? '1px solid #333' : '1px solid #e0e0e0'}}>
           <div style={{background: 'linear-gradient(135deg, #4caf50 0%, #388e3c 100%)', borderRadius: '50%', width: 60, height: 60, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px'}}>
             <CheckCircle style={{color: '#fff', width: 24, height: 24}} />
           </div>
-          <h3 style={{fontSize: '1.2rem', color: '#218838', marginBottom: 8}}>Entregas Finalizadas</h3>
+          <h3 style={{fontSize: '1.2rem', color: isDarkMode ? '#00ff88' : '#218838', marginBottom: 8}}>Entregas Finalizadas</h3>
           <p style={{fontSize: '1.5rem', fontWeight: 700, color: '#4caf50', margin: 0}}>
             {loading ? <Loader2 style={{width: 24, height: 24, animation: 'spin 1s linear infinite'}} /> : stats.entregasFinalizadas}
           </p>
         </div>
 
-        <div className="card" style={{padding: 24, textAlign: 'center'}}>
+        <div className="card" style={{
+          padding: 24, 
+          textAlign: 'center',
+          backgroundColor: isDarkMode ? '#2d3748' : '#fff',
+          border: isDarkMode ? '1px solid #4a5568' : '1px solid #e2e8f0'
+        }}>
           <div style={{background: 'linear-gradient(135deg, #dc3545 0%, #c82333 100%)', borderRadius: '50%', width: 60, height: 60, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px'}}>
             <XCircle style={{color: '#fff', width: 24, height: 24}} />
           </div>
-          <h3 style={{fontSize: '1.2rem', color: '#218838', marginBottom: 8}}>Devoluções</h3>
+          <h3 style={{fontSize: '1.2rem', color: isDarkMode ? '#00ff88' : '#218838', marginBottom: 8}}>Devoluções</h3>
           <p style={{fontSize: '1.5rem', fontWeight: 700, color: '#dc3545', margin: 0}}>
             {loading ? <Loader2 style={{width: 24, height: 24, animation: 'spin 1s linear infinite'}} /> : stats.devolucoes}
           </p>
         </div>
 
-        <div className="card" style={{padding: 24, textAlign: 'center'}}>
+        <div className="card" style={{
+          padding: 24, 
+          textAlign: 'center',
+          backgroundColor: isDarkMode ? '#2d3748' : '#fff',
+          border: isDarkMode ? '1px solid #4a5568' : '1px solid #e2e8f0'
+        }}>
           <div style={{background: 'linear-gradient(135deg, #ff9800 0%, #f57c00 100%)', borderRadius: '50%', width: 60, height: 60, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px'}}>
             <AlertTriangle style={{color: '#fff', width: 24, height: 24}} />
           </div>
-          <h3 style={{fontSize: '1.2rem', color: '#218838', marginBottom: 8}}>Problemas</h3>
+          <h3 style={{fontSize: '1.2rem', color: isDarkMode ? '#00ff88' : '#218838', marginBottom: 8}}>Problemas</h3>
           <p style={{fontSize: '1.5rem', fontWeight: 700, color: '#ff9800', margin: 0}}>
             {loading ? <Loader2 style={{width: 24, height: 24, animation: 'spin 1s linear infinite'}} /> : stats.problemas}
           </p>
         </div>
 
-        <div className="card" style={{padding: 24, textAlign: 'center'}}>
+        <div className="card" style={{
+          padding: 24, 
+          textAlign: 'center',
+          backgroundColor: isDarkMode ? '#2d3748' : '#fff',
+          border: isDarkMode ? '1px solid #4a5568' : '1px solid #e2e8f0'
+        }}>
           <div style={{background: 'linear-gradient(135deg, #1976d2 0%, #1565c0 100%)', borderRadius: '50%', width: 60, height: 60, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px'}}>
             <Clock style={{color: '#fff', width: 24, height: 24}} />
           </div>
-          <h3 style={{fontSize: '1.2rem', color: '#218838', marginBottom: 8}}>Tempo Médio</h3>
+          <h3 style={{fontSize: '1.2rem', color: isDarkMode ? '#00ff88' : '#218838', marginBottom: 8}}>Tempo Médio</h3>
           <p style={{fontSize: '1.5rem', fontWeight: 700, color: '#1976d2', margin: 0}}>
             {loading ? <Loader2 style={{width: 24, height: 24, animation: 'spin 1s linear infinite'}} /> : `${stats.tempoMedio} min`}
           </p>
@@ -639,38 +650,57 @@ function MeuResumo() {
       </div>
 
       {/* Resumo Detalhado */}
-      <div className="card" style={{padding: 24, marginBottom: 24}}>
-        <h3 style={{fontSize: '1.3rem', color: '#218838', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8}}>
+      <div className="card" style={{
+        padding: 24, 
+        marginBottom: 24,
+        backgroundColor: isDarkMode ? '#2d3748' : '#fff',
+        border: isDarkMode ? '1px solid #4a5568' : '1px solid #e2e8f0'
+      }}>
+        <h3 style={{fontSize: '1.3rem', color: isDarkMode ? '#00ff88' : '#218838', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8}}>
           <BarChart3 style={{width: 20, height: 20}} />
           Resumo dos Meus Registros
         </h3>
         
         {loading ? (
-          <div style={{background: '#f8f9fa', padding: 40, borderRadius: 12, textAlign: 'center'}}>
-            <Loader2 style={{width: 48, height: 48, color: '#666', marginBottom: 16, animation: 'spin 1s linear infinite'}} />
-            <p style={{color: '#666', margin: 0, fontSize: 16}}>Carregando dados...</p>
+          <div style={{
+            background: isDarkMode ? '#1a202c' : '#f8f9fa', 
+            padding: 40, 
+            borderRadius: 12, 
+            textAlign: 'center'
+          }}>
+            <Loader2 style={{width: 48, height: 48, color: isDarkMode ? '#a0aec0' : '#666', marginBottom: 16, animation: 'spin 1s linear infinite'}} />
+            <p style={{color: isDarkMode ? '#a0aec0' : '#666', margin: 0, fontSize: 16}}>Carregando dados...</p>
           </div>
         ) : records.length === 0 ? (
-          <div style={{background: '#f8f9fa', padding: 40, borderRadius: 12, textAlign: 'center'}}>
-            <Calendar style={{width: 48, height: 48, color: '#666', marginBottom: 16}} />
-            <p style={{color: '#666', margin: 0, fontSize: 16}}>Nenhum resumo disponível para o período selecionado.</p>
-            <p style={{color: '#999', margin: '8px 0 0 0', fontSize: 14}}>Selecione um período para visualizar suas estatísticas</p>
+          <div style={{
+            background: isDarkMode ? '#1a202c' : '#f8f9fa', 
+            padding: 40, 
+            borderRadius: 12, 
+            textAlign: 'center'
+          }}>
+            <Calendar style={{width: 48, height: 48, color: isDarkMode ? '#a0aec0' : '#666', marginBottom: 16}} />
+            <p style={{color: isDarkMode ? '#a0aec0' : '#666', margin: 0, fontSize: 16}}>Nenhum resumo disponível para o período selecionado.</p>
+            <p style={{color: isDarkMode ? '#718096' : '#999', margin: '8px 0 0 0', fontSize: 14}}>Selecione um período para visualizar suas estatísticas</p>
           </div>
         ) : (
-          <div style={{background: '#f8f9fa', padding: 24, borderRadius: 12}}>
+          <div style={{
+            background: isDarkMode ? '#1a202c' : '#f8f9fa', 
+            padding: 24, 
+            borderRadius: 12
+          }}>
             <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16}}>
               <div style={{textAlign: 'center'}}>
-                <h4 style={{color: '#218838', marginBottom: 8}}>Total de Registros</h4>
-                <p style={{fontSize: '1.5rem', fontWeight: 700, color: '#495057', margin: 0}}>{records.length}</p>
+                <h4 style={{color: isDarkMode ? '#00ff88' : '#218838', marginBottom: 8}}>Total de Registros</h4>
+                <p style={{fontSize: '1.5rem', fontWeight: 700, color: isDarkMode ? '#e2e8f0' : '#495057', margin: 0}}>{records.length}</p>
               </div>
               <div style={{textAlign: 'center'}}>
-                <h4 style={{color: '#218838', marginBottom: 8}}>Taxa de Sucesso</h4>
+                <h4 style={{color: isDarkMode ? '#00ff88' : '#218838', marginBottom: 8}}>Taxa de Sucesso</h4>
                 <p style={{fontSize: '1.5rem', fontWeight: 700, color: '#4caf50', margin: 0}}>
                   {records.length > 0 ? Math.round((stats.entregasFinalizadas / records.length) * 100) : 0}%
                 </p>
               </div>
               <div style={{textAlign: 'center'}}>
-                <h4 style={{color: '#218838', marginBottom: 8}}>Taxa de Problemas</h4>
+                <h4 style={{color: isDarkMode ? '#00ff88' : '#218838', marginBottom: 8}}>Taxa de Problemas</h4>
                 <p style={{fontSize: '1.5rem', fontWeight: 700, color: '#ff9800', margin: 0}}>
                   {records.length > 0 ? Math.round((stats.problemas / records.length) * 100) : 0}%
                 </p>
@@ -681,8 +711,12 @@ function MeuResumo() {
       </div>
 
       {/* Ações */}
-      <div className="card" style={{padding: 24}}>
-        <h3 style={{fontSize: '1.3rem', color: '#218838', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8}}>
+      <div className="card" style={{
+        padding: 24,
+        backgroundColor: isDarkMode ? '#2d3748' : '#fff',
+        border: isDarkMode ? '1px solid #4a5568' : '1px solid #e2e8f0'
+      }}>
+        <h3 style={{fontSize: '1.3rem', color: isDarkMode ? '#00ff88' : '#218838', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8}}>
           <Send style={{width: 20, height: 20}} />
           Ações de Compartilhamento
         </h3>
@@ -692,7 +726,16 @@ function MeuResumo() {
             className="btn btn-green"
             onClick={handleGenerateDaySummary}
             disabled={loading}
-            style={{fontSize: 16, padding: '14px 32px', display: 'inline-flex', alignItems: 'center', gap: 8}}
+            style={{
+              fontSize: 16, 
+              padding: '14px 32px', 
+              display: 'inline-flex', 
+              alignItems: 'center', 
+              gap: 8,
+              backgroundColor: isDarkMode ? '#38a169' : '#28a745',
+              borderColor: isDarkMode ? '#38a169' : '#28a745',
+              color: '#fff'
+            }}
           >
             <Send style={{width: 18, height: 18}} />
             Enviar Resumo do Dia (WhatsApp)
@@ -702,7 +745,16 @@ function MeuResumo() {
             className="btn btn-blue"
             onClick={handleGenerateWeekSummary}
             disabled={loading}
-            style={{fontSize: 16, padding: '14px 32px', display: 'inline-flex', alignItems: 'center', gap: 8}}
+            style={{
+              fontSize: 16, 
+              padding: '14px 32px', 
+              display: 'inline-flex', 
+              alignItems: 'center', 
+              gap: 8,
+              backgroundColor: isDarkMode ? '#3182ce' : '#007bff',
+              borderColor: isDarkMode ? '#3182ce' : '#007bff',
+              color: '#fff'
+            }}
           >
             <Send style={{width: 18, height: 18}} />
             Enviar Resumo da Semana (WhatsApp)
@@ -712,7 +764,16 @@ function MeuResumo() {
             className="btn btn-orange"
             onClick={handleGeneratePdf}
             disabled={loading}
-            style={{fontSize: 16, padding: '14px 32px', display: 'inline-flex', alignItems: 'center', gap: 8}}
+            style={{
+              fontSize: 16, 
+              padding: '14px 32px', 
+              display: 'inline-flex', 
+              alignItems: 'center', 
+              gap: 8,
+              backgroundColor: isDarkMode ? '#dd6b20' : '#fd7e14',
+              borderColor: isDarkMode ? '#dd6b20' : '#fd7e14',
+              color: '#fff'
+            }}
           >
             <Download style={{width: 18, height: 18}} />
             Gerar PDF (Admin)
@@ -727,16 +788,20 @@ function MeuResumo() {
           position: 'fixed',
           bottom: 24,
           right: 24,
-          width: 64,
-          height: 64,
+          width: 56,
+          height: 56,
           borderRadius: '50%',
-          background: 'linear-gradient(135deg, #ff9800 0%, #ff5722 100%)',
-          boxShadow: '0 8px 24px rgba(255, 152, 0, 0.3)',
+          background: isDarkMode 
+            ? 'linear-gradient(135deg, #dd6b20 0%, #c53030 100%)' 
+            : 'linear-gradient(135deg, #ff9800 0%, #ff5722 100%)',
+          boxShadow: isDarkMode 
+            ? '0 8px 24px rgba(221, 107, 32, 0.3)' 
+            : '0 8px 24px rgba(255, 152, 0, 0.3)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           cursor: 'pointer',
-          fontSize: 28,
+          fontSize: 24,
           color: '#fff',
           zIndex: 1000,
           transition: 'all 0.3s ease',
@@ -744,11 +809,15 @@ function MeuResumo() {
         }}
         onMouseEnter={(e) => {
           e.target.style.transform = 'scale(1.1)';
-          e.target.style.boxShadow = '0 12px 32px rgba(255, 152, 0, 0.4)';
+          e.target.style.boxShadow = isDarkMode 
+            ? '0 12px 32px rgba(221, 107, 32, 0.4)' 
+            : '0 12px 32px rgba(255, 152, 0, 0.4)';
         }}
         onMouseLeave={(e) => {
           e.target.style.transform = 'scale(1)';
-          e.target.style.boxShadow = '0 8px 24px rgba(255, 152, 0, 0.3)';
+          e.target.style.boxShadow = isDarkMode 
+            ? '0 8px 24px rgba(221, 107, 32, 0.3)' 
+            : '0 8px 24px rgba(255, 152, 0, 0.3)';
         }}
       >
         🚛

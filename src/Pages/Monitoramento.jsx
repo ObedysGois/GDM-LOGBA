@@ -5,11 +5,14 @@ import { supabase, STORAGE_BUCKETS } from '../supabaseConfig.js';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import '../App.css';
+import PageHeader from '../Components/PageHeader.jsx';
 import { useAuth } from '../AuthContext.js';
+import { useTheme } from '../contexts/ThemeContext.js';
 import { useNavigate } from 'react-router-dom';
 
 function Monitoramento() {
   const { currentUser } = useAuth();
+  const { isDarkMode } = useTheme();
   const navigate = useNavigate(); // fallback para navegação
 
   const [filterClient, setFilterClient] = useState('');
@@ -1649,48 +1652,17 @@ ${message}`);
   });
 
   return (
-    <div className="monitoramento-container" style={{maxWidth: '1400px', margin: '0 auto', padding: '24px 0'}}>
+    <div className={`monitoramento-container ${isDarkMode ? 'bg-gray-900 text-gray-100' : 'bg-white text-gray-900'}`} style={{maxWidth: '1400px', margin: '0 auto', padding: '24px 0'}}>
       {/* Cabeçalho moderno padrão localização */}
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '32px 12px 24px 12px',
-        background: 'linear-gradient(135deg, #1de9b6 0%, #1dc8e9 100%)',
-        borderRadius: 24,
-        marginBottom: 24,
-        maxWidth: '100%',
-        wordBreak: 'break-word',
-        overflowWrap: 'break-word',
-      }}>
-        <div style={{fontSize: 64, marginBottom: 8}}><i className="fas fa-eye" /></div>
-        <h1 style={{
-          fontSize: 'clamp(1.5rem, 6vw, 2.5rem)',
-          fontWeight: 800,
-          color: '#fff',
-          margin: 0,
-          textAlign: 'center',
-          maxWidth: '100%',
-          wordBreak: 'break-word',
-          overflowWrap: 'break-word',
-        }}>Monitoramento</h1>
-        <div style={{
-          color: '#fff',
-          fontSize: 'clamp(1rem, 3vw, 1.2rem)',
-          textAlign: 'center',
-          marginTop: 8,
-          maxWidth: '100%',
-          wordBreak: 'break-word',
-          overflowWrap: 'break-word',
-        }}>
-          Visualize o monitoramento em tempo real das entregas
-        </div>
-      </div>
+      <PageHeader
+        title="Monitoramento"
+        subtitle="Visualize o monitoramento em tempo real das entregas"
+        icon={Monitor}
+      />
 
       {/* Filtros */}
-      <div className="card" style={{padding: 24, marginBottom: 24}}>
-        <h3 style={{fontSize: '1.3rem', color: '#218838', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8}}>
+      <div className={`card ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`} style={{padding: 24, marginBottom: 24}}>
+        <h3 style={{fontSize: '1.3rem', color: isDarkMode ? '#10b981' : '#218838', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8}}>
           <Filter style={{width: 20, height: 20}} />
           Filtros de Busca
         </h3>
@@ -1698,22 +1670,24 @@ ${message}`);
         <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16}}>
           {/* Filtro rápido de período */}
           <div>
-            <label style={{display: 'block', fontWeight: 600, color: '#495057', marginBottom: 8}}>⏱️ Período:</label>
+            <label style={{display: 'block', fontWeight: 600, color: isDarkMode ? '#d1d5db' : '#495057', marginBottom: 8}}>⏱️ Período:</label>
             <select
               value={filterPeriod}
               onChange={e => setFilterPeriod(e.target.value)}
-              style={{width: '100%', padding: '12px 16px', border: '1px solid #e0e0e0', borderRadius: 8, fontSize: 15}}
+              className={`${isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`}
+              style={{width: '100%', padding: '12px 16px', borderRadius: 8, fontSize: 15}}
             >
               {periodOptions.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
             </select>
           </div>
           {/* Cliente */}
           <div>
-            <label style={{display: 'block', fontWeight: 600, color: '#495057', marginBottom: 8}}>👤 Cliente:</label>
+            <label style={{display: 'block', fontWeight: 600, color: isDarkMode ? '#d1d5db' : '#495057', marginBottom: 8}}>👤 Cliente:</label>
           <select
             value={filterClient}
               onChange={e => setFilterClient(e.target.value)}
-              style={{width: '100%', padding: '12px 16px', border: '1px solid #e0e0e0', borderRadius: 8, fontSize: 15}}
+              className={`${isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`}
+              style={{width: '100%', padding: '12px 16px', borderRadius: 8, fontSize: 15}}
           >
               <option value="">Todos os clientes</option>
             {clients.map((client) => (
@@ -1723,11 +1697,12 @@ ${message}`);
         </div>
           {/* Fretista */}
           <div>
-            <label style={{display: 'block', fontWeight: 600, color: '#495057', marginBottom: 8}}>🚛 Fretista:</label>
+            <label style={{display: 'block', fontWeight: 600, color: isDarkMode ? '#d1d5db' : '#495057', marginBottom: 8}}>🚛 Fretista:</label>
           <select
             value={filterFretista}
               onChange={e => setFilterFretista(e.target.value)}
-              style={{width: '100%', padding: '12px 16px', border: '1px solid #e0e0e0', borderRadius: 8, fontSize: 15}}
+              className={`${isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`}
+              style={{width: '100%', padding: '12px 16px', borderRadius: 8, fontSize: 15}}
           >
               <option value="">Todos os fretistas</option>
             {fretistas.map((fretista) => (
@@ -1737,11 +1712,12 @@ ${message}`);
         </div>
           {/* Usuário */}
           <div>
-            <label style={{display: 'block', fontWeight: 600, color: '#495057', marginBottom: 8}}>👤 Usuário:</label>
+            <label style={{display: 'block', fontWeight: 600, color: isDarkMode ? '#d1d5db' : '#495057', marginBottom: 8}}>👤 Usuário:</label>
             <select
               value={filterUser}
               onChange={e => setFilterUser(e.target.value)}
-              style={{width: '100%', padding: '12px 16px', border: '1px solid #e0e0e0', borderRadius: 8, fontSize: 15}}
+              className={`${isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`}
+              style={{width: '100%', padding: '12px 16px', borderRadius: 8, fontSize: 15}}
             >
               <option value="">Todos os usuários</option>
               {userList.map((user) => (
@@ -1751,11 +1727,12 @@ ${message}`);
         </div>
           {/* Status */}
           <div>
-            <label style={{display: 'block', fontWeight: 600, color: '#495057', marginBottom: 8}}>📊 Status:</label>
+            <label style={{display: 'block', fontWeight: 600, color: isDarkMode ? '#d1d5db' : '#495057', marginBottom: 8}}>📊 Status:</label>
             <select
               value={filterStatus}
               onChange={e => setFilterStatus(e.target.value)}
-              style={{width: '100%', padding: '12px 16px', border: '1px solid #e0e0e0', borderRadius: 8, fontSize: 15}}
+              className={`${isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`}
+              style={{width: '100%', padding: '12px 16px', borderRadius: 8, fontSize: 15}}
             >
               <option value="">Todos os status</option>
               {statusList.map((status) => (
@@ -1765,11 +1742,12 @@ ${message}`);
           </div>
           {/* Rede */}
           <div>
-            <label style={{display: 'block', fontWeight: 600, color: '#495057', marginBottom: 8}}>🏪 Rede:</label>
+            <label style={{display: 'block', fontWeight: 600, color: isDarkMode ? '#d1d5db' : '#495057', marginBottom: 8}}>🏪 Rede:</label>
             <select
               value={filterRede}
               onChange={e => setFilterRede(e.target.value)}
-              style={{width: '100%', padding: '12px 16px', border: '1px solid #e0e0e0', borderRadius: 8, fontSize: 15}}
+              className={`${isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`}
+              style={{width: '100%', padding: '12px 16px', borderRadius: 8, fontSize: 15}}
             >
               <option value="">Todas as redes</option>
               {redeList.map((rede) => (
@@ -1779,11 +1757,12 @@ ${message}`);
           </div>
           {/* Vendedor */}
           <div>
-            <label style={{display: 'block', fontWeight: 600, color: '#495057', marginBottom: 8}}>👨‍💼 Vendedor:</label>
+            <label style={{display: 'block', fontWeight: 600, color: isDarkMode ? '#d1d5db' : '#495057', marginBottom: 8}}>👨‍💼 Vendedor:</label>
             <select
               value={filterVendedor}
               onChange={e => setFilterVendedor(e.target.value)}
-              style={{width: '100%', padding: '12px 16px', border: '1px solid #e0e0e0', borderRadius: 8, fontSize: 15}}
+              className={`${isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`}
+              style={{width: '100%', padding: '12px 16px', borderRadius: 8, fontSize: 15}}
             >
               <option value="">Todos os vendedores</option>
               {vendedorList.map((vendedor) => (
@@ -1793,11 +1772,12 @@ ${message}`);
           </div>
           {/* UF */}
           <div>
-            <label style={{display: 'block', fontWeight: 600, color: '#495057', marginBottom: 8}}>📍 UF:</label>
+            <label style={{display: 'block', fontWeight: 600, color: isDarkMode ? '#d1d5db' : '#495057', marginBottom: 8}}>📍 UF:</label>
             <select
               value={filterUF}
               onChange={e => setFilterUF(e.target.value)}
-              style={{width: '100%', padding: '12px 16px', border: '1px solid #e0e0e0', borderRadius: 8, fontSize: 15}}
+              className={`${isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`}
+              style={{width: '100%', padding: '12px 16px', borderRadius: 8, fontSize: 15}}
             >
               <option value="">Todas as UFs</option>
               {ufList.map((uf) => (
@@ -1807,11 +1787,12 @@ ${message}`);
           </div>
           {/* Tipo de Problema */}
           <div>
-            <label style={{display: 'block', fontWeight: 600, color: '#495057', marginBottom: 8}}>⚠️ Tipo de Problema:</label>
+            <label style={{display: 'block', fontWeight: 600, color: isDarkMode ? '#d1d5db' : '#495057', marginBottom: 8}}>⚠️ Tipo de Problema:</label>
           <select
             value={filterProblemType}
               onChange={e => setFilterProblemType(e.target.value)}
-              style={{width: '100%', padding: '12px 16px', border: '1px solid #e0e0e0', borderRadius: 8, fontSize: 15}}
+              className={`${isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`}
+              style={{width: '100%', padding: '12px 16px', borderRadius: 8, fontSize: 15}}
           >
               <option value="">Todos os tipos</option>
             {problemTypes.map((problem) => (
@@ -1821,11 +1802,12 @@ ${message}`);
         </div>
           {/* Anexos */}
           <div>
-            <label style={{display: 'block', fontWeight: 600, color: '#495057', marginBottom: 8}}>📎 Anexos:</label>
+            <label style={{display: 'block', fontWeight: 600, color: isDarkMode ? '#d1d5db' : '#495057', marginBottom: 8}}>📎 Anexos:</label>
           <select
             value={filterHasAttachments}
               onChange={e => setFilterHasAttachments(e.target.value)}
-              style={{width: '100%', padding: '12px 16px', border: '1px solid #e0e0e0', borderRadius: 8, fontSize: 15}}
+              className={`${isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`}
+              style={{width: '100%', padding: '12px 16px', borderRadius: 8, fontSize: 15}}
           >
             <option value="all">Todos</option>
             <option value="with">Com Anexos</option>
@@ -1836,18 +1818,18 @@ ${message}`);
             <button 
               type="button"
               onClick={handleClearFilters}
+              className={`${isDarkMode ? 'bg-gradient-to-r from-green-400 to-orange-500 hover:from-green-500 hover:to-orange-600' : 'bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700'}`}
               style={{
                 width: '100%',
                 padding: '12px 18px',
                 borderRadius: 8,
                 border: 'none',
-                background: 'linear-gradient(90deg, #43a047 0%, #1976d2 100%)',
                 color: '#fff',
                 fontWeight: 700,
                 fontSize: 16,
                 cursor: 'pointer',
-                boxShadow: '0 2px 8px #1976d233',
-                transition: 'background 0.2s',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+                transition: 'all 0.2s',
                 marginLeft: 8,
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -1863,11 +1845,11 @@ ${message}`);
       </div>
 
       {/* Ações */}
-      <div className="card" style={{padding: 24, marginBottom: 24}}>
+      <div className={`card ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`} style={{padding: 24, marginBottom: 24}}>
         <div style={{display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'space-between', alignItems: 'center'}}>
           <div style={{display: 'flex', flexWrap: 'wrap', gap: 12}}>
             <button 
-              className="btn btn-green"
+              className={`btn ${isDarkMode ? 'bg-green-400 hover:bg-green-500 text-black' : 'btn-green'}`}
               onClick={handleGeneratePdf}
               style={{fontSize: 16, padding: '14px 32px', display: 'inline-flex', alignItems: 'center', gap: 8}}
             >
@@ -1876,7 +1858,7 @@ ${message}`);
             </button>
         {selectedRecords.length > 0 && (
               <button 
-                className="btn btn-red"
+                className={`btn ${isDarkMode ? 'bg-orange-500 hover:bg-orange-600 text-white' : 'btn-red'}`}
                 onClick={handleDeleteSelected}
                 disabled={selectedRecords.length > 20}
                 style={{fontSize: 16, padding: '14px 32px', display: 'inline-flex', alignItems: 'center', gap: 8}}
@@ -1886,7 +1868,7 @@ ${message}`);
           </button>
         )}
           </div>
-          <div style={{color: '#666', fontSize: 14}}>
+          <div style={{color: isDarkMode ? '#d1d5db' : '#666', fontSize: 14}}>
             {totalRecords} registro(s) no total | Página {currentPage} de {totalPages}
           </div>
         </div>
@@ -1896,39 +1878,39 @@ ${message}`);
           <button
             onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
             disabled={!hasPrevious}
+            className={`${isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`}
             style={{
               padding: '8px 16px',
               borderRadius: 6,
-              border: '1px solid #ddd',
-              background: hasPrevious ? '#fff' : '#f5f5f5',
-              color: hasPrevious ? '#218838' : '#999',
+              border: '1px solid',
               cursor: hasPrevious ? 'pointer' : 'not-allowed',
               display: 'flex',
               alignItems: 'center',
-              gap: 6
+              gap: 6,
+              opacity: hasPrevious ? 1 : 0.5
             }}
           >
             <ChevronLeft style={{width: 16, height: 16}} />
             Anterior
           </button>
           
-          <div style={{color: '#666', fontSize: 14}}>
+          <div style={{color: isDarkMode ? '#d1d5db' : '#666', fontSize: 14}}>
             Página {currentPage} de {totalPages}
           </div>
           
           <button
             onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
             disabled={!hasNext}
+            className={`${isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`}
             style={{
               padding: '8px 16px',
               borderRadius: 6,
-              border: '1px solid #ddd',
-              background: hasNext ? '#fff' : '#f5f5f5',
-              color: hasNext ? '#218838' : '#999',
+              border: '1px solid',
               cursor: hasNext ? 'pointer' : 'not-allowed',
               display: 'flex',
               alignItems: 'center',
-              gap: 6
+              gap: 6,
+              opacity: hasNext ? 1 : 0.5
             }}
           >
             Próxima
@@ -1938,12 +1920,12 @@ ${message}`);
       </div>
 
       {/* Tabela de Registros */}
-      <div className="card" style={{padding: 0, overflow: 'hidden'}}>
+      <div className={`card ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`} style={{padding: 0, overflow: 'hidden'}}>
         <div style={{overflowX: 'auto'}}>
           <table className="tabela-registros" style={{width: '100%', borderCollapse: 'collapse'}}>
           <thead>
-              <tr style={{background: '#f8f9fa'}}>
-                <th style={{padding: '16px', textAlign: 'center', borderBottom: '2px solid #e9ecef'}}>
+              <tr style={{background: isDarkMode ? '#374151' : '#f8f9fa'}}>
+                <th style={{padding: '16px', textAlign: 'center', borderBottom: `2px solid ${isDarkMode ? '#4b5563' : '#e9ecef'}`}}>
                 <input
                   type="checkbox"
                   onChange={handleSelectAll}
@@ -1952,25 +1934,25 @@ ${message}`);
                     style={{width: 16, height: 16}}
                 />
               </th>
-                <th style={{padding: '16px', textAlign: 'left', borderBottom: '2px solid #e9ecef', fontWeight: 600, color: '#218838'}}>Data</th>
-                <th style={{padding: '16px', textAlign: 'left', borderBottom: '2px solid #e9ecef', fontWeight: 600, color: '#218838'}}>Cliente</th>
-                <th style={{padding: '16px', textAlign: 'left', borderBottom: '2px solid #e9ecef', fontWeight: 600, color: '#218838'}}>Fretista</th>
-                <th style={{padding: '16px', textAlign: 'left', borderBottom: '2px solid #e9ecef', fontWeight: 600, color: '#218838'}}>Usuário</th>
-                <th style={{padding: '16px', textAlign: 'left', borderBottom: '2px solid #e9ecef', fontWeight: 600, color: '#218838'}}>Rede</th>
-                <th style={{padding: '16px', textAlign: 'left', borderBottom: '2px solid #e9ecef', fontWeight: 600, color: '#218838'}}>Vendedor</th>
-                <th style={{padding: '16px', textAlign: 'left', borderBottom: '2px solid #e9ecef', fontWeight: 600, color: '#218838'}}>UF</th>
-                <th style={{padding: '16px', textAlign: 'left', borderBottom: '2px solid #e9ecef', fontWeight: 600, color: '#218838'}}>Check-in</th>
-                <th style={{padding: '16px', textAlign: 'left', borderBottom: '2px solid #e9ecef', fontWeight: 600, color: '#218838'}}>Check-out</th>
-                <th style={{padding: '16px', textAlign: 'left', borderBottom: '2px solid #e9ecef', fontWeight: 600, color: '#218838'}}>Duração</th>
-                <th style={{padding: '16px', textAlign: 'left', borderBottom: '2px solid #e9ecef', fontWeight: 600, color: '#218838'}}>Status</th>
-                <th style={{padding: '16px', textAlign: 'left', borderBottom: '2px solid #e9ecef', fontWeight: 600, color: '#218838'}}>Anexos</th>
-                <th style={{padding: '16px', textAlign: 'center', borderBottom: '2px solid #e9ecef', fontWeight: 600, color: '#218838'}}>Ações</th>
+                <th style={{padding: '16px', textAlign: 'left', borderBottom: `2px solid ${isDarkMode ? '#4b5563' : '#e9ecef'}`, fontWeight: 600, color: isDarkMode ? '#10b981' : '#218838'}}>Data</th>
+                <th style={{padding: '16px', textAlign: 'left', borderBottom: `2px solid ${isDarkMode ? '#4b5563' : '#e9ecef'}`, fontWeight: 600, color: isDarkMode ? '#10b981' : '#218838'}}>Cliente</th>
+                <th style={{padding: '16px', textAlign: 'left', borderBottom: `2px solid ${isDarkMode ? '#4b5563' : '#e9ecef'}`, fontWeight: 600, color: isDarkMode ? '#10b981' : '#218838'}}>Fretista</th>
+                <th style={{padding: '16px', textAlign: 'left', borderBottom: `2px solid ${isDarkMode ? '#4b5563' : '#e9ecef'}`, fontWeight: 600, color: isDarkMode ? '#10b981' : '#218838'}}>Usuário</th>
+                <th style={{padding: '16px', textAlign: 'left', borderBottom: `2px solid ${isDarkMode ? '#4b5563' : '#e9ecef'}`, fontWeight: 600, color: isDarkMode ? '#10b981' : '#218838'}}>Rede</th>
+                <th style={{padding: '16px', textAlign: 'left', borderBottom: `2px solid ${isDarkMode ? '#4b5563' : '#e9ecef'}`, fontWeight: 600, color: isDarkMode ? '#10b981' : '#218838'}}>Vendedor</th>
+                <th style={{padding: '16px', textAlign: 'left', borderBottom: `2px solid ${isDarkMode ? '#4b5563' : '#e9ecef'}`, fontWeight: 600, color: isDarkMode ? '#10b981' : '#218838'}}>UF</th>
+                <th style={{padding: '16px', textAlign: 'left', borderBottom: `2px solid ${isDarkMode ? '#4b5563' : '#e9ecef'}`, fontWeight: 600, color: isDarkMode ? '#10b981' : '#218838'}}>Check-in</th>
+                <th style={{padding: '16px', textAlign: 'left', borderBottom: `2px solid ${isDarkMode ? '#4b5563' : '#e9ecef'}`, fontWeight: 600, color: isDarkMode ? '#10b981' : '#218838'}}>Check-out</th>
+                <th style={{padding: '16px', textAlign: 'left', borderBottom: `2px solid ${isDarkMode ? '#4b5563' : '#e9ecef'}`, fontWeight: 600, color: isDarkMode ? '#10b981' : '#218838'}}>Duração</th>
+                <th style={{padding: '16px', textAlign: 'left', borderBottom: `2px solid ${isDarkMode ? '#4b5563' : '#e9ecef'}`, fontWeight: 600, color: isDarkMode ? '#10b981' : '#218838'}}>Status</th>
+                <th style={{padding: '16px', textAlign: 'left', borderBottom: `2px solid ${isDarkMode ? '#4b5563' : '#e9ecef'}`, fontWeight: 600, color: isDarkMode ? '#10b981' : '#218838'}}>Anexos</th>
+                <th style={{padding: '16px', textAlign: 'center', borderBottom: `2px solid ${isDarkMode ? '#4b5563' : '#e9ecef'}`, fontWeight: 600, color: isDarkMode ? '#10b981' : '#218838'}}>Ações</th>
             </tr>
           </thead>
           <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan="14" style={{padding: '48px 16px', textAlign: 'center', color: '#666', fontSize: 16}}>
+                  <td colSpan="14" style={{padding: '48px 16px', textAlign: 'center', color: isDarkMode ? '#d1d5db' : '#666', fontSize: 16}}>
                     Carregando registros...
                   </td>
                 </tr>
@@ -1982,7 +1964,7 @@ ${message}`);
                 </tr>
               ) : filteredRecords.length > 0 ? (
                 filteredRecords.map((record, index) => (
-                  <tr key={record.id} style={{background: index % 2 === 0 ? '#fff' : '#f8f9fa', borderBottom: '1px solid #e9ecef'}}>
+                  <tr key={record.id} style={{background: isDarkMode ? (index % 2 === 0 ? '#1f2937' : '#374151') : (index % 2 === 0 ? '#fff' : '#f8f9fa'), borderBottom: `1px solid ${isDarkMode ? '#4b5563' : '#e9ecef'}`}}>
                     <td style={{padding: '12px 16px', textAlign: 'center'}}>
                     <input
                       type="checkbox"
@@ -1992,28 +1974,28 @@ ${message}`);
                         style={{width: 16, height: 16}}
                     />
                   </td>
-                    <td style={{padding: '12px 16px', fontSize: 14}}>
+                    <td style={{padding: '12px 16px', fontSize: 14, color: isDarkMode ? '#d1d5db' : '#000'}}>
                       {record.checkin_time ? new Date(record.checkin_time).toLocaleDateString('pt-BR') : '-'}
                     </td>
-                    <td style={{padding: '12px 16px', fontSize: 14, fontWeight: 500}}>{record.client || '-'}</td>
-                    <td style={{padding: '12px 16px', fontSize: 14}}>{record.driver || '-'}</td>
-                    <td style={{padding: '12px 16px', fontSize: 14, color: '#666'}}>{record.userEmail || '-'}</td>
-                    <td style={{padding: '12px 16px', fontSize: 14}}>{record.rede || '-'}</td>
-                    <td style={{padding: '12px 16px', fontSize: 14}}>{record.vendedor || '-'}</td>
-                    <td style={{padding: '12px 16px', fontSize: 14}}>{record.uf || '-'}</td>
-                    <td style={{padding: '12px 16px', fontSize: 14, color: '#ff9800'}}>
+                    <td style={{padding: '12px 16px', fontSize: 14, fontWeight: 500, color: isDarkMode ? '#d1d5db' : '#000'}}>{record.client || '-'}</td>
+                    <td style={{padding: '12px 16px', fontSize: 14, color: isDarkMode ? '#d1d5db' : '#000'}}>{record.driver || '-'}</td>
+                    <td style={{padding: '12px 16px', fontSize: 14, color: isDarkMode ? '#9ca3af' : '#666'}}>{record.userEmail || '-'}</td>
+                    <td style={{padding: '12px 16px', fontSize: 14, color: isDarkMode ? '#d1d5db' : '#000'}}>{record.rede || '-'}</td>
+                    <td style={{padding: '12px 16px', fontSize: 14, color: isDarkMode ? '#d1d5db' : '#000'}}>{record.vendedor || '-'}</td>
+                    <td style={{padding: '12px 16px', fontSize: 14, color: isDarkMode ? '#d1d5db' : '#000'}}>{record.uf || '-'}</td>
+                    <td style={{padding: '12px 16px', fontSize: 14, color: isDarkMode ? '#fb923c' : '#ff9800'}}>
                       {record.checkin_time ? new Date(record.checkin_time).toLocaleTimeString('pt-BR') : '-'}
                     </td>
-                    <td style={{padding: '12px 16px', fontSize: 14, color: '#4caf50'}}>
+                    <td style={{padding: '12px 16px', fontSize: 14, color: isDarkMode ? '#10b981' : '#4caf50'}}>
                       {record.checkout_time ? new Date(record.checkout_time).toLocaleTimeString('pt-BR') : '-'}
                     </td>
-                    <td style={{padding: '12px 16px', fontSize: 14, color: '#1976d2'}}>{record.duration || '-'}</td>
+                    <td style={{padding: '12px 16px', fontSize: 14, color: isDarkMode ? '#3b82f6' : '#1976d2'}}>{record.duration || '-'}</td>
                     <td style={{padding: '12px 16px', fontSize: 14}}>
                       <span
                         className="badge"
                         style={{
-                          background: (record.status || '').toLowerCase() === 'entrega em andamento' ? '#ffc107' : (record.status || '').toLowerCase() === 'entrega finalizada' ? '#4caf50' : (record.status || '').toLowerCase() === 'entrega devolvida' ? '#e53935' : '#e0e0e0',
-                          color: (record.status || '').toLowerCase() === 'entrega em andamento' ? '#222' : '#fff',
+                          background: (record.status || '').toLowerCase() === 'entrega em andamento' ? (isDarkMode ? '#fb923c' : '#ffc107') : (record.status || '').toLowerCase() === 'entrega finalizada' ? (isDarkMode ? '#10b981' : '#4caf50') : (record.status || '').toLowerCase() === 'entrega devolvida' ? '#e53935' : (isDarkMode ? '#6b7280' : '#e0e0e0'),
+                          color: (record.status || '').toLowerCase() === 'entrega em andamento' ? '#fff' : '#fff',
                           padding: '4px 14px',
                           borderRadius: '16px',
                           fontWeight: 600,
@@ -2023,7 +2005,7 @@ ${message}`);
                         {record.status || 'N/A'}
                       </span>
                       {record.problem_type && (
-                        <div style={{marginTop: 6, fontSize: 12, color: '#e65100'}}>⚠️ {record.problem_type}</div>
+                        <div style={{marginTop: 6, fontSize: 12, color: isDarkMode ? '#fb923c' : '#e65100'}}>⚠️ {record.problem_type}</div>
                       )}
                     </td>
                     <td style={{padding: '12px 16px', fontSize: 14}}>
@@ -2033,14 +2015,14 @@ ${message}`);
                             <div key={`${record.id}-${idx}-${att.file_url || att.file_name || att.original_name}`} style={{display: 'flex', alignItems: 'center', gap: 6}}>
                               <button
                                 onClick={() => handleDownloadAttachment(att)}
-                                style={{background: 'none', border: 'none', cursor: 'pointer', color: '#1976d2', fontWeight: 500, textDecoration: 'underline', fontSize: 14, padding: 0}}
+                                style={{background: 'none', border: 'none', cursor: 'pointer', color: isDarkMode ? '#3b82f6' : '#1976d2', fontWeight: 500, textDecoration: 'underline', fontSize: 14, padding: 0}}
                                 title={att.original_name || att.file_name}
                               >
                                 {att.file_name || att.original_name || `Anexo ${idx+1}`}
                               </button>
                               <button
                                 onClick={() => handleDownloadAttachment(att)}
-                                style={{background: 'none', border: 'none', cursor: 'pointer', color: '#218838', fontSize: 16, padding: 0}}
+                                style={{background: 'none', border: 'none', cursor: 'pointer', color: isDarkMode ? '#10b981' : '#218838', fontSize: 16, padding: 0}}
                                 title="Baixar anexo"
                               >
                                 <Download style={{width: 16, height: 16}} />
@@ -2054,21 +2036,21 @@ ${message}`);
                       <div style={{display: 'flex', gap: 4, justifyContent: 'center'}}>
                         <button 
                           onClick={() => handleCommentRecord(record)}
-                          style={{background: '#1976d2', color: '#fff', border: 'none', borderRadius: 4, padding: '6px 8px', cursor: 'pointer', fontSize: 12}}
+                          style={{background: isDarkMode ? '#3b82f6' : '#1976d2', color: '#fff', border: 'none', borderRadius: 4, padding: '6px 8px', cursor: 'pointer', fontSize: 12}}
                           title="Comentar"
                         >
                           <MessageSquare style={{width: 12, height: 12}} />
                         </button>
                         <button 
                           onClick={() => handleShareRecord(record)}
-                          style={{background: '#4caf50', color: '#fff', border: 'none', borderRadius: 4, padding: '6px 8px', cursor: 'pointer', fontSize: 12}}
+                          style={{background: isDarkMode ? '#10b981' : '#4caf50', color: '#fff', border: 'none', borderRadius: 4, padding: '6px 8px', cursor: 'pointer', fontSize: 12}}
                           title="Compartilhar"
                         >
                           <Share2 style={{width: 12, height: 12}} />
                         </button>
                         <button 
                           onClick={() => handleEditRecord(record)}
-                          style={{background: '#ff9800', color: '#fff', border: 'none', borderRadius: 4, padding: '6px 8px', cursor: 'pointer', fontSize: 12, opacity: currentUser && currentUser.type !== 'admin' ? 0.5 : 1}}
+                          style={{background: isDarkMode ? '#fb923c' : '#ff9800', color: '#fff', border: 'none', borderRadius: 4, padding: '6px 8px', cursor: 'pointer', fontSize: 12, opacity: currentUser && currentUser.type !== 'admin' ? 0.5 : 1}}
                           title={currentUser && currentUser.type !== 'admin' ? 'Apenas administradores podem editar' : 'Editar'}
                           disabled={currentUser && currentUser.type !== 'admin'}
                         >
@@ -2105,7 +2087,7 @@ ${message}`);
               ))
             ) : (
               <tr>
-                  <td colSpan="14" style={{padding: '48px 16px', textAlign: 'center', color: '#666', fontSize: 16}}>
+                  <td colSpan="14" style={{padding: '48px 16px', textAlign: 'center', color: isDarkMode ? '#d1d5db' : '#666', fontSize: 16}}>
                     Nenhum registro encontrado com os filtros aplicados.
                   </td>
               </tr>
@@ -2121,8 +2103,8 @@ ${message}`);
           position: 'fixed',
           bottom: 24,
           right: 24,
-          width: 64,
-          height: 64,
+          width: 56,
+          height: 56,
           borderRadius: '50%',
           background: 'linear-gradient(135deg, #ff9800 0%, #ff5722 100%)',
           boxShadow: '0 8px 24px rgba(255, 152, 0, 0.3)',
@@ -2130,7 +2112,7 @@ ${message}`);
           alignItems: 'center',
           justifyContent: 'center',
           cursor: 'pointer',
-          fontSize: 28,
+          fontSize: 24,
           color: '#fff',
           zIndex: 1000,
           transition: 'all 0.3s ease',
@@ -2165,17 +2147,18 @@ ${message}`);
         onClick={() => setCommentModal({ open: false, record: null, text: '' })}
         >
           <div style={{
-            background: '#fff',
+            background: isDarkMode ? '#1a1a1a' : '#fff',
             borderRadius: 12,
             padding: 32,
             maxWidth: 500,
             width: '90%',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.3)'
+            boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+            border: isDarkMode ? '1px solid #333' : 'none'
           }}
           onClick={e => e.stopPropagation()}
           >
-            <h3 style={{margin: '0 0 24px 0', color: '#218838'}}>Adicionar Comentário</h3>
-            <p style={{margin: '0 0 16px 0', color: '#666'}}>
+            <h3 style={{margin: '0 0 24px 0', color: isDarkMode ? '#00ff88' : '#218838'}}>Adicionar Comentário</h3>
+            <p style={{margin: '0 0 16px 0', color: isDarkMode ? '#ccc' : '#666'}}>
               <strong>Registro:</strong> {commentModal.record?.client || 'N/A'} - {commentModal.record?.driver || 'N/A'}
             </p>
             <textarea
@@ -2187,10 +2170,12 @@ ${message}`);
                 minHeight: 120,
                 padding: 16,
                 borderRadius: 8,
-                border: '1px solid #ddd',
+                border: isDarkMode ? '1px solid #444' : '1px solid #ddd',
                 fontSize: 16,
                 fontFamily: 'inherit',
-                resize: 'vertical'
+                resize: 'vertical',
+                background: isDarkMode ? '#2a2a2a' : '#fff',
+                color: isDarkMode ? '#ccc' : '#333'
               }}
             />
             <div style={{display: 'flex', gap: 12, justifyContent: 'flex-end', marginTop: 24}}>
@@ -2199,9 +2184,9 @@ ${message}`);
                 style={{
                   padding: '12px 24px',
                   borderRadius: 8,
-                  border: '1px solid #ddd',
-                  background: '#fff',
-                  color: '#666',
+                  border: isDarkMode ? '1px solid #444' : '1px solid #ddd',
+                  background: isDarkMode ? '#2a2a2a' : '#fff',
+                  color: isDarkMode ? '#ccc' : '#666',
                   fontWeight: 600,
                   cursor: 'pointer'
                 }}
@@ -2214,8 +2199,8 @@ ${message}`);
                   padding: '12px 24px',
                   borderRadius: 8,
                   border: 'none',
-                  background: 'linear-gradient(135deg, #1976d2 0%, #42a5f5 100%)',
-                  color: '#fff',
+                  background: isDarkMode ? 'linear-gradient(135deg, #00ff88 0%, #00cc6a 100%)' : 'linear-gradient(135deg, #1976d2 0%, #42a5f5 100%)',
+                  color: isDarkMode ? '#000' : '#fff',
                   fontWeight: 600,
                   cursor: 'pointer'
                 }}
@@ -2244,17 +2229,18 @@ ${message}`);
         onClick={() => setEditModal({ open: false, record: null })}
         >
           <div style={{
-            background: '#fff',
+            background: isDarkMode ? '#1a1a1a' : '#fff',
             borderRadius: 12,
             padding: 32,
             maxWidth: 500,
             width: '90%',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.3)'
+            boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+            border: isDarkMode ? '1px solid #333' : 'none'
           }}
           onClick={e => e.stopPropagation()}
           >
-            <h3 style={{margin: '0 0 24px 0', color: '#218838'}}>Editar Registro</h3>
-            <p style={{margin: '0 0 16px 0', color: '#666'}}>
+            <h3 style={{margin: '0 0 24px 0', color: isDarkMode ? '#00ff88' : '#218838'}}>Editar Registro</h3>
+            <p style={{margin: '0 0 16px 0', color: isDarkMode ? '#ccc' : '#666'}}>
               Funcionalidade de edição em desenvolvimento. Por favor, utilize a tela de Registros para editar informações.
             </p>
             <div style={{display: 'flex', gap: 12, justifyContent: 'flex-end', marginTop: 24}}>
@@ -2263,9 +2249,9 @@ ${message}`);
                 style={{
                   padding: '12px 24px',
                   borderRadius: 8,
-                  border: '1px solid #ddd',
-                  background: '#fff',
-                  color: '#666',
+                  border: isDarkMode ? '1px solid #444' : '1px solid #ddd',
+                  background: isDarkMode ? '#2a2a2a' : '#fff',
+                  color: isDarkMode ? '#ccc' : '#666',
                   fontWeight: 600,
                   cursor: 'pointer'
                 }}
@@ -2281,7 +2267,7 @@ ${message}`);
                   padding: '12px 24px',
                   borderRadius: 8,
                   border: 'none',
-                  background: 'linear-gradient(135deg, #ff9800 0%, #ffc107 100%)',
+                  background: isDarkMode ? 'linear-gradient(135deg, #ff9800 0%, #ff5722 100%)' : 'linear-gradient(135deg, #ff9800 0%, #ffc107 100%)',
                   color: '#fff',
                   fontWeight: 600,
                   cursor: 'pointer'

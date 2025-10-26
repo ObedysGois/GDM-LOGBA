@@ -1,14 +1,35 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../AuthContext.js';
 import { ToastContext } from '../App.js';
 import { getLatestDeliveryRecordsWithPermissions, updateDeliveryRecord, isAdmin, uploadRouteImage, deleteRouteImage, isCollaborator, addDeliveryComment, problemTypes } from '../firebaseUtils.js';
 import { getAllRouteImages } from '../firebaseUtils.js';
-import '../App.css';
+import { useTheme } from '../contexts/ThemeContext.js';
+import { 
+  Home as HomeIcon, 
+  Package, 
+  Clock, 
+  AlertTriangle, 
+  CheckCircle, 
+  XCircle,
+  Search,
+  Filter,
+  Eye,
+  MessageCircle,
+  Paperclip,
+  Truck,
+  User,
+  MapPin,
+  Calendar,
+  Timer
+} from 'lucide-react';
 import ToastNotification from '../Components/ToastNotification.jsx';
+import PageHeader from '../Components/PageHeader.jsx';
 import { useNavigate } from 'react-router-dom';
 
 // [NOVO] Componente de texto colapsável com modal
 function CollapsibleText({ text, maxLength = 20 }) {
+  const { isDarkMode } = useTheme();
   const [modalOpen, setModalOpen] = useState(false);
   if (!text || text.length <= maxLength) return <span>{text}</span>;
   return (
@@ -18,10 +39,10 @@ function CollapsibleText({ text, maxLength = 20 }) {
       </span>
       {modalOpen && (
         <div style={{position:'fixed',top:0,left:0,width:'100vw',height:'100vh',background:'rgba(0,0,0,0.35)',zIndex:9999,display:'flex',alignItems:'center',justifyContent:'center'}}>
-          <div style={{background:'#fff',borderRadius:16,padding:32,minWidth:320,maxWidth:400,boxShadow:'0 8px 32px #0005',position:'relative',wordBreak:'break-word'}}>
-            <button onClick={()=>setModalOpen(false)} style={{position:'absolute',top:16,right:16,fontSize:22,background:'none',border:'none',cursor:'pointer',color:'#888'}} title="Fechar">×</button>
+          <div style={{background: isDarkMode ? '#374151' : '#fff',borderRadius:16,padding:32,minWidth:320,maxWidth:400,boxShadow:'0 8px 32px #0005',position:'relative',wordBreak:'break-word'}}>
+            <button onClick={()=>setModalOpen(false)} style={{position:'absolute',top:16,right:16,fontSize:22,background:'none',border:'none',cursor:'pointer',color: isDarkMode ? '#d1d5db' : '#888'}} title="Fechar">×</button>
             <h2 style={{fontWeight:700, fontSize:'1.1rem', color:'#1976d2', marginBottom:18}}>Observação Completa</h2>
-            <div style={{fontSize:16, color:'#333', wordBreak:'break-word', whiteSpace:'pre-wrap'}}>{text}</div>
+            <div style={{fontSize:16, color: isDarkMode ? '#e5e7eb' : '#333', wordBreak:'break-word', whiteSpace:'pre-wrap'}}>{text}</div>
           </div>
         </div>
       )}
@@ -32,6 +53,7 @@ function CollapsibleText({ text, maxLength = 20 }) {
 function Home() {
   const { currentUser: user } = useAuth();
   const { showToast } = React.useContext(ToastContext);
+  const { isDarkMode, colors } = useTheme();
   const [routeImage, setRouteImage] = useState(null);
   const [imageName, setImageName] = useState('');
   const [currentRouteImageId, setCurrentRouteImageId] = useState(null);
@@ -612,44 +634,16 @@ function Home() {
   };
 
   return (
-    <div className="home-container" style={{maxWidth: '1200px', margin: '0 auto', padding: '24px 0'}}>
-      {/* Cabeçalho moderno padrão localização */}
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '32px 12px 24px 12px',
-        background: 'linear-gradient(135deg, #1de9b6 0%, #1dc8e9 100%)',
-        borderRadius: 24,
-        marginBottom: 24,
-        maxWidth: '100%',
-        wordBreak: 'break-word',
-        overflowWrap: 'break-word',
-      }}>
-        <div style={{fontSize: 64, marginBottom: 8}}><i className="fas fa-home" /></div>
-        <h1 style={{
-          fontSize: 'clamp(1.5rem, 6vw, 2.5rem)',
-          fontWeight: 800,
-          color: '#fff',
-          margin: 0,
-          textAlign: 'center',
-          maxWidth: '100%',
-          wordBreak: 'break-word',
-          overflowWrap: 'break-word',
-        }}>Dashboard Logística</h1>
-        <div style={{
-          color: '#fff',
-          fontSize: 'clamp(1rem, 3vw, 1.2rem)',
-          textAlign: 'center',
-          marginTop: 8,
-          maxWidth: '100%',
-          wordBreak: 'break-word',
-          overflowWrap: 'break-word',
-        }}>
-          Acompanhe entregas, status e solicitações em tempo real
-        </div>
-      </div>
+    <div className={`min-h-screen transition-colors duration-300 ${
+      isDarkMode ? 'bg-dark-bg text-dark-text' : 'bg-light-bg text-light-text'
+    }`}>
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        {/* Header moderno */}
+        <PageHeader
+          title="Dashboard Logística"
+          subtitle="Acompanhe entregas, status e solicitações em tempo real"
+          icon={HomeIcon}
+        />
       {/* Input file oculto */}
       <input
         type="file"
@@ -659,7 +653,7 @@ function Home() {
         style={{ display: 'none' }}
       />
       {/* Área de upload da rota */}
-      <div className="card" style={{maxWidth: 5000, margin: '0 auto 32px auto', textAlign: 'center'}}>
+      <div className="card"  style={{background: isDarkMode ? 'linear-gradient(100deg, #1ce788ff 0%, #06402b 100%)' : '#ffffffff', border: 'none', maxWidth: 5000, margin: '0 auto 32px auto', textAlign: 'center'}}>
         {!routeImage ? (
           <>
             <p style={{fontWeight: 600, color: '#218838', fontSize: 18, marginBottom: 8}}>
@@ -684,12 +678,12 @@ function Home() {
           <div className="route-preview">
             <div style={{display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12}}>
               <span style={{fontSize: 20, color: '#4caf50'}}>✅</span>
-              <h4 style={{fontSize: 16, color: '#218838', margin: 0}}>Rota do Dia Carregada</h4>
+              <h4 style={{fontSize: 16, color: isDarkMode ? '#ffffff' : '#218838', margin: 0}}>Rota do Dia Carregada</h4>
             </div>
             
-            <div className="route-info" style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#e6f4ea', borderRadius: 8, padding: '12px 20px', marginBottom: 18}}>
-              <span style={{fontSize: 16, color: '#218838', fontWeight: 600}}>
-                📅 Data: {routeImageInfo?.date ? new Date(routeImageInfo.date).toLocaleDateString('pt-BR') : (() => {
+            <div className="route-info" style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: isDarkMode ? '#ff9100ff' : '#DAF1DE', border: 'none', borderRadius: 8, padding: '12px 20px', marginBottom: 18}}>
+              <span style={{fontSize: 16, color: isDarkMode ? '#ffffff' : '#218838', fontWeight: 600}}>
+                📅 Data: {routeImageInfo?.date?.hour ? new Date(routeImageInfo.date).toLocaleDateString('pt-BR') : (() => {
                   // Obter data atual no fuso horário de Salvador, Bahia
                   const now = new Date();
                   // Criar um objeto de data com o fuso horário de Salvador
@@ -697,12 +691,15 @@ function Home() {
                     timeZone: 'America/Bahia',
                     day: '2-digit',
                     month: '2-digit',
-                    year: 'numeric'
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
                   });
                   return formatter.format(now);
                 })()}
               </span>
-              <span style={{fontSize: 16, color: routeImageInfo?.is_local ? '#4caf50' : '#1976d2', fontWeight: 600}}>
+              <span style={{fontSize: 16, color: routeImageInfo?.is_local ? background: isDarkMode ? '#ffffffff' : '#51ac56ff', fontWeight: 600}}>
                 💾 Status: {routeImageInfo?.is_local ? 'Salva localmente' : 'Salva no Supabase'}
               </span>
             </div>
@@ -712,7 +709,7 @@ function Home() {
                 src={routeImage} 
                 alt="Preview da Rota" 
                 className="route-preview-image"
-                style={{maxWidth: '100%', maxHeight: 5000, borderRadius: 16, boxShadow: '0 4px 24px #21883833', cursor: 'zoom-in', border: '3px solid #e6f4ea'}}
+                style={{maxWidth: '100%', maxHeight: 5000, borderRadius: 16, boxShadow: '0 4px 24px #21883833', cursor: 'zoom-in', border: 'none'}}
                 onClick={() => setZoomOpen(true)}
               />
             </div>
@@ -758,15 +755,16 @@ function Home() {
             <div className="route-actions" style={{display: 'flex', gap: 12, justifyContent: 'center'}}>
               <button 
                 onClick={handleSaveRoute}
-                className="btn btn-green"
+                className="btn btn-green" style={{background: isDarkMode ? '#51ac56ff' : '#4caf50'}}
                 disabled={isLoading}
               >
                 💾 Rota Salva
+
               </button>
               {isAdmin(user?.email) && (
                 <button 
                   onClick={handleRemoveImage}
-                  className="btn btn-outline"
+                  className="btn btn-orange" style={{background: isDarkMode ? '#ff9100ff' : '#FFA726'}}
                   disabled={isLoading}
                 >
                   {isLoading ? '⏳ Removendo...' : '🗑️ Remover'}
@@ -784,7 +782,7 @@ function Home() {
       </div>
       {/* Notificações */}
       {notifications.length > 0 && (
-        <div className="card" style={{marginBottom: 32, background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', border: 'none', boxShadow: '0 8px 32px rgba(102, 126, 234, 0.3)'}}>
+        <div className="card" style={{marginBottom: 32, background: 'linear-gradient(135deg, #4d0202ff 0%, #fc0000ff 100%)', border: 'none', boxShadow: '0 8px 32px rgba(117, 0, 0, 0.37)'}}>
           <h3 style={{fontSize: 20, color: '#fff', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 12, fontWeight: 700}}>
             <span style={{fontSize: 24}}>🔔</span>
             Notificações do Sistema
@@ -792,7 +790,7 @@ function Home() {
           <div style={{display: 'flex', flexDirection: 'column', gap: 16}}>
             {notifications.map(notification => (
               <div key={notification.id} className="notification-item" style={{
-                background: 'rgba(255, 255, 255, 0.95)', 
+                background: isDarkMode ? '#2a2a2a' : '#fff',
                 border: 'none', 
                 borderRadius: 16, 
                 padding: 20, 
@@ -805,7 +803,7 @@ function Home() {
               }}>
                 <div className="notification-content" style={{
                   fontSize: 16, 
-                  color: '#2d3748', 
+                  color: isDarkMode ? '#e5e7eb' : '#2d3748', 
                   whiteSpace: 'pre-line',
                   fontWeight: 500,
                   lineHeight: 1.5
@@ -818,9 +816,9 @@ function Home() {
                       onClick={() => notification.records.forEach(record => markAsBeingMonitored(record.id))}
                       className="btn btn-blue"
                       style={{
-                        fontSize: 14, 
-                        padding: '10px 20px',
-                        background: 'linear-gradient(135deg, #4299e1 0%, #3182ce 100%)',
+                        fontSize: 12, 
+                        padding: '8px 16px',
+                        background: isDarkMode ? '#2a2a2a' : '#fff',
                         border: 'none',
                         borderRadius: 8,
                         color: '#fff',
@@ -863,15 +861,15 @@ function Home() {
       {problemsInProgress.length > 0 && (
         <div className="card" style={{
           marginBottom: 32, 
-          background: 'linear-gradient(135deg, #fff5f5 0%, #fef2f2 100%)',
-          border: '2px solid #fecaca',
+          background: isDarkMode ? '#2a2a2a' : '#fff',
+          border: '2px solid #ff0000ff',
           borderRadius: 20,
           boxShadow: '0 8px 32px rgba(239, 68, 68, 0.15)',
           overflow: 'hidden'
         }}>
           {/* Header do card */}
           <div style={{
-            background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
+            background: 'linear-gradient(135deg, #4d0202ff 0%, #fc0000ff 100%)',
             padding: '20px 24px',
             display: 'flex',
             alignItems: 'center',
@@ -879,7 +877,7 @@ function Home() {
             boxShadow: '0 4px 16px rgba(239, 68, 68, 0.3)'
           }}>
             <div style={{
-              background: 'rgba(255, 255, 255, 0.2)',
+              background: isDarkMode ? '#2a2a2a' : '#fff',
               borderRadius: '50%',
               width: 48,
               height: 48,
@@ -917,10 +915,10 @@ function Home() {
             <div style={{display: 'flex', flexDirection: 'column', gap: 20}}>
             {problemsInProgress.map(record => (
                 <div key={record.id} style={{
-                  background: '#fff',
+                  background: isDarkMode ? '#374151' : '#fff',
                   borderRadius: 16,
-                  boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
-                  border: '1px solid #f3f4f6',
+                  boxShadow: isDarkMode ? '0 4px 20px rgba(0, 0, 0, 0.3)' : '0 4px 20px rgba(0, 0, 0, 0.08)',
+                  border: isDarkMode ? '1px solid #4b5563' : '1px solid #f3f4f6',
                   overflow: 'hidden',
                   transition: 'all 0.3s ease',
                   position: 'relative'
@@ -948,31 +946,31 @@ function Home() {
                       <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
                         <span style={{fontSize: 18, color: '#6b7280'}}>🚛</span>
                         <div>
-                          <div style={{fontSize: '0.8rem', color: '#9ca3af', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px'}}>Fretista</div>
-                          <div style={{fontSize: '1rem', color: '#1f2937', fontWeight: 700}}>{record.fretista || record.driver || '-'}</div>
+                          <div style={{fontSize: '0.8rem', color: isDarkMode ? '#9ca3af' : '#9ca3af', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px'}}>Fretista</div>
+                          <div style={{fontSize: '1rem', color: isDarkMode ? '#f3f4f6' : '#1f2937', fontWeight: 700}}>{record.fretista || record.driver || '-'}</div>
                         </div>
                       </div>
 
                       <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
                         <span style={{fontSize: 18, color: '#6b7280'}}>👤</span>
                         <div>
-                          <div style={{fontSize: '0.8rem', color: '#9ca3af', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px'}}>Cliente</div>
-                          <div style={{fontSize: '1rem', color: '#1f2937', fontWeight: 700}}>{record.cliente || record.client || '-'}</div>
+                          <div style={{fontSize: '0.8rem', color: isDarkMode ? '#9ca3af' : '#9ca3af', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px'}}>Cliente</div>
+                          <div style={{fontSize: '1rem', color: isDarkMode ? '#f3f4f6' : '#1f2937', fontWeight: 700}}>{record.cliente || record.client || '-'}</div>
                         </div>
                       </div>
 
                       <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
                         <span style={{fontSize: 18, color: '#6b7280'}}>⏰</span>
                         <div>
-                          <div style={{fontSize: '0.8rem', color: '#9ca3af', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px'}}>Check-in</div>
-                          <div style={{fontSize: '1rem', color: '#1f2937', fontWeight: 700}}>{record.checkin || (record.checkin_time ? new Date(record.checkin_time).toLocaleTimeString('pt-BR') : '-')}</div>
+                          <div style={{fontSize: '0.8rem', color: isDarkMode ? '#9ca3af' : '#9ca3af', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px'}}>Check-in</div>
+                          <div style={{fontSize: '1rem', color: isDarkMode ? '#f3f4f6' : '#1f2937', fontWeight: 700}}>{record.checkin || (record.checkin_time ? new Date(record.checkin_time).toLocaleTimeString('pt-BR') : '-')}</div>
                         </div>
                       </div>
 
                       <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
                         <span style={{fontSize: 18, color: '#6b7280'}}>⏳</span>
                         <div>
-                          <div style={{fontSize: '0.8rem', color: '#9ca3af', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px'}}>Tempo em Loja</div>
+                          <div style={{fontSize: '0.8rem', color: isDarkMode ? '#9ca3af' : '#9ca3af', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px'}}>Tempo em Loja</div>
                           <div style={{fontSize: '1rem', color: '#ef4444', fontWeight: 800}}>{(() => {
                     const now = new Date();
                     const checkin = new Date(record.checkin_time);
@@ -987,8 +985,8 @@ function Home() {
 
                     {/* Problema destacado */}
                     <div style={{
-                      background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)',
-                      border: '1px solid #f59e0b',
+                      background: isDarkMode ? 'linear-gradient(135deg, #451a03 0%, #78350f 100%)' : 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)',
+                      border: isDarkMode ? '1px solid #92400e' : '1px solid #f59e0b',
                       borderRadius: 12,
                       padding: '16px',
                       marginBottom: 16,
@@ -1006,8 +1004,8 @@ function Home() {
                       <div style={{display: 'flex', alignItems: 'center', gap: 12, marginLeft: 8}}>
                         <span style={{fontSize: 20, color: '#d97706'}}>⚠️</span>
                         <div>
-                          <div style={{fontSize: '0.8rem', color: '#92400e', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px'}}>Problema Identificado</div>
-                          <div style={{fontSize: '1.1rem', color: '#92400e', fontWeight: 800}}>{record.tipoProblema || record.problem_type || '-'}</div>
+                          <div style={{fontSize: '0.8rem', color: isDarkMode ? '#fbbf24' : '#92400e', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px'}}>Problema Identificado</div>
+                          <div style={{fontSize: '1.1rem', color: isDarkMode ? '#fbbf24' : '#92400e', fontWeight: 800}}>{record.tipoProblema || record.problem_type || '-'}</div>
                         </div>
                       </div>
                     </div>
@@ -1017,7 +1015,7 @@ function Home() {
 
                     {/* Usuário responsável */}
                     <div style={{
-                      background: '#f1f5f9',
+                      background: isDarkMode ? '#374151' : '#f1f5f9',
                       borderRadius: 8,
                       padding: '8px 12px',
                       marginBottom: 16,
@@ -1025,8 +1023,8 @@ function Home() {
                     }}>
                       <div style={{display: 'flex', alignItems: 'center', gap: 6}}>
                         <span style={{fontSize: 14, color: '#64748b'}}>👤</span>
-                        <span style={{fontSize: '0.8rem', color: '#64748b', fontWeight: 600}}>Registrado por:</span>
-                        <span style={{fontSize: '0.8rem', color: '#475569', fontWeight: 700}}>
+                        <span style={{fontSize: '0.8rem', color: isDarkMode ? '#9ca3af' : '#64748b', fontWeight: 600}}>Registrado por:</span>
+                        <span style={{fontSize: '0.8rem', color: isDarkMode ? '#e5e7eb' : '#475569', fontWeight: 700}}>
                           {record.userName ? `${record.userName} (${record.userEmail || '-'})` : (record.userEmail || '-')}
                         </span>
                       </div>
@@ -1072,9 +1070,10 @@ function Home() {
                     {/* Botões de ação */}
                     <div style={{
                       display: 'flex',
-                      gap: 12,
+                      gap: 8,
                       justifyContent: 'flex-end',
-                      flexWrap: 'wrap'
+                      flexWrap: 'wrap',
+                      marginTop: 12
                     }}>
                       {(record.userEmail === user.email || isAdmin(user?.email)) && (
                         <button 
@@ -1085,86 +1084,98 @@ function Home() {
                           }}
                           className="btn btn-red"
                           style={{
-                            fontWeight:700,
-                            fontSize:16,
-                            padding:'12px 28px',
-                            borderRadius:10,
-                            background:'linear-gradient(135deg, #e53935 0%, #ff9800 100%)',
-                            color:'#fff',
-                            marginTop:12,
-                            boxShadow:'0 2px 8px #e5393533',
-                            border:'none',
-                            cursor:'pointer',
-                            letterSpacing:1
+                            fontWeight: 600,
+                            fontSize: 12,
+                            padding: '8px 12px',
+                            borderRadius: 8,
+                            background: 'linear-gradient(135deg, #e53935 0%, #ff9800 100%)',
+                            color: '#fff',
+                            boxShadow: '0 2px 6px rgba(229, 57, 53, 0.3)',
+                            border: 'none',
+                            cursor: 'pointer',
+                            letterSpacing: 0.5,
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 4,
+                            transition: 'all 0.2s ease'
+                          }}
+                          onMouseOver={(e) => {
+                            e.target.style.transform = 'translateY(-1px)';
+                            e.target.style.boxShadow = '0 4px 10px rgba(229, 57, 53, 0.4)';
+                          }}
+                          onMouseOut={(e) => {
+                            e.target.style.transform = 'translateY(0)';
+                            e.target.style.boxShadow = '0 2px 6px rgba(229, 57, 53, 0.3)';
                           }}
                         >
-                          ⚠️ PROBLEMA
+                          <span style={{fontSize: 12}}>⚠️</span>
+                          PROBLEMA
                         </button>
                       )}
                       {(record.userEmail === user.email || isAdmin(user?.email)) && (
-                    <button 
-                      onClick={() => requestSupport(record)}
+                        <button 
+                          onClick={() => requestSupport(record)}
                           style={{
                             background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
                             color: '#fff',
                             border: 'none',
-                            borderRadius: 12,
-                            padding: '12px 20px',
-                            fontSize: '0.9rem',
-                            fontWeight: 700,
+                            borderRadius: 8,
+                            padding: '8px 12px',
+                            fontSize: 12,
+                            fontWeight: 600,
                             cursor: 'pointer',
                             display: 'flex',
                             alignItems: 'center',
-                            gap: 8,
-                            boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)',
+                            gap: 4,
+                            boxShadow: '0 2px 6px rgba(245, 158, 11, 0.3)',
                             transition: 'all 0.2s ease',
-                            letterSpacing: '0.5px'
+                            letterSpacing: 0.5
                           }}
                           onMouseOver={(e) => {
-                            e.target.style.transform = 'translateY(-2px)';
-                            e.target.style.boxShadow = '0 6px 20px rgba(245, 158, 11, 0.4)';
+                            e.target.style.transform = 'translateY(-1px)';
+                            e.target.style.boxShadow = '0 4px 10px rgba(245, 158, 11, 0.4)';
                           }}
                           onMouseOut={(e) => {
                             e.target.style.transform = 'translateY(0)';
-                            e.target.style.boxShadow = '0 4px 12px rgba(245, 158, 11, 0.3)';
+                            e.target.style.boxShadow = '0 2px 6px rgba(245, 158, 11, 0.3)';
                           }}
-                    >
-                          <span style={{fontSize: 16}}>🆘</span>
-                          SOLICITAR APOIO
-                    </button>
-                  )}
+                        >
+                          <span style={{fontSize: 12}}>🆘</span>
+                          APOIO
+                        </button>
+                      )}
                       {(user?.type === 'admin' || user?.type === 'colaborador') && (
-                    <button 
-                      onClick={() => markAsBeingMonitored(record.id)}
+                        <button 
+                          onClick={() => markAsBeingMonitored(record.id)}
                           style={{
                             background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
                             color: '#fff',
                             border: 'none',
-                            borderRadius: 12,
-                            padding: '12px 20px',
-                            fontSize: '0.9rem',
-                            fontWeight: 700,
+                            borderRadius: 8,
+                            padding: '8px 12px',
+                            fontSize: 12,
+                            fontWeight: 600,
                             cursor: 'pointer',
                             display: 'flex',
                             alignItems: 'center',
-                            gap: 8,
-                            boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)',
+                            gap: 4,
+                            boxShadow: '0 2px 6px rgba(59, 130, 246, 0.3)',
                             transition: 'all 0.2s ease',
-                            letterSpacing: '0.5px'
+                            letterSpacing: 0.5
                           }}
                           onMouseOver={(e) => {
-                            e.target.style.transform = 'translateY(-2px)';
-                            e.target.style.boxShadow = '0 6px 20px rgba(59, 130, 246, 0.4)';
+                            e.target.style.transform = 'translateY(-1px)';
+                            e.target.style.boxShadow = '0 4px 10px rgba(59, 130, 246, 0.4)';
                           }}
                           onMouseOut={(e) => {
                             e.target.style.transform = 'translateY(0)';
-                            e.target.style.boxShadow = '0 4px 12px rgba(59, 130, 246, 0.3)';
+                            e.target.style.boxShadow = '0 2px 6px rgba(59, 130, 246, 0.3)';
                           }}
                         >
-                          <span style={{fontSize: 16}}>👁️</span>
+                          <span style={{fontSize: 12}}>👁️</span>
                           ACOMPANHAR
-                    </button>
-                  )}
+                        </button>
+                      )}
                       {/* Botão de comentário */}
                       <button 
                         onClick={() => {
@@ -1175,28 +1186,28 @@ function Home() {
                           background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
                           color: '#fff',
                           border: 'none',
-                          borderRadius: 12,
-                          padding: '12px 20px',
-                          fontSize: '0.9rem',
-                          fontWeight: 700,
+                          borderRadius: 8,
+                          padding: '8px 12px',
+                          fontSize: 12,
+                          fontWeight: 600,
                           cursor: 'pointer',
                           display: 'flex',
                           alignItems: 'center',
-                          gap: 8,
-                          boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)',
+                          gap: 4,
+                          boxShadow: '0 2px 6px rgba(139, 92, 246, 0.3)',
                           transition: 'all 0.2s ease',
-                          letterSpacing: '0.5px'
+                          letterSpacing: 0.5
                         }}
                         onMouseOver={(e) => {
-                          e.target.style.transform = 'translateY(-2px)';
-                          e.target.style.boxShadow = '0 6px 20px rgba(139, 92, 246, 0.4)';
+                          e.target.style.transform = 'translateY(-1px)';
+                          e.target.style.boxShadow = '0 4px 10px rgba(139, 92, 246, 0.4)';
                         }}
                         onMouseOut={(e) => {
                           e.target.style.transform = 'translateY(0)';
-                          e.target.style.boxShadow = '0 4px 12px rgba(139, 92, 246, 0.3)';
+                          e.target.style.boxShadow = '0 2px 6px rgba(139, 92, 246, 0.3)';
                         }}
                       >
-                        <span style={{fontSize: 16}}>💬</span>
+                        <span style={{fontSize: 12}}>💬</span>
                         COMENTAR
                       </button>
                     </div>
@@ -1221,13 +1232,13 @@ function Home() {
             backgroundSize: '200% 100%',
             animation: 'shimmer 2s infinite'
           }}></div>
-          <h3 style={{fontSize: 17, color: '#218838', marginBottom: 10, marginTop: 16, marginLeft: 16}}>🔄 Entregas Sendo Acompanhadas</h3>
+          <h3 style={{fontSize: 17, color: isDarkMode ? '#10b981' : '#218838', marginBottom: 10, marginTop: 16, marginLeft: 16}}>🔄 Entregas Sendo Acompanhadas</h3>
           <div style={{display: 'flex', flexDirection: 'column', gap: 10, padding: 16}}>
             {beingMonitored.map(record => (
               <div
                 key={record.id}
                 style={{
-                  background: '#eafff6',
+                  background: isDarkMode ? '#065f46' : '#eafff6',
                   borderRadius: 14,
                   margin: '0 0 18px 0',
                   padding: 16,
@@ -1301,953 +1312,1002 @@ function Home() {
         </div>
       )}
       
-      {/* Cards Estatísticos */}
-      <div style={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        gap: 16,
-        marginBottom: 24,
-        justifyContent: 'center',
-        alignItems: 'stretch'
-      }}>
-        {/* Card Total */}
-        <div style={{
-          background: '#fff',
-          borderRadius: 12,
-          padding: '20px',
-          minWidth: 140,
-          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-          border: '1px solid #e2e8f0',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          textAlign: 'center'
-        }}>
-          <div style={{
-            fontSize: '2rem',
-            fontWeight: 800,
-            color: '#3b82f6',
-            marginBottom: 8
-          }}>
-            {stats.total}
-          </div>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 6,
-            fontSize: '0.9rem',
-            color: '#64748b',
-            fontWeight: 600
-          }}>
-            <span style={{fontSize: '1.2rem'}}>📦</span>
-            Total
-          </div>
-        </div>
-
-        {/* Card Em Andamento */}
-        <div style={{
-          background: '#fff',
-          borderRadius: 12,
-          padding: '20px',
-          minWidth: 140,
-          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-          border: '1px solid #e2e8f0',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          textAlign: 'center'
-        }}>
-          <div style={{
-            fontSize: '2rem',
-            fontWeight: 800,
-            color: '#f59e0b',
-            marginBottom: 8
-          }}>
-            {stats.emAndamento}
-          </div>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 6,
-            fontSize: '0.9rem',
-            color: '#64748b',
-            fontWeight: 600
-          }}>
-            <span style={{fontSize: '1.2rem'}}>⏳</span>
-            Em Andamento
-          </div>
-        </div>
-
-        {/* Card Com Problema */}
-        <div style={{
-          background: '#fff',
-          borderRadius: 12,
-          padding: '20px',
-          minWidth: 140,
-          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-          border: '1px solid #e2e8f0',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          textAlign: 'center'
-        }}>
-          <div style={{
-            fontSize: '2rem',
-            fontWeight: 800,
-            color: '#ef4444',
-            marginBottom: 8
-          }}>
-            {stats.comProblema}
-          </div>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 6,
-            fontSize: '0.9rem',
-            color: '#64748b',
-            fontWeight: 600
-          }}>
-            <span style={{fontSize: '1.2rem'}}>⚠️</span>
-            Com Problemas
-          </div>
-        </div>
-
-        {/* Card Finalizada */}
-        <div style={{
-          background: '#fff',
-          borderRadius: 12,
-          padding: '20px',
-          minWidth: 140,
-          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-          border: '1px solid #e2e8f0',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          textAlign: 'center'
-        }}>
-          <div style={{
-            fontSize: '2rem',
-            fontWeight: 800,
-            color: '#10b981',
-            marginBottom: 8
-          }}>
-            {stats.finalizada}
-          </div>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 6,
-            fontSize: '0.9rem',
-            color: '#64748b',
-            fontWeight: 600
-          }}>
-            <span style={{fontSize: '1.2rem'}}>✅</span>
-            Finalizadas
-          </div>
-        </div>
-
-        {/* Card Devolvida */}
-        <div style={{
-          background: '#fff',
-          borderRadius: 12,
-          padding: '20px',
-          minWidth: 140,
-          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-          border: '1px solid #e2e8f0',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          textAlign: 'center'
-        }}>
-          <div style={{
-            fontSize: '2rem',
-            fontWeight: 800,
-            color: '#dc2626',
-            marginBottom: 8
-          }}>
-            {stats.devolvida}
-          </div>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 6,
-            fontSize: '0.9rem',
-            color: '#64748b',
-            fontWeight: 600
-          }}>
-            <span style={{fontSize: '1.2rem'}}>❌</span>
-            Devolvidas
-          </div>
-        </div>
-      </div>
-
-      {/* Filtro dinâmico de busca */}
-      <div style={{display: 'flex', flexWrap: 'wrap', gap: 16, marginBottom: 18, justifyContent: 'center', alignItems: 'center'}}>
-          <input
-            type="text"
-          placeholder="Buscar por cliente, fretista, status, problema..."
-            value={searchTerm}
-          onChange={e => setSearchTerm(e.target.value)}
-          style={{padding: '10px 16px', borderRadius: 8, border: '1px solid #d0d7de', fontSize: 16, minWidth: 220}}
-          />
-        </div>
-      {/* Novos filtros adicionais */}
-      <div style={{display: 'flex', flexWrap: 'wrap', gap: 16, marginBottom: 24, justifyContent: 'center', alignItems: 'center'}}>
-        {/* Cliente */}
-        <select
-          value={filterClient}
-          onChange={e => setFilterClient(e.target.value)}
-          style={{padding: '10px 16px', borderRadius: 8, border: '1px solid #d0d7de', fontSize: 16, minWidth: 160}}
+        {/* Cards Estatísticos */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8"
         >
-          <option value="">Todos os Clientes</option>
-          {clientList.map(c => <option key={c} value={c}>{c}</option>)}
-        </select>
-        {/* Duração */}
-        <select
-          value={filterDuration}
-          onChange={e => setFilterDuration(e.target.value)}
-          style={{padding: '10px 16px', borderRadius: 8, border: '1px solid #d0d7de', fontSize: 16, minWidth: 160}}
-        >
-          <option value="">Todas as Durações</option>
-          <option value="0-59">0 a 59 min</option>
-          <option value="60-120">60 a 120 min</option>
-          <option value="120+">Acima de 120 min</option>
-        </select>
-        {/* Status */}
-        <select
-          value={filterStatus}
-          onChange={e => setFilterStatus(e.target.value)}
-          style={{padding: '10px 16px', borderRadius: 8, border: '1px solid #d0d7de', fontSize: 16, minWidth: 140}}
-        >
-          <option value="">Todos os Status</option>
-          {statusList.map(s => <option key={s} value={s}>{s}</option>)}
-        </select>
-        {/* Problema */}
-        <select
-          value={filterProblem}
-          onChange={e => setFilterProblem(e.target.value)}
-          style={{padding: '10px 16px', borderRadius: 8, border: '1px solid #d0d7de', fontSize: 16, minWidth: 140}}
-        >
-          <option value="">Com ou sem Problema</option>
-          <option value="sim">Com Problema</option>
-          <option value="nao">Sem Problema</option>
-        </select>
-        {/* Fretista */}
-        <select
-          value={filterFretista}
-          onChange={e => setFilterFretista(e.target.value)}
-          style={{padding: '10px 16px', borderRadius: 8, border: '1px solid #d0d7de', fontSize: 16, minWidth: 140}}
-        >
-          <option value="">Todos os Fretistas</option>
-          {fretistaList.map(f => <option key={f} value={f}>{f}</option>)}
-        </select>
-        {/* Limpar Filtros */}
-        <button
-          type="button"
-          onClick={handleClearFilters}
-          style={{
-            padding: '10px 18px',
-            borderRadius: 8,
-            border: 'none',
-            background: 'linear-gradient(90deg, #43a047 0%, #1976d2 100%)',
-            color: '#fff',
-            fontWeight: 700,
-            fontSize: 16,
-            cursor: 'pointer',
-            boxShadow: '0 2px 8px #1976d233',
-            transition: 'background 0.2s',
-            marginLeft: 8
-          }}
-        >
-          Limpar Filtros
-        </button>
-      </div>
-      {/* Lista de registros */}
-      <div className="latest-records" style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: 24, marginTop: 24}}>
-        {loadingRecords ? (
-          <p style={{fontWeight:600, fontSize:18, color:'#888'}}>Carregando registros...</p>
-        ) : filteredRecords.length === 0 ? (
-          <p style={{fontWeight:600, fontSize:18, color:'#888'}}>Nenhum registro encontrado.</p>
-        ) : (
-          filteredRecords.map(record => (
-            <div key={record.id} className="card record-item" style={{
-              background: '#fff',
-              borderRadius: 18,
-              boxShadow: '0 8px 32px rgba(33,136,56,0.10)',
-              padding: 28,
-              fontFamily: 'Inter, Segoe UI, Arial, sans-serif',
-              fontSize: 16,
-              fontWeight: 500,
-              minWidth: 0,
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 16,
-              transition: 'box-shadow 0.2s',
-              border: '1.5px solid #f0f0f0',
-              marginBottom: 0
-            }}>
-              <div style={{display:'flex', justifyContent:'space-between', alignItems:'flex-start', gap: 12, flexWrap:'wrap'}}>
-                <div style={{flex:1, minWidth:180}}>
-                  <div style={{marginBottom:8, color:'#888', fontWeight:600, fontSize:15}}>
-                    <span style={{marginRight:8}}>📅 Data:</span> <span style={{color:'#333', fontWeight:700}}>{record.data || new Date(record.checkin_time).toLocaleDateString('pt-BR')}</span>
-              </div>
-              <div style={{display:'flex',alignItems:'center',gap:6,fontWeight:700,fontSize:16,color:'#1976d2',marginBottom:8}}>
-  <span role="img" aria-label="Relógio">⏰</span> {getTempoEmLoja(record)}
-</div>
-                  <div style={{marginBottom:8}}><span style={{fontWeight:700, color:'#6c63ff'}}>👤 Cliente:</span> <span style={{color:'#222'}}>{record.cliente || record.client}</span></div>
-                  <div style={{marginBottom:8}}><span style={{fontWeight:700, color:'#43a047'}}>🚛 Fretista:</span> <span style={{color:'#222'}}>{record.fretista || record.driver}</span></div>
-                  <div style={{marginBottom:8}}><span style={{fontWeight:700, color:'#ff9800'}}>🏪 Vendedor:</span> <span style={{color:'#222'}}>{record.vendedor}</span></div>
-                  <div style={{marginBottom:8}}><span style={{fontWeight:700, color:'#e65100'}}>🏪 Rede:</span> <span style={{color:'#222'}}>{record.rede}</span></div>
-                  <div style={{marginBottom:8}}><span style={{fontWeight:700, color:'#1976d2'}}>📍 UF:</span> <span style={{color:'#222'}}>{record.uf}</span></div>
-                  <div style={{marginBottom:8}}><span style={{fontWeight:700, color:'#ffb300'}}>🟨 Check-in:</span> <span style={{color:'#222'}}>{record.checkin || new Date(record.checkin_time).toLocaleTimeString('pt-BR')}</span></div>
-                  {record.checkout && (
-                    <div style={{marginBottom:8}}><span style={{fontWeight:700, color:'#43a047'}}>✅ Check-out:</span> <span style={{color:'#222'}}>{record.checkout}</span></div>
-                  )}
-                  {record.duracao && (
-                    <div style={{marginBottom:8}}><span style={{fontWeight:700, color:'#43a047'}}>⏘ Duração:</span> <span style={{color:'#222'}}>{record.duracao}</span></div>
-                  )}
-                  {/* Usuário responsável */}
-                  <div style={{marginBottom:8}}>
-                    <span style={{fontWeight:700, color:'#64748b'}}>👤 Registrado por:</span> 
-                    <span style={{color:'#475569', fontWeight:700}}>
-                      {record.userName ? `${record.userName} (${record.userEmail || '-'})` : (record.userEmail || '-')}
-                    </span>
-                  </div>
-                  {/* Comentários existentes */}
-                  {(record.comments || []).length > 0 && (
-                    <div style={{marginBottom:8}}>
-                      <button 
-                        onClick={() => setViewCommentsModal({ open: true, record })}
-                      style={{
-                          background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
-                          color: '#fff',
-                          border: 'none',
-                          borderRadius: 8,
-                          padding: '8px 16px',
-                          fontSize: '0.9rem',
-                        fontWeight: 600,
-                          cursor: 'pointer',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: 8,
-                          boxShadow: '0 2px 8px rgba(139, 92, 246, 0.3)',
-                          transition: 'all 0.2s ease',
-                          width: '100%',
-                          justifyContent: 'center'
-                        }}
-                        onMouseOver={(e) => {
-                          e.target.style.transform = 'translateY(-1px)';
-                          e.target.style.boxShadow = '0 4px 12px rgba(139, 92, 246, 0.4)';
-                        }}
-                        onMouseOut={(e) => {
-                          e.target.style.transform = 'translateY(0)';
-                          e.target.style.boxShadow = '0 2px 8px rgba(139, 92, 246, 0.3)';
-                        }}
-                      >
-                        <span style={{fontSize: 16}}>💬</span>
-                        Ver {(record.comments || []).length} comentário(s)
-                      </button>
-                    </div>
-                  )}
-                </div>
-                <div style={{display:'flex', flexDirection:'column', alignItems:'flex-end', gap:8, minWidth:160}}>
-                  <div style={{marginBottom:8}}>
-                    <span style={{fontWeight:700, color:'#888'}}>Status:</span>
-                    <span style={{
-                      display:'inline-block',
-                      marginLeft:8,
-                      padding:'6px 18px',
-                      borderRadius:16,
-                      fontWeight:700,
-                      fontSize:15,
-                      background: record.status === 'Entrega em andamento' ? '#ffe082' : record.status === 'Entrega finalizada' ? '#43a047' : record.status === 'Entrega devolvida' ? '#e53935' : '#e0e0e0',
-                      color: record.status === 'Entrega em andamento' ? '#b26a00' : record.status === 'Entrega finalizada' ? '#fff' : record.status === 'Entrega devolvida' ? '#fff' : '#222',
-                      boxShadow: '0 2px 8px #0001',
-                      letterSpacing: 1
-                    }}>
-                      {record.status}
-                    </span>
-                  </div>
-                  {record.problem_type || record.tipoProblema ? (
-                    <div style={{marginBottom:8, color:'#e65100', fontWeight:700, fontSize:20, display:'flex', alignItems:'center', gap:6}}>
-                      <span style={{fontSize:22}}>⚠️</span> {record.tipoProblema || record.problem_type}
-                </div>
-                  ) : null}
-                  {record.informacoesAdicionais || record.information ? (
-                    <div style={{marginBottom:8, color:'#1976d2', fontWeight:600, fontSize:15, display:'flex', alignItems:'center', gap:6}}>
-                      <span style={{fontSize:18}}>✉️</span>
-                      <CollapsibleText text={record.informacoesAdicionais || record.information} />
-              </div>
-                  ) : null}
-                  {(record.attachments || []).length > 0 && (
-                    <div style={{marginBottom:8, color:'#888', fontWeight:600, fontSize:15, display:'flex', alignItems:'center', gap:6}}>
-                      <span style={{fontSize:18}}>📎</span> 
-                      <span 
-                        style={{color:'#1976d2', cursor:'pointer', textDecoration:'underline'}}
-                        onClick={() => setViewAttachmentsModal({ open: true, record })}
-                      >
-                        {(record.attachments || []).length} anexo(s)
-                      </span>
-                    </div>
-                  )}
-                  {record.status === 'Entrega em andamento' && (user?.email === record.userEmail || isAdmin(user?.email)) && (
-                    <button
-                      onClick={() => {
-                        setProblemModal({ open: true, record });
-                        setSelectedProblem('');
-                        setProblemInfo('');
-                      }}
-                      className="btn btn-red"
-                      style={{
-                        fontWeight:700,
-                        fontSize:16,
-                        padding:'12px 28px',
-                        borderRadius:10,
-                        background:'linear-gradient(135deg, #e53935 0%, #ff9800 100%)',
-                        color:'#fff',
-                        marginTop:12,
-                        boxShadow:'0 2px 8px #e5393533',
-                        border:'none',
-                        cursor:'pointer',
-                        letterSpacing:1
-                      }}
-                    >
-                      ⚠️ PROBLEMA
-                    </button>
-                  )}
-                  {record.status === 'Entrega em andamento' && (user?.email === record.userEmail || isAdmin(user?.email)) && (
-                  <button 
-                    onClick={() => requestSupport(record)}
-                    className="btn btn-orange"
-                      style={{
-                        fontWeight:700,
-                        fontSize:16,
-                        padding:'12px 28px',
-                        borderRadius:10,
-                        background:'linear-gradient(135deg, #ff9800 0%, #ffc107 100%)',
-                        color:'#fff',
-                        marginTop:12,
-                        boxShadow:'0 2px 8px #ff980033',
-                        border:'none',
-                        cursor:'pointer',
-                        letterSpacing:1
-                      }}
-                  >
-                      🚨 SOLICITAR APOIO
-                  </button>
-                )}
-                  {/* Botão de comentário */}
-                  {canComment(record) && (
-                  <button 
-                    onClick={() => {
-                      setCommentModal({ open: true, record });
-                      setCommentText('');
-                    }}
-                    style={{
-                      fontWeight:700,
-                      fontSize:16,
-                      padding:'12px 28px',
-                      borderRadius:10,
-                      background:'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
-                      color:'#fff',
-                      marginTop:12,
-                      boxShadow:'0 2px 8px #8b5cf633',
-                      border:'none',
-                      cursor:'pointer',
-                      letterSpacing:1
-                    }}
-                  >
-                    💬 COMENTAR
-                  </button>
-                  )}
-                </div>
-              </div>
+          {/* Card Total */}
+          <motion.div
+            whileHover={{ scale: 1.05, y: -5 }}
+            transition={{ type: "spring", stiffness: 300 }}
+            className={`
+              rounded-2xl p-6 text-center shadow-lg border transition-all duration-300
+              ${isDarkMode 
+                ? 'bg-dark-card border-dark-border hover:shadow-dark-primary/20' 
+                : 'bg-white border-light-border hover:shadow-light-primary/20'
+              }
+            `}
+          >
+            <div className="flex items-center justify-center mb-3">
+              <Package className="w-8 h-8 text-blue-500" />
             </div>
-          ))
-        )}
-      </div>
-      {/* Modal de Problema */}
-      {problemModal.open && (
-        <div style={{
-          position:'fixed', top:0, left:0, width:'100vw', height:'100vh', background:'rgba(0,0,0,0.35)', zIndex:9999,
-          display:'flex', alignItems:'center', justifyContent:'center'
-        }}>
-          <div style={{background:'#fff', borderRadius:16, padding:32, minWidth:320, maxWidth:400, boxShadow:'0 8px 32px #0005', position:'relative'}}>
-            <button onClick={()=>setProblemModal({open:false,record:null})} style={{position:'absolute',top:16,right:16,fontSize:22,background:'none',border:'none',cursor:'pointer',color:'#888'}} title="Fechar">×</button>
-            <h2 style={{fontWeight:700, fontSize:'1.3rem', color:'#e53935', marginBottom:18}}>Registrar Problema</h2>
-            <div style={{marginBottom:18}}>
-              <label style={{fontWeight:600, color:'#333', marginBottom:6, display:'block'}}>Tipo de Problema:</label>
-              <select value={selectedProblem} onChange={e=>setSelectedProblem(e.target.value)} style={{width:'100%',padding:10,borderRadius:8,border:'1.5px solid #eee',fontSize:16}}>
-                <option value="">Selecione...</option>
-                {problemTypes.map((p,i)=>(<option key={i} value={p}>{p}</option>))}
+            <div className="text-3xl font-bold text-blue-500 mb-2">
+              {stats.total}
+            </div>
+            <div className={`text-sm font-medium ${
+              isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'
+            }`}>
+              Total
+            </div>
+          </motion.div>
+
+          {/* Card Em Andamento */}
+          <motion.div
+            whileHover={{ scale: 1.05, y: -5 }}
+            transition={{ type: "spring", stiffness: 300 }}
+            className={`
+              rounded-2xl p-6 text-center shadow-lg border transition-all duration-300
+              ${isDarkMode 
+                ? 'bg-dark-card border-dark-border hover:shadow-amber-500/20' 
+                : 'bg-white border-light-border hover:shadow-amber-500/20'
+              }
+            `}
+          >
+            <div className="flex items-center justify-center mb-3">
+              <Clock className="w-8 h-8 text-amber-500" />
+            </div>
+            <div className="text-3xl font-bold text-amber-500 mb-2">
+              {stats.emAndamento}
+            </div>
+            <div className={`text-sm font-medium ${
+              isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'
+            }`}>
+              Em Andamento
+            </div>
+          </motion.div>
+
+          {/* Card Com Problema */}
+          <motion.div
+            whileHover={{ scale: 1.05, y: -5 }}
+            transition={{ type: "spring", stiffness: 300 }}
+            className={`
+              rounded-2xl p-6 text-center shadow-lg border transition-all duration-300
+              ${isDarkMode 
+                ? 'bg-dark-card border-dark-border hover:shadow-red-500/20' 
+                : 'bg-white border-light-border hover:shadow-red-500/20'
+              }
+            `}
+          >
+            <div className="flex items-center justify-center mb-3">
+              <AlertTriangle className="w-8 h-8 text-red-500" />
+            </div>
+            <div className="text-3xl font-bold text-red-500 mb-2">
+              {stats.comProblema}
+            </div>
+            <div className={`text-sm font-medium ${
+              isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'
+            }`}>
+              Com Problemas
+            </div>
+          </motion.div>
+
+          {/* Card Finalizada */}
+          <motion.div
+            whileHover={{ scale: 1.05, y: -5 }}
+            transition={{ type: "spring", stiffness: 300 }}
+            className={`
+              rounded-2xl p-6 text-center shadow-lg border transition-all duration-300
+              ${isDarkMode 
+                ? 'bg-dark-card border-dark-border hover:shadow-green-500/20' 
+                : 'bg-white border-light-border hover:shadow-green-500/20'
+              }
+            `}
+          >
+            <div className="flex items-center justify-center mb-3">
+              <CheckCircle className="w-8 h-8 text-green-500" />
+            </div>
+            <div className="text-3xl font-bold text-green-500 mb-2">
+              {stats.finalizada}
+            </div>
+            <div className={`text-sm font-medium ${
+              isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'
+            }`}>
+              Finalizadas
+            </div>
+          </motion.div>
+
+          {/* Card Devolvida */}
+          <motion.div
+            whileHover={{ scale: 1.05, y: -5 }}
+            transition={{ type: "spring", stiffness: 300 }}
+            className={`
+              rounded-2xl p-6 text-center shadow-lg border transition-all duration-300
+              ${isDarkMode 
+                ? 'bg-dark-card border-dark-border hover:shadow-red-600/20' 
+                : 'bg-white border-light-border hover:shadow-red-600/20'
+              }
+            `}
+          >
+            <div className="flex items-center justify-center mb-3">
+              <XCircle className="w-8 h-8 text-red-600" />
+            </div>
+            <div className="text-3xl font-bold text-red-600 mb-2">
+              {stats.devolvida}
+            </div>
+            <div className={`text-sm font-medium ${
+              isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'
+            }`}>
+              Devolvidas
+            </div>
+          </motion.div>
+        </motion.div>
+
+        {/* Filtros e Busca */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className={`
+            rounded-2xl p-6 mb-8 shadow-lg border
+            ${isDarkMode 
+              ? 'bg-dark-card border-dark-border' 
+              : 'bg-white border-light-border'
+            }
+          `}
+        >
+          {/* Barra de Busca */}
+          <div className="mb-6">
+            <div className="relative">
+              <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 ${
+                isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'
+              }`} />
+              <input
+                type="text"
+                placeholder="Buscar por cliente, fretista, status, problema..."
+                value={searchTerm}
+                onChange={e => setSearchTerm(e.target.value)}
+                className={`
+                  w-full pl-10 pr-4 py-3 rounded-xl border transition-all duration-200
+                  ${isDarkMode 
+                    ? 'bg-dark-surface border-dark-border text-dark-text placeholder-dark-text-secondary focus:border-dark-primary' 
+                    : 'bg-light-surface border-light-border text-light-text placeholder-light-text-secondary focus:border-light-primary'
+                  }
+                  focus:outline-none focus:ring-2 focus:ring-opacity-20
+                  ${isDarkMode ? 'focus:ring-dark-primary' : 'focus:ring-light-primary'}
+                `}
+              />
+            </div>
+          </div>
+
+          {/* Filtros */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+            {/* Cliente */}
+            <div className="space-y-2">
+              <label className={`text-sm font-medium ${
+                isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'
+              }`}>
+                Cliente
+              </label>
+              <select
+                value={filterClient}
+                onChange={e => setFilterClient(e.target.value)}
+                className={`
+                  w-full px-3 py-2 rounded-lg border transition-all duration-200
+                  ${isDarkMode 
+                    ? 'bg-dark-surface border-dark-border text-dark-text focus:border-dark-primary' 
+                    : 'bg-light-surface border-light-border text-light-text focus:border-light-primary'
+                  }
+                  focus:outline-none focus:ring-2 focus:ring-opacity-20
+                  ${isDarkMode ? 'focus:ring-dark-primary' : 'focus:ring-light-primary'}
+                `}
+              >
+                <option value="">Todos os Clientes</option>
+                {clientList.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
             </div>
-            <div style={{marginBottom:18}}>
-              <label style={{fontWeight:600, color:'#333', marginBottom:6, display:'block'}}>Observação (opcional):</label>
-              <textarea value={problemInfo} onChange={e=>setProblemInfo(e.target.value)} style={{width:'100%',padding:10,borderRadius:8,border:'1.5px solid #eee',fontSize:16,minHeight:60}} placeholder="Descreva o problema..."></textarea>
-            </div>
-            <button
-              className="btn btn-red"
-              style={{width:'100%',padding:'12px',fontWeight:700,fontSize:16,borderRadius:8,background:'linear-gradient(135deg, #e53935 0%, #ff9800 100%)',color:'#fff',border:'none',cursor:'pointer'}}
-              disabled={!selectedProblem}
-              onClick={async()=>{
-                if (!selectedProblem) return;
-                await updateDeliveryRecord(problemModal.record.id, {
-                  problem_type: selectedProblem,
-                  information: problemInfo
-                });
-                // NOVO MODELO DE RESUMO (ENTREGA COM PROBLEMA)
-                const record = problemModal.record;
-                let message = `🚨ENTREGA COM PROBLEMA🚨\n\n`;
-                message += `🚛 Fretista: ${(record.fretista || record.driver || '-') }\n`;
-                message += `🛒 Cliente: ${(record.cliente || record.client || '-') }\n`;
-                message += `🧰 Vendedor: ${(record.vendedor || '-') }\n`;
-                message += `⚠️ Problema: ${selectedProblem}\n`;
-                message += `📝 Observação: ${problemInfo || 'Nenhuma'}\n\n`;
-                message += `🫵NO AGUARDO DA RESOLUÇÃO!⌛`;
-                const encodedMessage = encodeURIComponent(message);
-                // Detectar dispositivo móvel
-                const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-                
-                let whatsappUrl;
-                if (isMobile) {
-                  // Para mobile, tentar abrir app diretamente
-                  whatsappUrl = `whatsapp://send?text=${encodedMessage}`;
-                } else {
-                  // Para desktop/web, usar api.whatsapp.com
-                  whatsappUrl = `https://api.whatsapp.com/send?text=${encodedMessage}`;
-                }
 
-                try {
-                  // Tentar abrir WhatsApp
-                  window.open(whatsappUrl, '_blank');
-                } catch (error) {
-                  console.error('Erro ao abrir WhatsApp:', error);
-                  // Fallback: copiar para clipboard
-                  navigator.clipboard.writeText(message).then(() => {
-                    alert('Mensagem copiada para a área de transferência! Cole no WhatsApp.');
-                  }).catch(() => {
-                    alert('Mensagem gerada:\n\n' + message);
-                  });
-                }
-                
-                setProblemModal({open:false,record:null});
-                setSelectedProblem('');
-                setProblemInfo('');
-                loadLatestRecords();
-              }}
-            >Salvar Problema e Enviar WhatsApp</button>
-          </div>
-        </div>
-      )}
-      {/* Modal de Comentário */}
-      {commentModal.open && (
-        <div style={{
-          position:'fixed', top:0, left:0, width:'100vw', height:'100vh', background:'rgba(0,0,0,0.35)', zIndex:9999,
-          display:'flex', alignItems:'center', justifyContent:'center'
-        }}>
-          <div style={{background:'#fff', borderRadius:16, padding:32, minWidth:320, maxWidth:400, boxShadow:'0 8px 32px #0005', position:'relative'}}>
-            <button onClick={()=>setCommentModal({open:false,record:null})} style={{position:'absolute',top:16,right:16,fontSize:22,background:'none',border:'none',cursor:'pointer',color:'#888'}} title="Fechar">×</button>
-            <h2 style={{fontWeight:700, fontSize:'1.3rem', color:'#8b5cf6', marginBottom:18}}>💬 Adicionar Comentário</h2>
-            <div style={{marginBottom:18}}>
-              <label style={{fontWeight:600, color:'#333', marginBottom:6, display:'block'}}>Comentário:</label>
-              <textarea 
-                value={commentText} 
-                onChange={e=>setCommentText(e.target.value)} 
-                style={{width:'100%',padding:10,borderRadius:8,border:'1.5px solid #eee',fontSize:16,minHeight:80}} 
-                placeholder="Digite seu comentário..."
-                maxLength={500}
-              ></textarea>
-              <div style={{fontSize:12, color:'#666', textAlign:'right', marginTop:4}}>
-                {commentText.length}/500 caracteres
-              </div>
+            {/* Duração */}
+            <div className="space-y-2">
+              <label className={`text-sm font-medium ${
+                isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'
+              }`}>
+                Duração
+              </label>
+              <select
+                value={filterDuration}
+                onChange={e => setFilterDuration(e.target.value)}
+                className={`
+                  w-full px-3 py-2 rounded-lg border transition-all duration-200
+                  ${isDarkMode 
+                    ? 'bg-dark-surface border-dark-border text-dark-text focus:border-dark-primary' 
+                    : 'bg-light-surface border-light-border text-light-text focus:border-light-primary'
+                  }
+                  focus:outline-none focus:ring-2 focus:ring-opacity-20
+                  ${isDarkMode ? 'focus:ring-dark-primary' : 'focus:ring-light-primary'}
+                `}
+              >
+                <option value="">Todas as Durações</option>
+                <option value="0-59">0 a 59 min</option>
+                <option value="60-120">60 a 120 min</option>
+                <option value="120+">Acima de 120 min</option>
+              </select>
             </div>
-            <button
-              style={{
-                width:'100%',
-                padding:'12px',
-                fontWeight:700,
-                fontSize:16,
-                borderRadius:8,
-                background:'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
-                color:'#fff',
-                border:'none',
-                cursor:'pointer',
-                opacity: savingComment ? 0.7 : 1
-              }}
-              disabled={!commentText.trim() || savingComment}
-              onClick={handleSaveComment}
-            >
-              {savingComment ? '💾 Salvando...' : '💬 Salvar Comentário'}
-            </button>
-          </div>
-        </div>
-      )}
-      {/* Modal de Visualização de Comentários */}
-      {viewCommentsModal.open && (
-        <div style={{
-          position:'fixed', top:0, left:0, width:'100vw', height:'100vh', background:'rgba(0,0,0,0.35)', zIndex:9999,
-          display:'flex', alignItems:'center', justifyContent:'center'
-        }}>
-          <div style={{
-            background:'#fff', 
-            borderRadius:16, 
-            padding:32, 
-            minWidth:400, 
-            maxWidth:600, 
-            maxHeight:'80vh',
-            boxShadow:'0 8px 32px #0005', 
-            position:'relative',
-            overflow: 'hidden',
-            display: 'flex',
-            flexDirection: 'column'
-          }}>
-            <button 
-              onClick={()=>setViewCommentsModal({open:false,record:null})} 
-              style={{
-                position:'absolute',
-                top:16,
-                right:16,
-                fontSize:22,
-                background:'none',
-                border:'none',
-                cursor:'pointer',
-                color:'#888',
-                zIndex: 1
-              }} 
-              title="Fechar"
-            >
-              ×
-            </button>
-            
-            <div style={{marginBottom: 24, borderBottom: '2px solid #f1f5f9', paddingBottom: 16}}>
-              <h2 style={{fontWeight:700, fontSize:'1.5rem', color:'#8b5cf6', marginBottom: 8}}>
-                💬 Comentários da Entrega
-              </h2>
-              <div style={{fontSize: '0.9rem', color: '#64748b'}}>
-                <strong>Cliente:</strong> {viewCommentsModal.record?.cliente || viewCommentsModal.record?.client} | 
-                <strong> Fretista:</strong> {viewCommentsModal.record?.fretista || viewCommentsModal.record?.driver}
-              </div>
+
+            {/* Status */}
+            <div className="space-y-2">
+              <label className={`text-sm font-medium ${
+                isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'
+              }`}>
+                Status
+              </label>
+              <select
+                value={filterStatus}
+                onChange={e => setFilterStatus(e.target.value)}
+                className={`
+                  w-full px-3 py-2 rounded-lg border transition-all duration-200
+                  ${isDarkMode 
+                    ? 'bg-dark-surface border-dark-border text-dark-text focus:border-dark-primary' 
+                    : 'bg-light-surface border-light-border text-light-text focus:border-light-primary'
+                  }
+                  focus:outline-none focus:ring-2 focus:ring-opacity-20
+                  ${isDarkMode ? 'focus:ring-dark-primary' : 'focus:ring-light-primary'}
+                `}
+              >
+                <option value="">Todos os Status</option>
+                {statusList.map(s => <option key={s} value={s}>{s}</option>)}
+              </select>
             </div>
-            
-            <div style={{
-              flex: 1,
-              overflowY: 'auto',
-              paddingRight: 8,
-              marginBottom: 24
-            }}>
-              {viewCommentsModal.record?.comments?.map((comment, index) => (
-                <div 
-                  key={`${comment.userEmail}-${comment.timestamp}`} 
-                  style={{
-                    background: '#f8fafc',
-                    borderRadius: 12,
-                    padding: 16,
-                    marginBottom: 16,
-                    border: '1px solid #e2e8f0',
-                    position: 'relative'
-                  }}
-                >
-                  <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'flex-start',
-                    marginBottom: 8
-                  }}>
-                    <div style={{
-                      fontSize: '0.9rem',
-                      color: '#64748b',
-                      fontWeight: 600,
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 6
-                    }}>
-                      <span style={{fontSize: 16}}>👤</span>
-                      {comment.userName || comment.userEmail}
+
+            {/* Problema */}
+            <div className="space-y-2">
+              <label className={`text-sm font-medium ${
+                isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'
+              }`}>
+                Problema
+              </label>
+              <select
+                value={filterProblem}
+                onChange={e => setFilterProblem(e.target.value)}
+                className={`
+                  w-full px-3 py-2 rounded-lg border transition-all duration-200
+                  ${isDarkMode 
+                    ? 'bg-dark-surface border-dark-border text-dark-text focus:border-dark-primary' 
+                    : 'bg-light-surface border-light-border text-light-text focus:border-light-primary'
+                  }
+                  focus:outline-none focus:ring-2 focus:ring-opacity-20
+                  ${isDarkMode ? 'focus:ring-dark-primary' : 'focus:ring-light-primary'}
+                `}
+              >
+                <option value="">Com ou sem Problema</option>
+                <option value="sim">Com Problema</option>
+                <option value="nao">Sem Problema</option>
+              </select>
+            </div>
+
+            {/* Fretista */}
+            <div className="space-y-2">
+              <label className={`text-sm font-medium ${
+                isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'
+              }`}>
+                Fretista
+              </label>
+              <select
+                value={filterFretista}
+                onChange={e => setFilterFretista(e.target.value)}
+                className={`
+                  w-full px-3 py-2 rounded-lg border transition-all duration-200
+                  ${isDarkMode 
+                    ? 'bg-dark-surface border-dark-border text-dark-text focus:border-dark-primary' 
+                    : 'bg-light-surface border-light-border text-light-text focus:border-light-primary'
+                  }
+                  focus:outline-none focus:ring-2 focus:ring-opacity-20
+                  ${isDarkMode ? 'focus:ring-dark-primary' : 'focus:ring-light-primary'}
+                `}
+              >
+                <option value="">Todos os Fretistas</option>
+                {fretistaList.map(f => <option key={f} value={f}>{f}</option>)}
+              </select>
+            </div>
+
+            {/* Botão Limpar Filtros */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium opacity-0">Ações</label>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                type="button"
+                onClick={handleClearFilters}
+                className={`
+                  w-full px-4 py-2 rounded-lg font-medium transition-all duration-200
+                  ${isDarkMode 
+                    ? 'bg-gradient-to-r from-dark-primary to-blue-600 hover:from-dark-primary/90 hover:to-blue-600/90 text-white' 
+                    : 'bg-gradient-to-r from-light-primary to-blue-600 hover:from-light-primary/90 hover:to-blue-600/90 text-white'
+                  }
+                  shadow-lg hover:shadow-xl
+                `}
+              >
+                <Filter className="w-4 h-4 inline mr-2" />
+                Limpar Filtros
+              </motion.button>
+            </div>
+          </div>
+        </motion.div>
+
+      {/* Lista de registros */}
+      <div className="latest-records" style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: 24, marginTop: 24}}>
+        <AnimatePresence>
+          {loadingRecords ? (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="flex items-center justify-center py-12"
+            >
+              <div className="flex items-center gap-3">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                <p className={`text-lg font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                  Carregando registros...
+                </p>
+              </div>
+            </motion.div>
+          ) : filteredRecords.length === 0 ? (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="flex flex-col items-center justify-center py-16"
+            >
+              <Package className={`w-16 h-16 mb-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} />
+              <p className={`text-lg font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                Nenhum registro encontrado.
+              </p>
+            </motion.div>
+          ) : (
+            filteredRecords.map((record, index) => (
+              <motion.div
+                key={record.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ y: -4, scale: 1.02 }}
+                className={`
+                  rounded-2xl p-6 mb-6 shadow-lg border transition-all duration-300
+                  ${isDarkMode 
+                    ? 'bg-dark-card border-dark-border hover:shadow-2xl hover:shadow-blue-500/10' 
+                    : 'bg-white border-gray-200 hover:shadow-xl hover:shadow-blue-500/10'
+                  }
+                `}
+              >
+                <div className="flex flex-col lg:flex-row justify-between gap-6">
+                  {/* Left Section - Main Info */}
+                  <div className="flex-1 space-y-4">
+                    {/* Date and Time */}
+                    <div className="flex items-center gap-2 mb-3">
+                      <Calendar className="w-5 h-5 text-blue-500" />
+                      <span className={`font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                        Data:
+                      </span>
+                      <span className={`font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                        {record.data || new Date(record.checkin_time).toLocaleDateString('pt-BR')}
+                      </span>
                     </div>
-                    <div style={{
-                      fontSize: '0.8rem',
-                      color: '#94a3b8',
-                      fontStyle: 'italic'
-                    }}>
-                      {comment.timestamp ? (comment.timestamp?.toDate ? comment.timestamp.toDate().toLocaleString('pt-BR') : new Date(comment.timestamp).toLocaleString('pt-BR')) : 'Agora'}
+
+                    <div className="flex items-center gap-2 mb-4">
+                      <Timer className="w-5 h-5 text-blue-600" />
+                      <span className="font-bold text-blue-600 text-lg">
+                        {getTempoEmLoja(record)}
+                      </span>
                     </div>
+
+                    {/* Info Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div className="flex items-center gap-2">
+                        <User className="w-4 h-4 text-purple-500" />
+                        <span className="font-semibold text-purple-600">Cliente:</span>
+                        <span className={isDarkMode ? 'text-gray-200' : 'text-gray-800'}>
+                          {record.cliente || record.client}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <Truck className="w-4 h-4 text-green-500" />
+                        <span className="font-semibold text-green-600">Fretista:</span>
+                        <span className={isDarkMode ? 'text-gray-200' : 'text-gray-800'}>
+                          {record.fretista || record.driver}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <User className="w-4 h-4 text-orange-500" />
+                        <span className="font-semibold text-orange-600">Vendedor:</span>
+                        <span className={isDarkMode ? 'text-gray-200' : 'text-gray-800'}>
+                          {record.vendedor}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <Package className="w-4 h-4 text-red-500" />
+                        <span className="font-semibold text-red-600">Rede:</span>
+                        <span className={isDarkMode ? 'text-gray-200' : 'text-gray-800'}>
+                          {record.rede}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <MapPin className="w-4 h-4 text-blue-500" />
+                        <span className="font-semibold text-blue-600">UF:</span>
+                        <span className={isDarkMode ? 'text-gray-200' : 'text-gray-800'}>
+                          {record.uf}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <Clock className="w-4 h-4 text-yellow-500" />
+                        <span className="font-semibold text-yellow-600">Check-in:</span>
+                        <span className={isDarkMode ? 'text-gray-200' : 'text-gray-800'}>
+                          {record.checkin || new Date(record.checkin_time).toLocaleTimeString('pt-BR')}
+                        </span>
+                      </div>
+
+                      {record.checkout && (
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-green-500" />
+                          <span className="font-semibold text-green-600">Check-out:</span>
+                          <span className={isDarkMode ? 'text-gray-200' : 'text-gray-800'}>
+                            {record.checkout}
+                          </span>
+                        </div>
+                      )}
+
+                      {record.duracao && (
+                        <div className="flex items-center gap-2">
+                          <Timer className="w-4 h-4 text-green-500" />
+                          <span className="font-semibold text-green-600">Duração:</span>
+                          <span className={isDarkMode ? 'text-gray-200' : 'text-gray-800'}>
+                            {record.duracao}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* User Info */}
+                    <div className="flex items-center gap-2 pt-2 border-t border-gray-200 dark:border-gray-700">
+                      <User className="w-4 h-4 text-slate-500" />
+                      <span className="font-semibold text-slate-600">Registrado por:</span>
+                      <span className="font-bold text-slate-700 dark:text-slate-300">
+                        {record.userName ? `${record.userName} (${record.userEmail || '-'})` : (record.userEmail || '-')}
+                      </span>
+                    </div>
+
+                    {/* Comments Button */}
+                    {(record.comments || []).length > 0 && (
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={() => setViewCommentsModal({ open: true, record })}
+                        className="w-full mt-4 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-semibold py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2"
+                      >
+                        <MessageCircle className="w-5 h-5" />
+                        Ver {(record.comments || []).length} comentário(s)
+                      </motion.button>
+                    )}
                   </div>
-                  <div style={{
-                    fontSize: '1rem',
-                    color: '#475569',
-                    lineHeight: 1.5,
-                    wordWrap: 'break-word',
-                    whiteSpace: 'pre-wrap'
-                  }}>
-                    {comment.comment}
-                  </div>
+
+                  {/* Right Section - Status and Actions */}
+                  <div className="flex flex-col items-end gap-4 min-w-[200px]">
+                    {/* Status Badge */}
+                    <div className="flex flex-col items-end">
+                      <span className={`text-sm font-semibold mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                        Status:
+                      </span>
+                      <motion.span
+                        initial={{ scale: 0.9 }}
+                        animate={{ scale: 1 }}
+                        className={`
+                          inline-block px-4 py-2 rounded-full font-bold text-sm shadow-lg
+                          ${record.status === 'Entrega em andamento' 
+                            ? 'bg-yellow-100 text-yellow-800 border border-yellow-300' 
+                            : record.status === 'Entrega finalizada' 
+                            ? 'bg-green-500 text-white' 
+                            : record.status === 'Entrega devolvida' 
+                            ? 'bg-red-500 text-white' 
+                            : 'bg-gray-200 text-gray-800'
+                          }
+                        `}
+                      >
+                        {record.status}
+                      </motion.span>
+                    </div>
+
+                    {/* Problem Indicator */}
+                    {record.problem_type || record.tipoProblema ? (
+                      <motion.div
+                        initial={{ scale: 0.9 }}
+                        animate={{ scale: 1 }}
+                        className="flex items-center gap-2 mb-3 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800"
+                      >
+                        <AlertTriangle className="w-5 h-5 text-red-500" />
+                        <span className="font-bold text-red-600 dark:text-red-400">
+                          {record.tipoProblema || record.problem_type}
+                        </span>
+                      </motion.div>
+                    ) : null}
+
+                    {/* Additional Information */}
+                    {record.informacoesAdicionais || record.information ? (
+                      <div className="flex items-center gap-2 mb-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                        <MessageCircle className="w-4 h-4 text-blue-500" />
+                        <CollapsibleText text={record.informacoesAdicionais || record.information} />
+                      </div>
+                    ) : null}
+
+                    {/* Attachments */}
+                    {(record.attachments || []).length > 0 && (
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={() => setViewAttachmentsModal({ open: true, record })}
+                        className="flex items-center gap-2 mb-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                      >
+                        <Paperclip className="w-4 h-4 text-blue-500" />
+                        <span className="text-blue-600 dark:text-blue-400 font-semibold">
+                          {(record.attachments || []).length} anexo(s)
+                        </span>
+                      </motion.button>
+                    )}
+
+                    {/* Action Buttons */}
+                    <div className="flex flex-col gap-3 mt-4">
+                      {record.status === 'Entrega em andamento' && (user?.email === record.userEmail || isAdmin(user?.email)) && (
+                        <motion.button
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          onClick={() => {
+                            setProblemModal({ open: true, record });
+                            setSelectedProblem('');
+                            setProblemInfo('');
+                          }}
+                          className="bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2"
+                        >
+                          <AlertTriangle className="w-5 h-5" />
+                          PROBLEMA
+                        </motion.button>
+                      )}
+
+                      {record.status === 'Entrega em andamento' && (user?.email === record.userEmail || isAdmin(user?.email)) && (
+                        <motion.button
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          onClick={() => requestSupport(record)}
+                          className="bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2"
+                        >
+                          <AlertTriangle className="w-5 h-5" />
+                          SOLICITAR APOIO
+                        </motion.button>
+                      )}
+
+                      {canComment(record) && (
+                        <motion.button
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          onClick={() => {
+                            setCommentModal({ open: true, record });
+                            setCommentText('');
+                          }}
+                          className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2"
+                        >
+                          <MessageCircle className="w-5 h-5" />
+                          COMENTAR
+                        </motion.button>
+                      )}
+                    </div>
                 </div>
-              ))}
-            </div>
-            
-            <div style={{
-              borderTop: '2px solid #f1f5f9',
-              paddingTop: 16,
-              display: 'flex',
-              gap: 12
-            }}>
-              {canComment(viewCommentsModal.record) && (
+              </div>
+            </motion.div>
+          ))
+        )}
+      </AnimatePresence>
+      </div>
+      {/* Modal de Problema */}
+      <AnimatePresence>
+        {problemModal.open && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-2xl p-8 min-w-80 max-w-md w-full shadow-2xl relative`}
+            >
               <button
-                onClick={() => {
-                  setViewCommentsModal({open: false, record: null});
-                  setCommentModal({ open: true, record: viewCommentsModal.record });
-                  setCommentText('');
-                }}
-                style={{
-                  flex: 1,
-                  padding:'12px 20px',
-                  fontWeight:700,
-                  fontSize:16,
-                  borderRadius:8,
-                  background:'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
-                  color:'#fff',
-                  border:'none',
-                  cursor:'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: 8
-                }}
+                onClick={() => setProblemModal({ open: false, record: null })}
+                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-2xl font-bold"
+                title="Fechar"
               >
-                <span style={{fontSize: 18}}>💬</span>
-                Adicionar Comentário
+                ×
               </button>
-              )}
               
-              <button
-                onClick={() => setViewCommentsModal({open: false, record: null})}
-                style={{
-                  padding:'12px 24px',
-                  fontWeight:600,
-                  fontSize:16,
-                  borderRadius:8,
-                  background:'#f1f5f9',
-                  color:'#64748b',
-                  border:'1px solid #e2e8f0',
-                  cursor:'pointer',
-                  transition: 'all 0.2s ease'
-                }}
-                onMouseOver={(e) => {
-                  e.target.style.background = '#e2e8f0';
-                  e.target.style.color = '#475569';
-                }}
-                onMouseOut={(e) => {
-                  e.target.style.background = '#f1f5f9';
-                  e.target.style.color = '#64748b';
+              <h2 className="text-xl font-bold text-red-600 dark:text-red-400 mb-6 flex items-center gap-2">
+                <AlertTriangle className="w-6 h-6" />
+                Registrar Problema
+              </h2>
+              
+              <div className="mb-6">
+                <label className="block font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                  Tipo de Problema:
+                </label>
+                <select
+                  value={selectedProblem}
+                  onChange={e => setSelectedProblem(e.target.value)}
+                  className={`w-full p-3 rounded-lg border-2 ${isDarkMode 
+                    ? 'bg-gray-700 border-gray-600 text-white' 
+                    : 'bg-white border-gray-200 text-gray-900'
+                  } focus:border-red-500 focus:outline-none transition-colors`}
+                >
+                  <option value="">Selecione...</option>
+                  {problemTypes.map((p, i) => (
+                    <option key={i} value={p}>{p}</option>
+                  ))}
+                </select>
+              </div>
+              
+              <div className="mb-6">
+                <label className="block font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                  Observação (opcional):
+                </label>
+                <textarea
+                  value={problemInfo}
+                  onChange={e => setProblemInfo(e.target.value)}
+                  className={`w-full p-3 rounded-lg border-2 min-h-16 ${isDarkMode 
+                    ? 'bg-gray-700 border-gray-600 text-white' 
+                    : 'bg-white border-gray-200 text-gray-900'
+                  } focus:border-red-500 focus:outline-none transition-colors`}
+                  placeholder="Descreva o problema..."
+                />
+              </div>
+              
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full py-3 px-6 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={!selectedProblem}
+                onClick={async () => {
+                  if (!selectedProblem) return;
+                  await updateDeliveryRecord(problemModal.record.id, {
+                    problem_type: selectedProblem,
+                    information: problemInfo
+                  });
+                  // NOVO MODELO DE RESUMO (ENTREGA COM PROBLEMA)
+                  const record = problemModal.record;
+                  let message = `🚨ENTREGA COM PROBLEMA🚨\n\n`;
+                  message += `🚛 Fretista: ${(record.fretista || record.driver || '-')}\n`;
+                  message += `🛒 Cliente: ${(record.cliente || record.client || '-')}\n`;
+                  message += `🧰 Vendedor: ${(record.vendedor || '-')}\n`;
+                  message += `⚠️ Problema: ${selectedProblem}\n`;
+                  message += `📝 Observação: ${problemInfo || 'Nenhuma'}\n\n`;
+                  message += `🫵NO AGUARDO DA RESOLUÇÃO!⌛`;
+                  const encodedMessage = encodeURIComponent(message);
+                  // Detectar dispositivo móvel
+                  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                  
+                  let whatsappUrl;
+                  if (isMobile) {
+                    // Para mobile, tentar abrir app diretamente
+                    whatsappUrl = `whatsapp://send?text=${encodedMessage}`;
+                  } else {
+                    // Para desktop/web, usar api.whatsapp.com
+                    whatsappUrl = `https://api.whatsapp.com/send?text=${encodedMessage}`;
+                  }
+
+                  try {
+                    // Tentar abrir WhatsApp
+                    window.open(whatsappUrl, '_blank');
+                  } catch (error) {
+                    console.error('Erro ao abrir WhatsApp:', error);
+                    // Fallback: copiar para clipboard
+                    navigator.clipboard.writeText(message).then(() => {
+                      alert('Mensagem copiada para a área de transferência! Cole no WhatsApp.');
+                    }).catch(() => {
+                      alert('Mensagem gerada:\n\n' + message);
+                    });
+                  }
+                  
+                  setProblemModal({ open: false, record: null });
+                  setSelectedProblem('');
+                  setProblemInfo('');
+                  loadLatestRecords();
                 }}
               >
-                Fechar
+                Salvar Problema e Enviar WhatsApp
+              </motion.button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {/* Modal de Comentário */}
+      <AnimatePresence>
+        {commentModal.open && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-2xl p-8 min-w-80 max-w-md w-full shadow-2xl relative`}
+            >
+              <button
+                onClick={() => setCommentModal({ open: false, record: null })}
+                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-2xl font-bold"
+                title="Fechar"
+              >
+                ×
               </button>
-            </div>
-          </div>
-        </div>
-      )}
+              
+              <h2 className="text-xl font-bold text-purple-600 dark:text-purple-400 mb-6 flex items-center gap-2">
+                <MessageCircle className="w-6 h-6" />
+                Adicionar Comentário
+              </h2>
+              
+              <div className="mb-6">
+                <label className="block font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                  Comentário:
+                </label>
+                <textarea
+                  value={commentText}
+                  onChange={e => setCommentText(e.target.value)}
+                  className={`w-full p-3 rounded-lg border-2 min-h-20 ${isDarkMode 
+                    ? 'bg-gray-700 border-gray-600 text-white' 
+                    : 'bg-white border-gray-200 text-gray-900'
+                  } focus:border-purple-500 focus:outline-none transition-colors resize-none`}
+                  placeholder="Digite seu comentário..."
+                  maxLength={500}
+                />
+                <div className="text-xs text-gray-500 dark:text-gray-400 text-right mt-1">
+                  {commentText.length}/500 caracteres
+                </div>
+              </div>
+              
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full py-3 px-6 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                disabled={!commentText.trim() || savingComment}
+                onClick={handleSaveComment}
+              >
+                {savingComment ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
+                    Salvando...
+                  </>
+                ) : (
+                  <>
+                    <MessageCircle className="w-4 h-4" />
+                    Salvar Comentário
+                  </>
+                )}
+              </motion.button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {/* Modal de Visualização de Comentários */}
+      <AnimatePresence>
+        {viewCommentsModal.open && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-2xl p-8 min-w-96 max-w-2xl w-full max-h-[80vh] shadow-2xl relative flex flex-col overflow-hidden`}
+            >
+              <button
+                onClick={() => setViewCommentsModal({ open: false, record: null })}
+                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-2xl font-bold z-10"
+                title="Fechar"
+              >
+                ×
+              </button>
+              
+              <div className="mb-6 border-b-2 border-gray-100 dark:border-gray-700 pb-4">
+                <h2 className="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-2 flex items-center gap-2">
+                  <MessageCircle className="w-7 h-7" />
+                  Comentários da Entrega
+                </h2>
+                <div className="text-sm text-gray-600 dark:text-gray-400">
+                  <strong>Cliente:</strong> {viewCommentsModal.record?.cliente || viewCommentsModal.record?.client} | 
+                  <strong> Fretista:</strong> {viewCommentsModal.record?.fretista || viewCommentsModal.record?.driver}
+                </div>
+              </div>
+              
+              <div className="flex-1 overflow-y-auto pr-2 mb-6 space-y-4">
+                {viewCommentsModal.record?.comments?.length > 0 ? (
+                  viewCommentsModal.record.comments.map((comment, index) => (
+                    <motion.div
+                      key={`${comment.userEmail}-${comment.timestamp}`}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      className={`${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-gray-50 border-gray-200'} rounded-xl p-4 border relative`}
+                    >
+                      <div className="flex justify-between items-start mb-2">
+                        <div className="text-sm font-semibold text-gray-600 dark:text-gray-300 flex items-center gap-2">
+                          <User className="w-4 h-4" />
+                          {comment.userName || comment.userEmail}
+                        </div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400 italic">
+                          {comment.timestamp ? (comment.timestamp?.toDate ? comment.timestamp.toDate().toLocaleString('pt-BR') : new Date(comment.timestamp).toLocaleString('pt-BR')) : 'Agora'}
+                        </div>
+                      </div>
+                      <div className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap break-words">
+                        {comment.comment}
+                      </div>
+                    </motion.div>
+                  ))
+                ) : (
+                  <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                    <MessageCircle className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                    <p>Nenhum comentário encontrado para esta entrega.</p>
+                  </div>
+                )}
+              </div>
+              
+              <div className="border-t-2 border-gray-100 dark:border-gray-700 pt-4 flex gap-3">
+                {canComment(viewCommentsModal.record) && (
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => {
+                      setViewCommentsModal({ open: false, record: null });
+                      setCommentModal({ open: true, record: viewCommentsModal.record });
+                      setCommentText('');
+                    }}
+                    className="flex-1 py-3 px-5 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    Adicionar Comentário
+                  </motion.button>
+                )}
+                
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => setViewCommentsModal({ open: false, record: null })}
+                  className={`py-3 px-6 font-semibold rounded-lg border-2 transition-all duration-200 ${isDarkMode 
+                    ? 'bg-gray-700 border-gray-600 text-gray-300 hover:bg-gray-600 hover:text-white' 
+                    : 'bg-gray-100 border-gray-200 text-gray-600 hover:bg-gray-200 hover:text-gray-800'
+                  }`}
+                >
+                  Fechar
+                </motion.button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       
       {/* Toast Notification Popup */}
       <ToastNotification open={toast.open} type={toast.type} message={toast.message} onClose={() => setToast({ ...toast, open: false })} />
+      
       {/* Botão flutuante para Registros */}
-      <div
+      <motion.div
         onClick={() => navigate('/registros')}
-        style={{
-          position: 'fixed',
-          bottom: 24,
-          right: 24,
-          width: 64,
-          height: 64,
-          borderRadius: '50%',
-          background: 'linear-gradient(135deg, #ff9800 0%, #ff5722 100%)',
-          boxShadow: '0 8px 24px rgba(255, 152, 0, 0.3)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          cursor: 'pointer',
-          fontSize: 28,
-          color: '#fff',
-          zIndex: 1000,
-          transition: 'all 0.3s ease',
-          border: '3px solid rgba(255, 255, 255, 0.2)',
-        }}
-        onMouseEnter={(e) => {
-          e.target.style.transform = 'scale(1.1)';
-          e.target.style.boxShadow = '0 12px 32px rgba(255, 152, 0, 0.4)';
-        }}
-        onMouseLeave={(e) => {
-          e.target.style.transform = 'scale(1)';
-          e.target.style.boxShadow = '0 8px 24px rgba(255, 152, 0, 0.3)';
-        }}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+        className="fixed bottom-6 right-6 w-16 h-16 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 shadow-lg hover:shadow-xl cursor-pointer flex items-center justify-center text-white text-2xl z-50 border-2 border-white/20"
       >
-        🚛
-      </div>
+        <Truck className="w-8 h-8" />
+      </motion.div>
 
       {/* Modal de Visualização de Anexos */}
-      {viewAttachmentsModal.open && viewAttachmentsModal.record && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100vw',
-          height: '100vh',
-          background: 'rgba(0,0,0,0.85)',
-          zIndex: 9999,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}
-        onClick={() => setViewAttachmentsModal({ open: false, record: null })}
-        >
-          <div style={{
-            background: '#fff',
-            borderRadius: 16,
-            padding: 32,
-            maxWidth: '90vw',
-            maxHeight: '90vh',
-            overflow: 'auto',
-            position: 'relative',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.3)'
-          }}
-          onClick={e => e.stopPropagation()}
+      <AnimatePresence>
+        {viewAttachmentsModal.open && viewAttachmentsModal.record && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4"
+            onClick={() => setViewAttachmentsModal({ open: false, record: null })}
           >
-            <button 
-              onClick={() => setViewAttachmentsModal({ open: false, record: null })}
-              style={{
-                position: 'absolute',
-                top: 16,
-                right: 16,
-                fontSize: 28,
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                color: '#888',
-                fontWeight: 'bold'
-              }}
-              title="Fechar"
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-2xl p-8 max-w-[90vw] max-h-[90vh] overflow-auto relative shadow-2xl`}
+              onClick={e => e.stopPropagation()}
             >
-              ×
-            </button>
-            <h2 style={{
-              marginTop: 0,
-              marginBottom: 24,
-              fontSize: '1.4rem',
-              color: '#218838',
-              fontWeight: 700,
-              textAlign: 'center'
-            }}>
-              Anexos - {viewAttachmentsModal.record.client || viewAttachmentsModal.record.cliente}
-            </h2>
-            
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-              gap: 20,
-              marginTop: 20
-            }}>
-              {(viewAttachmentsModal.record.attachments || []).map((attachment, index) => (
-                <div key={`${attachment.file_name || attachment.original_name || index}`} style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: 12
-                }}>
-                  {attachment.file_url ? (
-                    // Verificar se é uma imagem (base64 ou URL)
-                    (attachment.file_url.startsWith('data:image') || 
-                     (attachment.file_type && attachment.file_type.startsWith('image/')) ||
-                     (attachment.original_name && /\.(jpe?g|png|gif|webp|bmp)$/i.test(attachment.original_name))) ? (
-                      // Imagem
-                      <>
-                        <img 
-                          src={attachment.file_url} 
-                          alt={`Anexo ${index + 1}`}
-                          style={{
-                            maxWidth: '100%',
-                            maxHeight: 300,
-                            borderRadius: 8,
-                            objectFit: 'contain',
-                            border: '1px solid #ddd'
-                          }}
-                          onError={(e) => {
-                            // Se a imagem não carregar, mostrar placeholder
-                            e.target.style.display = 'none';
-                            if (e.target.nextSibling) {
-                              e.target.nextSibling.style.display = 'flex';
-                            }
-                          }}
-                        />
-                        {/* Placeholder para quando a imagem falhar */}
-                        <div style={{
-                          display: 'none',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          width: 100,
-                          height: 100,
-                          background: '#f0f0f0',
-                          borderRadius: 8,
-                          fontSize: 40
-                        }}>
-                          📎
+              <button 
+                onClick={() => setViewAttachmentsModal({ open: false, record: null })}
+                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-2xl font-bold z-10"
+                title="Fechar"
+              >
+                ×
+              </button>
+              
+              <h2 className="text-2xl font-bold text-green-600 dark:text-green-400 text-center mb-6 flex items-center justify-center gap-2">
+                <Paperclip className="w-7 h-7" />
+                Anexos - {viewAttachmentsModal.record.client || viewAttachmentsModal.record.cliente}
+              </h2>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-5">
+                {(viewAttachmentsModal.record.attachments || []).map((attachment, index) => (
+                  <motion.div
+                    key={`${attachment.file_name || attachment.original_name || index}`}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className="flex flex-col items-center gap-3"
+                  >
+                    {attachment.file_url ? (
+                      // Verificar se é uma imagem (base64 ou URL)
+                      (attachment.file_url.startsWith('data:image') || 
+                       (attachment.file_type && attachment.file_type.startsWith('image/')) ||
+                       (attachment.original_name && /\.(jpe?g|png|gif|webp|bmp)$/i.test(attachment.original_name))) ? (
+                        // Imagem
+                        <>
+                          <img 
+                            src={attachment.file_url} 
+                            alt={`Anexo ${index + 1}`}
+                            className="max-w-full max-h-72 rounded-lg object-contain border border-gray-200 dark:border-gray-600"
+                            onError={(e) => {
+                              // Se a imagem não carregar, mostrar placeholder
+                              e.target.style.display = 'none';
+                              if (e.target.nextSibling) {
+                                e.target.nextSibling.style.display = 'flex';
+                              }
+                            }}
+                          />
+                          {/* Placeholder para quando a imagem falhar */}
+                          <div className="hidden items-center justify-center w-24 h-24 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                            <Paperclip className="w-10 h-10 text-gray-400" />
+                          </div>
+                        </>
+                      ) : (
+                        // Placeholder para arquivos não imagem
+                        <div className="flex items-center justify-center w-24 h-24 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                          <Paperclip className="w-10 h-10 text-gray-400" />
                         </div>
-                      </>
+                      )
                     ) : (
-                      // Placeholder para arquivos não imagem
-                      <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        width: 100,
-                        height: 100,
-                        background: '#f0f0f0',
-                        borderRadius: 8,
-                        fontSize: 40
-                      }}>
-                        📎
+                      // Placeholder quando não há file_url
+                      <div className="flex items-center justify-center w-24 h-24 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                        <Paperclip className="w-10 h-10 text-gray-400" />
                       </div>
-                    )
-                  ) : (
-                    // Placeholder quando não há file_url
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      width: 100,
-                      height: 100,
-                      background: '#f0f0f0',
-                      borderRadius: 8,
-                      fontSize: 40
-                    }}>
-                      📎
+                    )}
+                    <div className="text-center text-sm text-gray-600 dark:text-gray-400 break-words">
+                      {attachment.original_name || attachment.file_name || `Anexo ${index + 1}`}
                     </div>
-                  )}
-                  <div style={{
-                    textAlign: 'center',
-                    fontSize: 14,
-                    color: '#666',
-                    wordBreak: 'break-word'
-                  }}>
-                    {attachment.original_name || attachment.file_name || `Anexo ${index + 1}`}
-                  </div>
-                </div>
-              ))}
-            </div>
-            
-            {(viewAttachmentsModal.record.attachments || []).length === 0 && (
-              <div style={{
-                textAlign: 'center',
-                padding: 40,
-                color: '#888',
-                fontSize: 16
-              }}>
-                Nenhum anexo disponível para este registro.
+                  </motion.div>
+                ))}
               </div>
-            )}
-          </div>
-        </div>
-      )}
+              
+              {(viewAttachmentsModal.record.attachments || []).length === 0 && (
+                <div className="text-center py-10 text-gray-500 dark:text-gray-400">
+                  <Paperclip className="w-16 h-16 mx-auto mb-4 opacity-50" />
+                  <p className="text-lg">Nenhum anexo disponível para este registro.</p>
+                </div>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      </div>
     </div>
   );
 }
