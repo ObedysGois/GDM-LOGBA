@@ -114,13 +114,17 @@ function Layout() {
               `}>
                 <div className="flex items-center space-x-3">
                   <div className={`
-                    p-3 rounded-xl
+                    w-12 h-12 rounded-xl overflow-hidden
                     ${isDarkMode ? 'bg-dark-primary' : 'bg-light-primary'}
                   `}>
-                    <Truck className="w-8 h-8 text-white" />
+                    <img 
+                      src="/assets/logodocemel.png" 
+                      alt="Logo Doce Mel" 
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                   <div>
-                    <h2 className="text-xl font-bold">Logística BA</h2>
+                    <h2 className="text-xl font-bold">LOG.BA</h2>
                     <p className={`text-sm ${isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'}`}>
                       Sistema de Transporte
                     </p>
@@ -157,7 +161,7 @@ function Layout() {
                       `}
                     >
                       <IconComponent className="w-5 h-5" />
-                      <span className="font-medium">{item.label}</span>
+                      <span className="font-medium text-sm">{item.label}</span>
                     </motion.button>
                   );
                 })}
@@ -176,9 +180,12 @@ function Layout() {
                     <User className="w-5 h-5 text-white" />
                   </div>
                   <div className="flex-1">
-                    <p className="font-medium text-sm">{currentUser?.nome || 'Usuário'}</p>
+                    <p className="font-medium text-sm">
+                      {currentUser?.displayName || currentUser?.email?.split('@')[0] || 'Usuário'}
+                    </p>
                     <p className={`text-xs ${isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'}`}>
-                      {currentUser?.tipo || 'Motorista'}
+                      {currentUser?.type === 'admin' ? 'Administrador' : 
+                       currentUser?.type === 'fretista' ? 'Fretista' : 'Motorista'}
                     </p>
                   </div>
                 </div>
@@ -239,12 +246,16 @@ function Layout() {
             
             <div className="flex items-center space-x-3">
               <div className={`
-                p-2 rounded-lg
+                w-10 h-10 rounded-lg overflow-hidden
                 ${isDarkMode ? 'bg-dark-primary' : 'bg-light-primary'}
               `}>
-                <Truck className="w-6 h-6 text-white" />
+                <img 
+                  src="/assets/logodocemel.png" 
+                  alt="Logo Doce Mel" 
+                  className="w-full h-full object-cover"
+                />
               </div>
-              <h1 className="text-xl font-bold hidden sm:block">Logística BA</h1>
+              <h1 className="text-xl font-bold hidden sm:block">LOG.BA</h1>
             </div>
           </div>
 

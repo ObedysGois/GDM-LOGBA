@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './AuthContext.js';
 import { ThemeProvider } from './contexts/ThemeContext.js';
+import { NotificationProvider } from './contexts/NotificationContext.js';
+import { Toaster } from 'react-hot-toast';
 import Layout from './Layout.js';
 import Login from './Pages/Login.jsx';
 import Home from './Pages/Home.jsx';
@@ -33,39 +35,60 @@ function App() {
   return (
     <ThemeProvider>
       <AuthProvider>
-        <ToastContext.Provider value={{ showToast }}>
-      <Router
-        future={{
-          v7_startTransition: true,
-          v7_relativeSplatPath: true
-        }}
-      >
-          <div className="App">
-            <Routes>
-              <Route path="/login" element={<Login />} />
-              <Route path="/" element={<Layout />}>
-                <Route index element={<Home />} />
-                <Route path="registros" element={<Registros />} />
-                <Route path="dashboard" element={<Dashboard />} />
-                <Route path="localizacao" element={<Localizacao />} />
-                <Route path="meu-resumo" element={<MeuResumo />} />
-                <Route path="monitoramento" element={<Monitoramento />} />
-                <Route path="profile" element={<Profile />} />
-              </Route>
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-            
-            {/* Toast Notification Global */}
-            <ToastNotification 
-              open={toast.open} 
-              type={toast.type} 
-              message={toast.message} 
-              duration={toast.duration}
-              onClose={closeToast} 
-            />
-          </div>
-        </Router>
-      </ToastContext.Provider>
+        <NotificationProvider>
+          <ToastContext.Provider value={{ showToast }}>
+        <Router
+          future={{
+            v7_startTransition: true,
+            v7_relativeSplatPath: true
+          }}
+        >
+            <div className="App">
+              <Routes>
+                <Route path="/login" element={<Login />} />
+                <Route path="/" element={<Layout />}>
+                  <Route index element={<Home />} />
+                  <Route path="registros" element={<Registros />} />
+                  <Route path="dashboard" element={<Dashboard />} />
+                  <Route path="localizacao" element={<Localizacao />} />
+                  <Route path="meu-resumo" element={<MeuResumo />} />
+                  <Route path="monitoramento" element={<Monitoramento />} />
+                  <Route path="profile" element={<Profile />} />
+                </Route>
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Routes>
+              
+              {/* Toast Notification Global */}
+              <ToastNotification 
+                open={toast.open} 
+                type={toast.type} 
+                message={toast.message} 
+                duration={toast.duration}
+                onClose={closeToast} 
+              />
+              
+              {/* React Hot Toast para notificações push */}
+              <Toaster
+                position="top-right"
+                toastOptions={{
+                  duration: 4000,
+                  style: {
+                    background: '#0F0F0F',
+                    color: '#fff',
+                  },
+                  success: {
+                    duration: 3000,
+                    theme: {
+                      primary: 'green',
+                      secondary: 'black',
+                    },
+                  },
+                }}
+              />
+            </div>
+          </Router>
+        </ToastContext.Provider>
+        </NotificationProvider>
       </AuthProvider>
     </ThemeProvider>
   );

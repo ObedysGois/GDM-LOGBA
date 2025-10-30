@@ -65,18 +65,18 @@ const ToastNotification = ({ open, type = 'info', message, onClose, duration = 4
   return (
     <div style={{
       position: 'fixed',
-      top: '20px',
-      right: '20px',
+      top: '16px',
+      right: '16px',
       zIndex: 10000,
-      maxWidth: '400px',
-      minWidth: '300px'
+      maxWidth: '350px',
+      minWidth: '280px'
     }}>
       <div style={{
         background: config.bgColor,
         border: `2px solid ${config.borderColor}`,
-        borderRadius: '16px',
-        padding: '20px',
-        boxShadow: `0 8px 32px ${config.shadowColor}`,
+        borderRadius: '12px',
+        padding: '16px',
+        boxShadow: `0 6px 24px ${config.shadowColor}`,
         color: '#fff',
         fontFamily: 'Inter, Segoe UI, Arial, sans-serif',
         transform: isExiting ? 'translateX(100%)' : 'translateX(0)',
@@ -102,22 +102,22 @@ const ToastNotification = ({ open, type = 'info', message, onClose, duration = 4
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          marginBottom: '12px'
+          marginBottom: '10px'
         }}>
           <div style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '12px'
+            gap: '10px'
           }}>
             <span style={{
-              fontSize: '24px',
+              fontSize: '20px',
               filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))'
             }}>
               {config.icon}
             </span>
             <h4 style={{
               margin: 0,
-              fontSize: '1.1rem',
+              fontSize: '1rem',
               fontWeight: 700,
               textShadow: '0 2px 4px rgba(0,0,0,0.2)'
             }}>
@@ -132,14 +132,14 @@ const ToastNotification = ({ open, type = 'info', message, onClose, duration = 4
               background: 'rgba(255, 255, 255, 0.2)',
               border: 'none',
               borderRadius: '50%',
-              width: '32px',
-              height: '32px',
+              width: '28px',
+              height: '28px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               cursor: 'pointer',
               color: '#fff',
-              fontSize: '18px',
+              fontSize: '16px',
               fontWeight: 'bold',
               transition: 'all 0.2s ease',
               backdropFilter: 'blur(10px)'
@@ -159,8 +159,8 @@ const ToastNotification = ({ open, type = 'info', message, onClose, duration = 4
 
         {/* Mensagem */}
         <div style={{
-          fontSize: '0.95rem',
-          lineHeight: 1.5,
+          fontSize: '0.875rem',
+          lineHeight: 1.4,
           fontWeight: 500,
           textShadow: '0 1px 2px rgba(0,0,0,0.1)',
           whiteSpace: 'pre-line'
@@ -176,7 +176,7 @@ const ToastNotification = ({ open, type = 'info', message, onClose, duration = 4
           width: '100%',
           height: '3px',
           background: 'rgba(255, 255, 255, 0.2)',
-          borderRadius: '0 0 14px 14px',
+          borderRadius: '0 0 10px 10px',
           overflow: 'hidden'
         }}>
           <div style={{
@@ -184,7 +184,7 @@ const ToastNotification = ({ open, type = 'info', message, onClose, duration = 4
             background: 'rgba(255, 255, 255, 0.8)',
             width: '100%',
             animation: `progress ${duration}ms linear`,
-            borderRadius: '0 0 14px 14px'
+            borderRadius: '0 0 10px 10px'
           }}></div>
         </div>
       </div>
@@ -204,4 +204,4 @@ const ToastNotification = ({ open, type = 'info', message, onClose, duration = 4
   );
 };
 
-export default ToastNotification; 
+export default ToastNotification;

@@ -35,13 +35,13 @@ function CollapsibleText({ text, maxLength = 20 }) {
   return (
     <>
       <span>
-        {text.slice(0, maxLength)}... <span style={{color:'#1976d2',cursor:'pointer',fontWeight:600}} onClick={()=>setModalOpen(true)}>ver mais</span>
+        {text.slice(0, maxLength)}... <span style={{color:'#1976d2',cursor:'pointer',fontWeight:600}} onClick={()=>setModalOpen(true)}>ver</span>
       </span>
       {modalOpen && (
         <div style={{position:'fixed',top:0,left:0,width:'100vw',height:'100vh',background:'rgba(0,0,0,0.35)',zIndex:9999,display:'flex',alignItems:'center',justifyContent:'center'}}>
-          <div style={{background: isDarkMode ? '#374151' : '#fff',borderRadius:16,padding:32,minWidth:320,maxWidth:400,boxShadow:'0 8px 32px #0005',position:'relative',wordBreak:'break-word'}}>
+          <div style={{background: isDarkMode ? '#0f0f0f' : '#fff' , border: isDarkMode ? '0.5px solid #585858ff' : 'none',borderRadius:16,padding:32,minWidth:220,maxWidth:370,boxShadow:'0 8px 32px #0005',position:'relative',wordBreak:'break-word`}'}}>
             <button onClick={()=>setModalOpen(false)} style={{position:'absolute',top:16,right:16,fontSize:22,background:'none',border:'none',cursor:'pointer',color: isDarkMode ? '#d1d5db' : '#888'}} title="Fechar">×</button>
-            <h2 style={{fontWeight:700, fontSize:'1.1rem', color:'#1976d2', marginBottom:18}}>Observação Completa</h2>
+            <h2 style={{fontWeight:700, fontSize:'1.1rem', color: isDarkMode ? '#ffffff' : '#000000ff', marginBottom:18}}>Observação Completa</h2>
             <div style={{fontSize:16, color: isDarkMode ? '#e5e7eb' : '#333', wordBreak:'break-word', whiteSpace:'pre-wrap'}}>{text}</div>
           </div>
         </div>
@@ -634,9 +634,14 @@ function Home() {
   };
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${
-      isDarkMode ? 'bg-dark-bg text-dark-text' : 'bg-light-bg text-light-text'
-    }`}>
+    <div 
+      className={`min-h-screen transition-colors duration-300 ${
+        isDarkMode ? 'text-white' : 'bg-light-bg text-light-text'
+      }`}
+      style={{
+        background: isDarkMode ? '#0F0F0F' : 'transparent'
+      }}
+    >
       <div className="max-w-7xl mx-auto px-4 py-6">
         {/* Header moderno */}
         <PageHeader
@@ -653,36 +658,63 @@ function Home() {
         style={{ display: 'none' }}
       />
       {/* Área de upload da rota */}
-      <div className="card"  style={{background: isDarkMode ? 'linear-gradient(100deg, #1ce788ff 0%, #06402b 100%)' : '#ffffffff', border: 'none', maxWidth: 5000, margin: '0 auto 32px auto', textAlign: 'center'}}>
+      <div className="card" style={{
+        background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+        backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+        border: isDarkMode ? '1px solid #0F0F0F' : 'none', 
+        maxWidth: 5000, 
+        margin: '0 auto 24px auto',
+        textAlign: 'center',
+        padding: '16px',
+        borderRadius: '12px',
+        boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : 'undefined'
+      }}>
         {!routeImage ? (
           <>
-            <p style={{fontWeight: 600, color: '#218838', fontSize: 18, marginBottom: 8}}>
+            <p style={{fontWeight: 600, color: isDarkMode ? '#FFFFFF' : '#218838', fontSize: 14, marginBottom: 6}}>
               📋 Imagem da Rota do Dia
             </p>
-            <p className="route-instructions" style={{fontSize: 15, color: '#888', marginBottom: 18}}>
+            <p className="route-instructions" style={{fontSize: 12, color: isDarkMode ? '#B3B3B3' : '#888', marginBottom: 12}}>
               Clique no botão abaixo para importar a imagem da rota do dia
             </p>
             <button 
               onClick={handleImportClick}
               disabled={isLoading || !isAdmin(user?.email)}
               className="btn btn-green"
-              style={{width: '100%', maxWidth: 260, margin: '0 auto'}}
+              style={{
+                width: '100%', 
+                maxWidth: 200, 
+                margin: '0 auto',
+                padding: '8px 16px',
+                fontSize: '12px',
+                borderRadius: '8px'
+              }}
             >
               {isLoading ? '⏳ Carregando...' : '📁 Importar Imagem da Rota'}
             </button>
             {!isAdmin(user?.email) && (
-              <p className="admin-only" style={{color: '#e65100', fontSize: 13, marginTop: 10}}>Apenas administradores podem importar rotas</p>
+              <p className="admin-only" style={{color: '#e65100', fontSize: 11, marginTop: 8}}>Apenas administradores podem importar rotas</p>
             )}
           </>
         ) : (
           <div className="route-preview">
-            <div style={{display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12}}>
-              <span style={{fontSize: 20, color: '#4caf50'}}>✅</span>
-              <h4 style={{fontSize: 16, color: isDarkMode ? '#ffffff' : '#218838', margin: 0}}>Rota do Dia Carregada</h4>
+            <div style={{display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8}}>
+              <span style={{fontSize: 16, color: '#4caf50'}}>✅</span>
+              <h4 style={{fontSize: 14, color: isDarkMode ? '#ffffff' : '#218838', margin: 0}}>Rota do Dia Carregada</h4>
             </div>
             
-            <div className="route-info" style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: isDarkMode ? '#ff9100ff' : '#DAF1DE', border: 'none', borderRadius: 8, padding: '12px 20px', marginBottom: 18}}>
-              <span style={{fontSize: 16, color: isDarkMode ? '#ffffff' : '#218838', fontWeight: 600}}>
+            <div className="route-info" style={{
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              alignItems: 'center', 
+              background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.8) 0%, rgba(25, 25, 25, 0.6) 100%)' : '#DAF1DE', 
+              backdropFilter: isDarkMode ? 'blur(15px)' : 'none',
+              border: isDarkMode ? '1px solid #0F0F0F' : 'none', 
+              borderRadius: 6, 
+              padding: '8px 12px', 
+              marginBottom: 12
+            }}>
+              <span style={{fontSize: 12, color: isDarkMode ? '#ffffff' : '#218838', fontWeight: 600}}>
                 📅 Data: {routeImageInfo?.date?.hour ? new Date(routeImageInfo.date).toLocaleDateString('pt-BR') : (() => {
                   // Obter data atual no fuso horário de Salvador, Bahia
                   const now = new Date();
@@ -699,17 +731,25 @@ function Home() {
                   return formatter.format(now);
                 })()}
               </span>
-              <span style={{fontSize: 16, color: routeImageInfo?.is_local ? background: isDarkMode ? '#ffffffff' : '#51ac56ff', fontWeight: 600}}>
+              <span style={{fontSize: 12, color: routeImageInfo?.is_local ? background: isDarkMode ? '#ffffffff' : '#51ac56ff', fontWeight: 600}}>
                 💾 Status: {routeImageInfo?.is_local ? 'Salva localmente' : 'Salva no Supabase'}
               </span>
             </div>
             
-            <div className="image-preview-container" style={{marginBottom: 16, display: 'flex', justifyContent: 'center'}}>
+            <div className="image-preview-container" style={{marginBottom: 12, display: 'flex', justifyContent: 'center'}}>
               <img 
                 src={routeImage} 
                 alt="Preview da Rota" 
                 className="route-preview-image"
-                style={{maxWidth: '100%', maxHeight: 5000, borderRadius: 16, boxShadow: '0 4px 24px #21883833', cursor: 'zoom-in', border: 'none'}}
+                style={{
+                  maxWidth: '100%', 
+                  maxHeight: '100%', 
+                  padding: 15,
+                  gap: 15,
+                  borderRadius: 12, 
+                  cursor: 'zoom-in', 
+                  border: 'none'
+                }}
                 onClick={() => setZoomOpen(true)}
               />
             </div>
@@ -752,19 +792,30 @@ function Home() {
               </div>
             )}
             
-            <div className="route-actions" style={{display: 'flex', gap: 12, justifyContent: 'center'}}>
+            <div className="route-actions" style={{display: 'flex', gap: 8, justifyContent: 'center'}}>
               <button 
                 onClick={handleSaveRoute}
-                className="btn btn-green" style={{background: isDarkMode ? '#51ac56ff' : '#4caf50'}}
+                className="btn btn-green" 
+                style={{
+                  background: isDarkMode ? '#51ac56ff' : '#4caf50',
+                  padding: '6px 12px',
+                  fontSize: '11px',
+                  borderRadius: '6px'
+                }}
                 disabled={isLoading}
               >
                 💾 Rota Salva
-
               </button>
               {isAdmin(user?.email) && (
                 <button 
                   onClick={handleRemoveImage}
-                  className="btn btn-orange" style={{background: isDarkMode ? '#ff9100ff' : '#FFA726'}}
+                  className="btn btn-orange" 
+                  style={{
+                    background: isDarkMode ? '#ff9100ff' : '#FFA726',
+                    padding: '6px 12px',
+                    fontSize: '11px',
+                    borderRadius: '6px'
+                  }}
                   disabled={isLoading}
                 >
                   {isLoading ? '⏳ Removendo...' : '🗑️ Remover'}
@@ -773,7 +824,7 @@ function Home() {
             </div>
             
             {!isAdmin(user?.email) && (
-              <p style={{color: '#e65100', fontSize: 13, marginTop: 10}}>
+              <p style={{color: '#e65100', fontSize: 10, marginTop: 6}}>
                 Apenas administradores podem remover rotas
               </p>
             )}
@@ -782,45 +833,70 @@ function Home() {
       </div>
       {/* Notificações */}
       {notifications.length > 0 && (
-        <div className="card" style={{marginBottom: 32, background: 'linear-gradient(135deg, #4d0202ff 0%, #fc0000ff 100%)', border: 'none', boxShadow: '0 8px 32px rgba(117, 0, 0, 0.37)'}}>
-          <h3 style={{fontSize: 20, color: '#fff', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 12, fontWeight: 700}}>
-            <span style={{fontSize: 24}}>🔔</span>
+        <div className="card" style={{
+          marginBottom: 24, 
+          background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+          border: 'none', 
+          boxShadow: '0 4px 16px rgba(117, 0, 0, 0.37)',
+          padding: '16px',
+          borderRadius: '12px'
+        }}>
+          <h3 style={{
+            background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+            color: '#fff',
+            border: 'none',
+            borderRadius: 6,
+            padding: '6px 12px',
+            fontSize: '0.8rem',
+            fontWeight: 600,
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 6,
+            boxShadow: '0 1px 4px rgba(139, 92, 246, 0.3)',
+            transition: 'all 0.2s ease',
+            width: '100%',
+            justifyContent: 'center'
+              }}>
+            <span style={{fontSize: 18}}>🔔</span>
             Notificações do Sistema
           </h3>
-          <div style={{display: 'flex', flexDirection: 'column', gap: 16}}>
+          <div style={{display: 'flex', flexDirection: 'column', gap: 12}}>
             {notifications.map(notification => (
               <div key={notification.id} className="notification-item" style={{
-                background: isDarkMode ? '#2a2a2a' : '#fff',
+                background: isDarkMode ? '#2a2a2aff' : '#fff',
                 border: 'none', 
-                borderRadius: 16, 
-                padding: 20, 
-                display: 'flex', 
+                borderRadius: 12, 
+                padding: 12, 
+                display: 'block',
                 alignItems: 'center', 
                 justifyContent: 'space-between', 
-                gap: 16,
-                boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
+                gap: 12,
+                boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
                 backdropFilter: 'blur(10px)'
               }}>
                 <div className="notification-content" style={{
-                  fontSize: 16, 
-                  color: isDarkMode ? '#e5e7eb' : '#2d3748', 
+                  fontSize: 13, 
+                  color: isDarkMode ? '#e5e7eb' : '#2a2a2a', 
                   whiteSpace: 'pre-line',
                   fontWeight: 500,
-                  lineHeight: 1.5
+                  wordBreak: 'break-word',
+                  lineHeight: 1.4,
+                  display: 'block',
                 }}>
                   {notification.message}
                 </div>
-                <div className="notification-actions" style={{display: 'flex', gap: 12, alignItems: 'center'}}>
+                <div className="notification-actions" style={{display: 'flex', gap: 8, alignItems: 'center'}}>
                   {notification.type === 'problem' && notification.records && (isAdmin(user?.email) || isCollaborator(user)) && (
                     <button 
                       onClick={() => notification.records.forEach(record => markAsBeingMonitored(record.id))}
                       className="btn btn-blue"
                       style={{
-                        fontSize: 12, 
-                        padding: '8px 16px',
+                        fontSize: 10, 
+                        padding: '6px 12px',
                         background: isDarkMode ? '#2a2a2a' : '#fff',
                         border: 'none',
-                        borderRadius: 8,
+                        borderRadius: 6,
                         color: '#fff',
                         fontWeight: 600,
                         cursor: 'pointer',
@@ -834,21 +910,21 @@ function Home() {
                     onClick={() => dismissNotification(notification.id)}
                     className="btn btn-outline"
                     style={{
-                      fontSize: 14, 
-                      padding: '10px 20px',
+                      fontSize: 11, 
+                      padding: '6px 12px',
                       background: 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)',
                       border: 'none',
-                      borderRadius: 8,
+                      borderRadius: 6,
                       color: '#fff',
                       fontWeight: 600,
                       cursor: 'pointer',
                       transition: 'all 0.2s ease',
                       display: 'flex',
                       alignItems: 'center',
-                      gap: 8
+                      gap: 4
                     }}
                   >
-                    <span style={{fontSize: 16}}>✅</span>
+                    <span style={{fontSize: 12}}>✅</span>
                     CIENTE
                   </button>
                 </div>
@@ -860,37 +936,37 @@ function Home() {
       {/* Entregas com problemas */}
       {problemsInProgress.length > 0 && (
         <div className="card" style={{
-          marginBottom: 32, 
-          background: isDarkMode ? '#2a2a2a' : '#fff',
-          border: '2px solid #ff0000ff',
-          borderRadius: 20,
-          boxShadow: '0 8px 32px rgba(239, 68, 68, 0.15)',
+          marginBottom: 24, 
+              background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+              backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+              border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+              boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
           overflow: 'hidden'
         }}>
           {/* Header do card */}
           <div style={{
             background: 'linear-gradient(135deg, #4d0202ff 0%, #fc0000ff 100%)',
-            padding: '20px 24px',
+            padding: '12px 16px',
             display: 'flex',
             alignItems: 'center',
-            gap: 16,
-            boxShadow: '0 4px 16px rgba(239, 68, 68, 0.3)'
+            gap: 12,
+            boxShadow: '0 2px 8px rgba(239, 68, 68, 0.3)'
           }}>
             <div style={{
               background: isDarkMode ? '#2a2a2a' : '#fff',
               borderRadius: '50%',
-              width: 48,
-              height: 48,
+              width: 32,
+              height: 32,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               backdropFilter: 'blur(10px)'
             }}>
-              <span style={{fontSize: 24, color: '#fff'}}>🚨</span>
+              <span style={{fontSize: 16, color: '#fff'}}>🚨</span>
           </div>
             <div>
               <h3 style={{
-                fontSize: '1.4rem',
+                fontSize: '1rem',
                 fontWeight: 800,
                 color: '#fff',
                 margin: 0,
@@ -900,9 +976,9 @@ function Home() {
                 ATENÇÃO: ENTREGAS COM PROBLEMAS
               </h3>
               <p style={{
-                fontSize: '0.9rem',
+                fontSize: '0.7rem',
                 color: 'rgba(255, 255, 255, 0.9)',
-                margin: '4px 0 0 0',
+                margin: '2px 0 0 0',
                 fontWeight: 500
               }}>
                 {problemsInProgress.length} entrega(s) requerem atenção imediata
@@ -911,17 +987,17 @@ function Home() {
           </div>
 
           {/* Lista de problemas */}
-          <div style={{padding: '24px'}}>
-            <div style={{display: 'flex', flexDirection: 'column', gap: 20}}>
+          <div style={{padding: '16px'}}>
+            <div style={{display: 'flex', flexDirection: 'column', gap: 12}}>
             {problemsInProgress.map(record => (
                 <div key={record.id} style={{
-                  background: isDarkMode ? '#374151' : '#fff',
-                  borderRadius: 16,
-                  boxShadow: isDarkMode ? '0 4px 20px rgba(0, 0, 0, 0.3)' : '0 4px 20px rgba(0, 0, 0, 0.08)',
-                  border: isDarkMode ? '1px solid #4b5563' : '1px solid #f3f4f6',
-                  overflow: 'hidden',
-                  transition: 'all 0.3s ease',
-                  position: 'relative'
+              background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+              backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+              border: 'none',
+              boxShadow: 'none',
+              overflow: 'hidden',
+              transition: 'all 0.3s ease',
+              position: 'relative'
                 }}>
                   {/* Indicador de problema */}
                   <div style={{
@@ -929,49 +1005,49 @@ function Home() {
                     top: 0,
                     left: 0,
                     right: 0,
-                    height: 4,
+                    height: 3,
                     background: 'linear-gradient(90deg, #ef4444 0%, #f59e0b 50%, #ef4444 100%)',
                     backgroundSize: '200% 100%',
                     animation: 'shimmer 2s infinite'
                   }}></div>
 
-                  <div style={{padding: '20px'}}>
+                  <div style={{padding: '12px'}}>
                     {/* Informações principais */}
                     <div style={{
                       display: 'grid',
-                      gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                      gap: 16,
-                      marginBottom: 16
+                      gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+                      gap: 12,
+                      marginBottom: 12
                     }}>
-                      <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
-                        <span style={{fontSize: 18, color: '#6b7280'}}>🚛</span>
+                      <div style={{display: 'flex', alignItems: 'center', gap: 6}}>
+                        <span style={{fontSize: 14, color: '#6b7280'}}>🚛</span>
                         <div>
-                          <div style={{fontSize: '0.8rem', color: isDarkMode ? '#9ca3af' : '#9ca3af', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px'}}>Fretista</div>
-                          <div style={{fontSize: '1rem', color: isDarkMode ? '#f3f4f6' : '#1f2937', fontWeight: 700}}>{record.fretista || record.driver || '-'}</div>
+                          <div style={{fontSize: '0.6rem', color: isDarkMode ? '#9ca3af' : '#9ca3af', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px'}}>Fretista</div>
+                          <div style={{fontSize: '0.8rem', color: isDarkMode ? '#f3f4f6' : '#1f2937', fontWeight: 700}}>{record.fretista || record.driver || '-'}</div>
                         </div>
                       </div>
 
-                      <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
-                        <span style={{fontSize: 18, color: '#6b7280'}}>👤</span>
+                      <div style={{display: 'flex', alignItems: 'center', gap: 6}}>
+                        <span style={{fontSize: 14, color: '#6b7280'}}>👤</span>
                         <div>
-                          <div style={{fontSize: '0.8rem', color: isDarkMode ? '#9ca3af' : '#9ca3af', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px'}}>Cliente</div>
-                          <div style={{fontSize: '1rem', color: isDarkMode ? '#f3f4f6' : '#1f2937', fontWeight: 700}}>{record.cliente || record.client || '-'}</div>
+                          <div style={{fontSize: '0.6rem', color: isDarkMode ? '#9ca3af' : '#9ca3af', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px'}}>Cliente</div>
+                          <div style={{fontSize: '0.8rem', color: isDarkMode ? '#f3f4f6' : '#1f2937', fontWeight: 700}}>{record.cliente || record.client || '-'}</div>
                         </div>
                       </div>
 
-                      <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
-                        <span style={{fontSize: 18, color: '#6b7280'}}>⏰</span>
+                      <div style={{display: 'flex', alignItems: 'center', gap: 6}}>
+                        <span style={{fontSize: 14, color: '#6b7280'}}>⏰</span>
                         <div>
-                          <div style={{fontSize: '0.8rem', color: isDarkMode ? '#9ca3af' : '#9ca3af', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px'}}>Check-in</div>
-                          <div style={{fontSize: '1rem', color: isDarkMode ? '#f3f4f6' : '#1f2937', fontWeight: 700}}>{record.checkin || (record.checkin_time ? new Date(record.checkin_time).toLocaleTimeString('pt-BR') : '-')}</div>
+                          <div style={{fontSize: '0.6rem', color: isDarkMode ? '#9ca3af' : '#9ca3af', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px'}}>Check-in</div>
+                          <div style={{fontSize: '0.8rem', color: isDarkMode ? '#f3f4f6' : '#1f2937', fontWeight: 700}}>{record.checkin || (record.checkin_time ? new Date(record.checkin_time).toLocaleTimeString('pt-BR') : '-')}</div>
                         </div>
                       </div>
 
-                      <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
-                        <span style={{fontSize: 18, color: '#6b7280'}}>⏳</span>
+                      <div style={{display: 'flex', alignItems: 'center', gap: 6}}>
+                        <span style={{fontSize: 14, color: '#6b7280'}}>⏳</span>
                         <div>
-                          <div style={{fontSize: '0.8rem', color: isDarkMode ? '#9ca3af' : '#9ca3af', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px'}}>Tempo em Loja</div>
-                          <div style={{fontSize: '1rem', color: '#ef4444', fontWeight: 800}}>{(() => {
+                          <div style={{fontSize: '0.6rem', color: isDarkMode ? '#9ca3af' : '#9ca3af', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px'}}>Tempo em Loja</div>
+                          <div style={{fontSize: '0.8rem', color: '#ef4444', fontWeight: 800}}>{(() => {
                     const now = new Date();
                     const checkin = new Date(record.checkin_time);
                     const diff = Math.floor((now - checkin)/1000);
@@ -987,9 +1063,9 @@ function Home() {
                     <div style={{
                       background: isDarkMode ? 'linear-gradient(135deg, #451a03 0%, #78350f 100%)' : 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)',
                       border: isDarkMode ? '1px solid #92400e' : '1px solid #f59e0b',
-                      borderRadius: 12,
-                      padding: '16px',
-                      marginBottom: 16,
+                      borderRadius: 8,
+                      padding: '12px',
+                      marginBottom: 12,
                       position: 'relative',
                       overflow: 'hidden'
                     }}>
@@ -997,15 +1073,15 @@ function Home() {
                         position: 'absolute',
                         top: 0,
                         left: 0,
-                        width: 4,
+                        width: 3,
                         height: '100%',
                         background: 'linear-gradient(180deg, #ef4444 0%, #f59e0b 100%)'
                       }}></div>
-                      <div style={{display: 'flex', alignItems: 'center', gap: 12, marginLeft: 8}}>
-                        <span style={{fontSize: 20, color: '#d97706'}}>⚠️</span>
+                      <div style={{display: 'flex', alignItems: 'center', gap: 8, marginLeft: 6}}>
+                        <span style={{fontSize: 16, color: '#d97706'}}>⚠️</span>
                         <div>
-                          <div style={{fontSize: '0.8rem', color: isDarkMode ? '#fbbf24' : '#92400e', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px'}}>Problema Identificado</div>
-                          <div style={{fontSize: '1.1rem', color: isDarkMode ? '#fbbf24' : '#92400e', fontWeight: 800}}>{record.tipoProblema || record.problem_type || '-'}</div>
+                          <div style={{fontSize: '0.7rem', color: isDarkMode ? '#fbbf24' : '#92400e', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px'}}>Problema Identificado</div>
+                          <div style={{fontSize: '0.9rem', color: isDarkMode ? '#fbbf24' : '#92400e', fontWeight: 800}}>{record.tipoProblema || record.problem_type || '-'}</div>
                         </div>
                       </div>
                     </div>
@@ -1015,16 +1091,18 @@ function Home() {
 
                     {/* Usuário responsável */}
                     <div style={{
-                      background: isDarkMode ? '#374151' : '#f1f5f9',
-                      borderRadius: 8,
-                      padding: '8px 12px',
-                      marginBottom: 16,
+                      background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+                      backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+                      border: 'none',
+                      boxShadow: 'none',
+                      padding: '6px 10px',
+                      marginBottom: 12,
                       display: 'inline-block'
                     }}>
-                      <div style={{display: 'flex', alignItems: 'center', gap: 6}}>
-                        <span style={{fontSize: 14, color: '#64748b'}}>👤</span>
-                        <span style={{fontSize: '0.8rem', color: isDarkMode ? '#9ca3af' : '#64748b', fontWeight: 600}}>Registrado por:</span>
-                        <span style={{fontSize: '0.8rem', color: isDarkMode ? '#e5e7eb' : '#475569', fontWeight: 700}}>
+                      <div style={{display: 'flex', alignItems: 'center', gap: 4}}>
+                        <span style={{fontSize: 12, color: '#64748b'}}>👤</span>
+                        <span style={{fontSize: '0.7rem', color: isDarkMode ? '#9ca3af' : '#64748b', fontWeight: 600}}>Registrado por:</span>
+                        <span style={{fontSize: '0.7rem', color: isDarkMode ? '#e5e7eb' : '#475569', fontWeight: 700}}>
                           {record.userName ? `${record.userName} (${record.userEmail || '-'})` : (record.userEmail || '-')}
                         </span>
                       </div>
@@ -1032,33 +1110,33 @@ function Home() {
 
                     {/* Comentários existentes */}
                     {(record.comments || []).length > 0 && (
-                      <div style={{marginBottom:8}}>
+                      <div style={{marginBottom:6}}>
                         <button 
                           onClick={() => setViewCommentsModal({ open: true, record })}
                           style={{
                             background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
                             color: '#fff',
                             border: 'none',
-                            borderRadius: 8,
-                            padding: '8px 16px',
-                            fontSize: '0.9rem',
+                            borderRadius: 6,
+                            padding: '2px 6px',
+                            fontSize: '0.7rem',
                             fontWeight: 600,
                             cursor: 'pointer',
                             display: 'flex',
                             alignItems: 'center',
-                            gap: 8,
-                            boxShadow: '0 2px 8px rgba(139, 92, 246, 0.3)',
+                            gap: 6,
+                            boxShadow: '0 1px 4px rgba(139, 92, 246, 0.3)',
                             transition: 'all 0.2s ease',
                             width: '100%',
                             justifyContent: 'center'
                           }}
                           onMouseOver={(e) => {
                             e.target.style.transform = 'translateY(-1px)';
-                            e.target.style.boxShadow = '0 4px 12px rgba(139, 92, 246, 0.4)';
+                            e.target.style.boxShadow = '0 2px 6px rgba(139, 92, 246, 0.4)';
                           }}
                           onMouseOut={(e) => {
                             e.target.style.transform = 'translateY(0)';
-                            e.target.style.boxShadow = '0 2px 8px rgba(139, 92, 246, 0.3)';
+                            e.target.style.boxShadow = '0 1px 4px rgba(139, 92, 246, 0.3)';
                           }}
                         >
                           <span style={{fontSize: 16}}>💬</span>
@@ -1070,10 +1148,10 @@ function Home() {
                     {/* Botões de ação */}
                     <div style={{
                       display: 'flex',
-                      gap: 8,
+                      gap: 6,
                       justifyContent: 'flex-end',
                       flexWrap: 'wrap',
-                      marginTop: 12
+                      marginTop: 8
                     }}>
                       {(record.userEmail === user.email || isAdmin(user?.email)) && (
                         <button 
@@ -1085,30 +1163,32 @@ function Home() {
                           className="btn btn-red"
                           style={{
                             fontWeight: 600,
-                            fontSize: 12,
-                            padding: '8px 12px',
-                            borderRadius: 8,
+                            fontSize: 10,
+                            padding: '4px 6px',
+                            borderRadius: 6,
                             background: 'linear-gradient(135deg, #e53935 0%, #ff9800 100%)',
                             color: '#fff',
-                            boxShadow: '0 2px 6px rgba(229, 57, 53, 0.3)',
+                            boxShadow: '0 1px 3px rgba(229, 57, 53, 0.3)',
                             border: 'none',
                             cursor: 'pointer',
                             letterSpacing: 0.5,
                             display: 'flex',
                             alignItems: 'center',
-                            gap: 4,
+                            gap: 3,
+                            width: '45%',
+                            justifyContent: 'center',
                             transition: 'all 0.2s ease'
                           }}
                           onMouseOver={(e) => {
                             e.target.style.transform = 'translateY(-1px)';
-                            e.target.style.boxShadow = '0 4px 10px rgba(229, 57, 53, 0.4)';
+                            e.target.style.boxShadow = '0 2px 5px rgba(229, 57, 53, 0.4)';
                           }}
                           onMouseOut={(e) => {
                             e.target.style.transform = 'translateY(0)';
-                            e.target.style.boxShadow = '0 2px 6px rgba(229, 57, 53, 0.3)';
+                            e.target.style.boxShadow = '0 1px 3px rgba(229, 57, 53, 0.3)';
                           }}
                         >
-                          <span style={{fontSize: 12}}>⚠️</span>
+                          <span style={{fontSize: 10}}>⚠️</span>
                           PROBLEMA
                         </button>
                       )}
@@ -1119,28 +1199,30 @@ function Home() {
                             background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
                             color: '#fff',
                             border: 'none',
-                            borderRadius: 8,
-                            padding: '8px 12px',
-                            fontSize: 12,
+                            borderRadius: 6,
+                            padding: '4px 6px',
+                            fontSize: 10,
                             fontWeight: 600,
                             cursor: 'pointer',
                             display: 'flex',
                             alignItems: 'center',
-                            gap: 4,
-                            boxShadow: '0 2px 6px rgba(245, 158, 11, 0.3)',
+                            gap: 3,
+                            boxShadow: '0 1px 3px rgba(245, 158, 11, 0.3)',
                             transition: 'all 0.2s ease',
-                            letterSpacing: 0.5
+                            width: '45%',
+                            letterSpacing: 0.5,
+                            justifyContent: 'center'
                           }}
                           onMouseOver={(e) => {
                             e.target.style.transform = 'translateY(-1px)';
-                            e.target.style.boxShadow = '0 4px 10px rgba(245, 158, 11, 0.4)';
+                            e.target.style.boxShadow = '0 2px 5px rgba(245, 158, 11, 0.4)';
                           }}
                           onMouseOut={(e) => {
                             e.target.style.transform = 'translateY(0)';
-                            e.target.style.boxShadow = '0 2px 6px rgba(245, 158, 11, 0.3)';
+                            e.target.style.boxShadow = '0 1px 3px rgba(245, 158, 11, 0.3)';
                           }}
                         >
-                          <span style={{fontSize: 12}}>🆘</span>
+                          <span style={{fontSize: 10}}>🆘</span>
                           APOIO
                         </button>
                       )}
@@ -1151,28 +1233,30 @@ function Home() {
                             background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
                             color: '#fff',
                             border: 'none',
-                            borderRadius: 8,
-                            padding: '8px 12px',
-                            fontSize: 12,
+                            borderRadius: 6,
+                            padding: '4px 6px',
+                            fontSize: 10,
                             fontWeight: 600,
                             cursor: 'pointer',
                             display: 'flex',
                             alignItems: 'center',
-                            gap: 4,
-                            boxShadow: '0 2px 6px rgba(59, 130, 246, 0.3)',
+                            gap: 3,
+                            boxShadow: '0 1px 3px rgba(59, 130, 246, 0.3)',
                             transition: 'all 0.2s ease',
+                            width: '45%',
+                            justifyContent: 'center',
                             letterSpacing: 0.5
                           }}
                           onMouseOver={(e) => {
                             e.target.style.transform = 'translateY(-1px)';
-                            e.target.style.boxShadow = '0 4px 10px rgba(59, 130, 246, 0.4)';
+                            e.target.style.boxShadow = '0 2px 5px rgba(59, 130, 246, 0.4)';
                           }}
                           onMouseOut={(e) => {
                             e.target.style.transform = 'translateY(0)';
-                            e.target.style.boxShadow = '0 2px 6px rgba(59, 130, 246, 0.3)';
+                            e.target.style.boxShadow = '0 1px 3px rgba(59, 130, 246, 0.3)';
                           }}
                         >
-                          <span style={{fontSize: 12}}>👁️</span>
+                          <span style={{fontSize: 10}}>👁️</span>
                           ACOMPANHAR
                         </button>
                       )}
@@ -1186,28 +1270,30 @@ function Home() {
                           background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
                           color: '#fff',
                           border: 'none',
-                          borderRadius: 8,
-                          padding: '8px 12px',
-                          fontSize: 12,
+                          borderRadius: 6,
+                          padding: '4px 6px',
+                          fontSize: 10,
                           fontWeight: 600,
                           cursor: 'pointer',
                           display: 'flex',
                           alignItems: 'center',
-                          gap: 4,
-                          boxShadow: '0 2px 6px rgba(139, 92, 246, 0.3)',
+                          gap: 3,
+                          boxShadow: '0 1px 3px rgba(139, 92, 246, 0.3)',
                           transition: 'all 0.2s ease',
+                          width: '45%',
+                          justifyContent: 'center',
                           letterSpacing: 0.5
                         }}
                         onMouseOver={(e) => {
                           e.target.style.transform = 'translateY(-1px)';
-                          e.target.style.boxShadow = '0 4px 10px rgba(139, 92, 246, 0.4)';
+                          e.target.style.boxShadow = '0 2px 5px rgba(139, 92, 246, 0.4)';
                         }}
                         onMouseOut={(e) => {
                           e.target.style.transform = 'translateY(0)';
-                          e.target.style.boxShadow = '0 2px 6px rgba(139, 92, 246, 0.3)';
+                          e.target.style.boxShadow = '0 1px 3px rgba(139, 92, 246, 0.3)';
                         }}
                       >
-                        <span style={{fontSize: 12}}>💬</span>
+                        <span style={{fontSize: 10}}>💬</span>
                         COMENTAR
                       </button>
                     </div>
@@ -1220,29 +1306,29 @@ function Home() {
       )}
       {/* Entregas sendo acompanhadas */}
       {beingMonitored.length > 0 && (
-        <div className="card" style={{marginBottom: 32, position: 'relative', overflow: 'hidden', boxShadow: '0 8px 32px rgba(59,130,246,0.10)'}}>
+        <div className="card" style={{marginBottom: 24, position: 'relative', overflow: 'hidden', boxShadow: '0 4px 16px rgba(59,130,246,0.10)'}}>
           {/* shimmer azul */}
           <div style={{
             position: 'absolute',
             top: 0,
             left: 0,
             right: 0,
-            height: 4,
+            height: 3,
             background: 'linear-gradient(90deg, #3b82f6 0%, #60a5fa 50%, #3b82f6 100%)',
             backgroundSize: '200% 100%',
             animation: 'shimmer 2s infinite'
           }}></div>
-          <h3 style={{fontSize: 17, color: isDarkMode ? '#10b981' : '#218838', marginBottom: 10, marginTop: 16, marginLeft: 16}}>🔄 Entregas Sendo Acompanhadas</h3>
-          <div style={{display: 'flex', flexDirection: 'column', gap: 10, padding: 16}}>
+          <h3 style={{fontSize: 14, color: isDarkMode ? '#10b981' : '#218838', marginBottom: 8, marginTop: 12, marginLeft: 12}}>🔄 Entregas Sendo Acompanhadas</h3>
+          <div style={{display: 'flex', flexDirection: 'column', gap: 8, padding: 12}}>
             {beingMonitored.map(record => (
               <div
                 key={record.id}
                 style={{
                   background: isDarkMode ? '#065f46' : '#eafff6',
-                  borderRadius: 14,
-                  margin: '0 0 18px 0',
-                  padding: 16,
-                  boxShadow: '0 2px 8px #0001',
+                  borderRadius: 10,
+                  margin: '0 0 12px 0',
+                  padding: 12,
+                  boxShadow: '0 1px 4px #0001',
                   maxWidth: 420,
                   width: '100%',
                   wordBreak: 'break-word',
@@ -1252,13 +1338,15 @@ function Home() {
                   alignItems: 'flex-start',
                 }}
               >
-                <div style={{display:'flex',alignItems:'center',gap:6,fontWeight:700,fontSize:16,color:'#1976d2',marginBottom:8}}>
+                <div style={{display:'flex',alignItems:'center',gap:4,fontWeight:700,fontSize:13,color:'#1976d2',marginBottom:6}}>
   <span role="img" aria-label="Relógio">⏰</span> {getTempoEmLoja(record)}
 </div>
-                <b>🚚 Fretista:</b> {record.fretista || record.driver || '-'} <b>👤 Cliente:</b> {record.cliente || record.client || '-'} <b>🕒 Check-in:</b> {record.checkin || (record.checkin_time ? new Date(record.checkin_time).toLocaleTimeString('pt-BR') : '-')} <b>⚠️ Problema:</b> {record.tipoProblema || record.problem_type || '-'} <b>📝 Info:</b> <CollapsibleText text={record.informacoesAdicionais || record.information || '-'} /> <b>👤 Usuário:</b> {record.userEmail || '-'}
-                  <div style={{marginTop: 4, fontSize: 13, color: '#888'}}>🔄 Status: Responsável da logística resolvendo o Problema, por favor, aguardar e em caso de demora, entrar em contato por ligação!</div>
-                <div style={{marginBottom:8, color:'#1976d2', fontWeight:600, fontSize:15, display:'flex', alignItems:'center', gap:6, maxWidth:'100%', wordBreak:'break-word', overflowWrap:'break-word'}}>
-  <span style={{fontSize:18}}>✉️</span>
+                <div style={{fontSize: 11, lineHeight: 1.4, marginBottom: 6}}>
+                  <b>🚚 Fretista:</b> {record.fretista || record.driver || '-'} <b>👤 Cliente:</b> {record.cliente || record.client || '-'} <b>🕒 Check-in:</b> {record.checkin || (record.checkin_time ? new Date(record.checkin_time).toLocaleTimeString('pt-BR') : '-')} <b>⚠️ Problema:</b> {record.tipoProblema || record.problem_type || '-'} <b>📝 Info:</b> <CollapsibleText text={record.informacoesAdicionais || record.information || '-'} /> <b>👤 Usuário:</b> {record.userEmail || '-'}
+                </div>
+                  <div style={{marginTop: 3, fontSize: 10, color: '#888'}}>🔄 Status: Responsável da logística resolvendo o Problema, por favor, aguardar e em caso de demora, entrar em contato por ligação!</div>
+                <div style={{marginBottom:6, color:'#1976d2', fontWeight:600, fontSize:12, display:'flex', alignItems:'center', gap:4, maxWidth:'100%', wordBreak:'break-word', overflowWrap:'break-word'}}>
+  <span style={{fontSize:14}}>✉️</span>
   <CollapsibleText text={record.informacoesAdicionais || record.information} />
                 </div>
                 <div className="record-actions">
@@ -1266,7 +1354,7 @@ function Home() {
                     <button 
                       onClick={() => requestSupport(record)}
                       className="btn btn-orange"
-                      style={{fontSize: 14, fontWeight: 600}}
+                      style={{fontSize: 11, fontWeight: 600, padding: '6px 12px', borderRadius: 6}}
                     >
                       🆘 SOLICITAR APOIO
                     </button>
@@ -1280,29 +1368,29 @@ function Home() {
                       background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
                       color: '#fff',
                       border: 'none',
-                      borderRadius: 8,
-                      padding: '8px 16px',
-                      fontSize: '0.9rem',
+                      borderRadius: 6,
+                      padding: '6px 12px',
+                      fontSize: '11px',
                       fontWeight: 600,
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
-                      gap: 8,
-                      boxShadow: '0 2px 8px rgba(139, 92, 246, 0.3)',
+                      gap: 6,
+                      boxShadow: '0 1px 4px rgba(139, 92, 246, 0.3)',
                       transition: 'all 0.2s ease',
                       width: '100%',
                       justifyContent: 'center'
                     }}
                     onMouseOver={(e) => {
                       e.target.style.transform = 'translateY(-1px)';
-                      e.target.style.boxShadow = '0 4px 12px rgba(139, 92, 246, 0.4)';
+                      e.target.style.boxShadow = '0 2px 6px rgba(139, 92, 246, 0.4)';
                     }}
                     onMouseOut={(e) => {
                       e.target.style.transform = 'translateY(0)';
-                      e.target.style.boxShadow = '0 2px 8px rgba(139, 92, 246, 0.3)';
+                      e.target.style.boxShadow = '0 1px 4px rgba(139, 92, 246, 0.3)';
                     }}
                   >
-                    <span style={{fontSize: 16}}>💬</span>
+                    <span style={{fontSize: 12}}>💬</span>
                     Ver {(record.comments || []).length} comentário(s)
                   </button>
                 </div>
@@ -1326,10 +1414,16 @@ function Home() {
             className={`
               rounded-2xl p-6 text-center shadow-lg border transition-all duration-300
               ${isDarkMode 
-                ? 'bg-dark-card border-dark-border hover:shadow-dark-primary/20' 
+                ? 'hover:shadow-blue-500/20' 
                 : 'bg-white border-light-border hover:shadow-light-primary/20'
               }
             `}
+            style={{
+              background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+              backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+              border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+              boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined
+            }}
           >
             <div className="flex items-center justify-center mb-3">
               <Package className="w-8 h-8 text-blue-500" />
@@ -1351,10 +1445,16 @@ function Home() {
             className={`
               rounded-2xl p-6 text-center shadow-lg border transition-all duration-300
               ${isDarkMode 
-                ? 'bg-dark-card border-dark-border hover:shadow-amber-500/20' 
+                ? 'hover:shadow-amber-500/20' 
                 : 'bg-white border-light-border hover:shadow-amber-500/20'
               }
             `}
+            style={{
+              background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+              backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+              border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+              boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined
+            }}
           >
             <div className="flex items-center justify-center mb-3">
               <Clock className="w-8 h-8 text-amber-500" />
@@ -1376,10 +1476,16 @@ function Home() {
             className={`
               rounded-2xl p-6 text-center shadow-lg border transition-all duration-300
               ${isDarkMode 
-                ? 'bg-dark-card border-dark-border hover:shadow-red-500/20' 
+                ? 'hover:shadow-red-500/20' 
                 : 'bg-white border-light-border hover:shadow-red-500/20'
               }
             `}
+            style={{
+              background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+              backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+              border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+              boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined
+            }}
           >
             <div className="flex items-center justify-center mb-3">
               <AlertTriangle className="w-8 h-8 text-red-500" />
@@ -1401,10 +1507,16 @@ function Home() {
             className={`
               rounded-2xl p-6 text-center shadow-lg border transition-all duration-300
               ${isDarkMode 
-                ? 'bg-dark-card border-dark-border hover:shadow-green-500/20' 
+                ? 'hover:shadow-green-500/20' 
                 : 'bg-white border-light-border hover:shadow-green-500/20'
               }
             `}
+            style={{
+              background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+              backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+              border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+              boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined
+            }}
           >
             <div className="flex items-center justify-center mb-3">
               <CheckCircle className="w-8 h-8 text-green-500" />
@@ -1426,10 +1538,16 @@ function Home() {
             className={`
               rounded-2xl p-6 text-center shadow-lg border transition-all duration-300
               ${isDarkMode 
-                ? 'bg-dark-card border-dark-border hover:shadow-red-600/20' 
+                ? 'hover:shadow-red-600/20' 
                 : 'bg-white border-light-border hover:shadow-red-600/20'
               }
             `}
+            style={{
+              background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+              backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+              border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+              boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined
+            }}
           >
             <div className="flex items-center justify-center mb-3">
               <XCircle className="w-8 h-8 text-red-600" />
@@ -1451,17 +1569,23 @@ function Home() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
           className={`
-            rounded-2xl p-6 mb-8 shadow-lg border
+            rounded-xl p-4 mb-6 shadow-md border
             ${isDarkMode 
-              ? 'bg-dark-card border-dark-border' 
+              ? '' 
               : 'bg-white border-light-border'
             }
           `}
+          style={{
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined
+          }}
         >
           {/* Barra de Busca */}
-          <div className="mb-6">
+          <div className="mb-4">
             <div className="relative">
-              <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 ${
+              <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 ${
                 isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'
               }`} />
               <input
@@ -1469,24 +1593,26 @@ function Home() {
                 placeholder="Buscar por cliente, fretista, status, problema..."
                 value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
-                className={`
-                  w-full pl-10 pr-4 py-3 rounded-xl border transition-all duration-200
-                  ${isDarkMode 
-                    ? 'bg-dark-surface border-dark-border text-dark-text placeholder-dark-text-secondary focus:border-dark-primary' 
-                    : 'bg-light-surface border-light-border text-light-text placeholder-light-text-secondary focus:border-light-primary'
-                  }
-                  focus:outline-none focus:ring-2 focus:ring-opacity-20
-                  ${isDarkMode ? 'focus:ring-dark-primary' : 'focus:ring-light-primary'}
-                `}
+              style={{
+                width: '100%', 
+                padding: '8px 12px', 
+                textIndent: '16px',
+                border: isDarkMode ? '1px solid #0F0F0F' : '1px solid #e0e0e0', 
+                borderRadius: 6, 
+                fontSize: 12,
+                background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.8) 0%, rgba(25, 25, 25, 0.6) 100%)' : '#fff',
+                color: isDarkMode ? '#FFFFFF' : '#333',
+                backdropFilter: isDarkMode ? 'blur(15px)' : 'none'
+              }}
               />
             </div>
           </div>
 
           {/* Filtros */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
             {/* Cliente */}
-            <div className="space-y-2">
-              <label className={`text-sm font-medium ${
+            <div className="space-y-1">
+              <label className={`text-xs font-medium ${ 
                 isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'
               }`}>
                 Cliente
@@ -1494,15 +1620,16 @@ function Home() {
               <select
                 value={filterClient}
                 onChange={e => setFilterClient(e.target.value)}
-                className={`
-                  w-full px-3 py-2 rounded-lg border transition-all duration-200
-                  ${isDarkMode 
-                    ? 'bg-dark-surface border-dark-border text-dark-text focus:border-dark-primary' 
-                    : 'bg-light-surface border-light-border text-light-text focus:border-light-primary'
-                  }
-                  focus:outline-none focus:ring-2 focus:ring-opacity-20
-                  ${isDarkMode ? 'focus:ring-dark-primary' : 'focus:ring-light-primary'}
-                `}
+                style={{
+                  width: '100%', 
+                  padding: '8px 12px', 
+                  border: isDarkMode ? '1px solid #0F0F0F' : '1px solid #e0e0e0', 
+                  borderRadius: 6, 
+                  fontSize: 12,
+                  background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.8) 0%, rgba(25, 25, 25, 0.6) 100%)' : '#fff',
+                  color: isDarkMode ? '#FFFFFF' : '#333',
+                  backdropFilter: isDarkMode ? 'blur(15px)' : 'none'
+                }}
               >
                 <option value="">Todos os Clientes</option>
                 {clientList.map(c => <option key={c} value={c}>{c}</option>)}
@@ -1510,8 +1637,8 @@ function Home() {
             </div>
 
             {/* Duração */}
-            <div className="space-y-2">
-              <label className={`text-sm font-medium ${
+            <div className="space-y-1">
+              <label className={`text-xs font-medium ${
                 isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'
               }`}>
                 Duração
@@ -1519,15 +1646,16 @@ function Home() {
               <select
                 value={filterDuration}
                 onChange={e => setFilterDuration(e.target.value)}
-                className={`
-                  w-full px-3 py-2 rounded-lg border transition-all duration-200
-                  ${isDarkMode 
-                    ? 'bg-dark-surface border-dark-border text-dark-text focus:border-dark-primary' 
-                    : 'bg-light-surface border-light-border text-light-text focus:border-light-primary'
-                  }
-                  focus:outline-none focus:ring-2 focus:ring-opacity-20
-                  ${isDarkMode ? 'focus:ring-dark-primary' : 'focus:ring-light-primary'}
-                `}
+              style={{
+                width: '100%', 
+                padding: '8px 12px', 
+                border: isDarkMode ? '1px solid #0F0F0F' : '1px solid #e0e0e0', 
+                borderRadius: 6, 
+                fontSize: 12,
+                background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.8) 0%, rgba(25, 25, 25, 0.6) 100%)' : '#fff',
+                color: isDarkMode ? '#FFFFFF' : '#333',
+                backdropFilter: isDarkMode ? 'blur(15px)' : 'none'
+              }}
               >
                 <option value="">Todas as Durações</option>
                 <option value="0-59">0 a 59 min</option>
@@ -1537,8 +1665,8 @@ function Home() {
             </div>
 
             {/* Status */}
-            <div className="space-y-2">
-              <label className={`text-sm font-medium ${
+            <div className="space-y-1">
+              <label className={`text-xs font-medium ${
                 isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'
               }`}>
                 Status
@@ -1546,15 +1674,16 @@ function Home() {
               <select
                 value={filterStatus}
                 onChange={e => setFilterStatus(e.target.value)}
-                className={`
-                  w-full px-3 py-2 rounded-lg border transition-all duration-200
-                  ${isDarkMode 
-                    ? 'bg-dark-surface border-dark-border text-dark-text focus:border-dark-primary' 
-                    : 'bg-light-surface border-light-border text-light-text focus:border-light-primary'
-                  }
-                  focus:outline-none focus:ring-2 focus:ring-opacity-20
-                  ${isDarkMode ? 'focus:ring-dark-primary' : 'focus:ring-light-primary'}
-                `}
+              style={{
+                width: '100%', 
+                padding: '8px 12px', 
+                border: isDarkMode ? '1px solid #0F0F0F' : '1px solid #e0e0e0', 
+                borderRadius: 6, 
+                fontSize: 12,
+                background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.8) 0%, rgba(25, 25, 25, 0.6) 100%)' : '#fff',
+                color: isDarkMode ? '#FFFFFF' : '#333',
+                backdropFilter: isDarkMode ? 'blur(15px)' : 'none'
+              }}
               >
                 <option value="">Todos os Status</option>
                 {statusList.map(s => <option key={s} value={s}>{s}</option>)}
@@ -1562,8 +1691,8 @@ function Home() {
             </div>
 
             {/* Problema */}
-            <div className="space-y-2">
-              <label className={`text-sm font-medium ${
+            <div className="space-y-1">
+              <label className={`text-xs font-medium ${
                 isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'
               }`}>
                 Problema
@@ -1571,15 +1700,16 @@ function Home() {
               <select
                 value={filterProblem}
                 onChange={e => setFilterProblem(e.target.value)}
-                className={`
-                  w-full px-3 py-2 rounded-lg border transition-all duration-200
-                  ${isDarkMode 
-                    ? 'bg-dark-surface border-dark-border text-dark-text focus:border-dark-primary' 
-                    : 'bg-light-surface border-light-border text-light-text focus:border-light-primary'
-                  }
-                  focus:outline-none focus:ring-2 focus:ring-opacity-20
-                  ${isDarkMode ? 'focus:ring-dark-primary' : 'focus:ring-light-primary'}
-                `}
+              style={{
+                width: '100%', 
+                padding: '8px 12px', 
+                border: isDarkMode ? '1px solid #0F0F0F' : '1px solid #e0e0e0', 
+                borderRadius: 6, 
+                fontSize: 12,
+                background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.8) 0%, rgba(25, 25, 25, 0.6) 100%)' : '#fff',
+                color: isDarkMode ? '#FFFFFF' : '#333',
+                backdropFilter: isDarkMode ? 'blur(15px)' : 'none'
+              }}
               >
                 <option value="">Com ou sem Problema</option>
                 <option value="sim">Com Problema</option>
@@ -1588,8 +1718,8 @@ function Home() {
             </div>
 
             {/* Fretista */}
-            <div className="space-y-2">
-              <label className={`text-sm font-medium ${
+            <div className="space-y-1">
+              <label className={`text-xs font-medium ${
                 isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'
               }`}>
                 Fretista
@@ -1597,15 +1727,16 @@ function Home() {
               <select
                 value={filterFretista}
                 onChange={e => setFilterFretista(e.target.value)}
-                className={`
-                  w-full px-3 py-2 rounded-lg border transition-all duration-200
-                  ${isDarkMode 
-                    ? 'bg-dark-surface border-dark-border text-dark-text focus:border-dark-primary' 
-                    : 'bg-light-surface border-light-border text-light-text focus:border-light-primary'
-                  }
-                  focus:outline-none focus:ring-2 focus:ring-opacity-20
-                  ${isDarkMode ? 'focus:ring-dark-primary' : 'focus:ring-light-primary'}
-                `}
+              style={{
+                width: '100%', 
+                padding: '8px 12px', 
+                border: isDarkMode ? '1px solid #0F0F0F' : '1px solid #e0e0e0', 
+                borderRadius: 6, 
+                fontSize: 12,
+                background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.8) 0%, rgba(25, 25, 25, 0.6) 100%)' : '#fff',
+                color: isDarkMode ? '#FFFFFF' : '#333',
+                backdropFilter: isDarkMode ? 'blur(15px)' : 'none'
+              }}
               >
                 <option value="">Todos os Fretistas</option>
                 {fretistaList.map(f => <option key={f} value={f}>{f}</option>)}
@@ -1613,23 +1744,23 @@ function Home() {
             </div>
 
             {/* Botão Limpar Filtros */}
-            <div className="space-y-2">
-              <label className="text-sm font-medium opacity-0">Ações</label>
+            <div className="space-y-1">
+              <label className="text-xs font-medium opacity-0">Ações</label>
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 type="button"
                 onClick={handleClearFilters}
                 className={`
-                  w-full px-4 py-2 rounded-lg font-medium transition-all duration-200
+                  w-full px-3 py-2 rounded-md font-medium transition-all duration-200 text-xs
                   ${isDarkMode 
-                    ? 'bg-gradient-to-r from-dark-primary to-blue-600 hover:from-dark-primary/90 hover:to-blue-600/90 text-white' 
-                    : 'bg-gradient-to-r from-light-primary to-blue-600 hover:from-light-primary/90 hover:to-blue-600/90 text-white'
+                    ? 'bg-gradient-to-r from-dark-primary to-green-600 hover:from-dark-primary/90 hover:to-green-600/90 text-white' 
+                    : 'bg-gradient-to-r from-light-primary to-green-600 hover:from-light-primary/90 hover:to-green-600/90 text-white'
                   }
-                  shadow-lg hover:shadow-xl
+                  shadow-md hover:shadow-lg
                 `}
               >
-                <Filter className="w-4 h-4 inline mr-2" />
+                <Filter className="w-3 h-3 inline mr-1" />
                 Limpar Filtros
               </motion.button>
             </div>
@@ -1637,18 +1768,18 @@ function Home() {
         </motion.div>
 
       {/* Lista de registros */}
-      <div className="latest-records" style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: 24, marginTop: 24}}>
+      <div className="latest-records" style={{display: 'flex', flexDirection: 'column',gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 16, marginTop: 16}}>
         <AnimatePresence>
           {loadingRecords ? (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="flex items-center justify-center py-12"
+              className="flex items-center justify-center py-8"
             >
-              <div className="flex items-center gap-3">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-                <p className={`text-lg font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+              <div className="flex items-center gap-2">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+                <p className={`text-sm font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
                   Carregando registros...
                 </p>
               </div>
@@ -1658,10 +1789,10 @@ function Home() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="flex flex-col items-center justify-center py-16"
+              className="flex flex-col items-center justify-center py-12"
             >
-              <Package className={`w-16 h-16 mb-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} />
-              <p className={`text-lg font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+              <Package className={`w-12 h-12 mb-3 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} />
+              <p className={`text-sm font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
                 Nenhum registro encontrado.
               </p>
             </motion.div>
@@ -1673,91 +1804,97 @@ function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ delay: index * 0.1 }}
-                whileHover={{ y: -4, scale: 1.02 }}
+                whileHover={{ y: -2, scale: 1.01 }}
                 className={`
-                  rounded-2xl p-6 mb-6 shadow-lg border transition-all duration-300
+                  rounded-lg p-4 mb-4 shadow-md border transition-all duration-300
                   ${isDarkMode 
-                    ? 'bg-dark-card border-dark-border hover:shadow-2xl hover:shadow-blue-500/10' 
-                    : 'bg-white border-gray-200 hover:shadow-xl hover:shadow-blue-500/10'
+                    ? 'bg-dark-card border-dark-border hover:shadow-lg hover:shadow-blue-500/10' 
+                    : 'bg-white border-gray-200 hover:shadow-lg hover:shadow-blue-500/10'
                   }
                 `}
+                style={{
+                  background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white', border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+                  boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+                  maxWidth: '100%',
+                  maxWidth: '100%'
+                }}
               >
-                <div className="flex flex-col lg:flex-row justify-between gap-6">
+                <div className="flex flex-col lg:flex-row justify-between gap-4">
                   {/* Left Section - Main Info */}
-                  <div className="flex-1 space-y-4">
+                  <div className="flex-1 space-y-3">
                     {/* Date and Time */}
-                    <div className="flex items-center gap-2 mb-3">
-                      <Calendar className="w-5 h-5 text-blue-500" />
-                      <span className={`font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                    <div className="flex items-center gap-2 mb-2">
+                      <Calendar className="w-4 h-4 text-blue-500" />
+                      <span className={`font-semibold text-xs ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
                         Data:
                       </span>
-                      <span className={`font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                      <span className={`font-bold text-xs ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                         {record.data || new Date(record.checkin_time).toLocaleDateString('pt-BR')}
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-2 mb-4">
-                      <Timer className="w-5 h-5 text-blue-600" />
-                      <span className="font-bold text-blue-600 text-lg">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Timer className="w-4 h-4 text-blue-600" />
+                      <span className="font-bold text-blue-600 text-sm">
                         {getTempoEmLoja(record)}
                       </span>
                     </div>
 
                     {/* Info Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                       <div className="flex items-center gap-2">
-                        <User className="w-4 h-4 text-purple-500" />
-                        <span className="font-semibold text-purple-600">Cliente:</span>
-                        <span className={isDarkMode ? 'text-gray-200' : 'text-gray-800'}>
+                        <User className="w-3 h-3 text-purple-500" />
+                        <span className="font-semibold text-purple-600 text-xs">Cliente:</span>
+                        <span className={`text-xs ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
                           {record.cliente || record.client}
                         </span>
                       </div>
 
                       <div className="flex items-center gap-2">
-                        <Truck className="w-4 h-4 text-green-500" />
-                        <span className="font-semibold text-green-600">Fretista:</span>
-                        <span className={isDarkMode ? 'text-gray-200' : 'text-gray-800'}>
+                        <Truck className="w-3 h-3 text-green-500" />
+                        <span className="font-semibold text-green-600 text-xs">Fretista:</span>
+                        <span className={`text-xs ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
                           {record.fretista || record.driver}
                         </span>
                       </div>
 
                       <div className="flex items-center gap-2">
-                        <User className="w-4 h-4 text-orange-500" />
-                        <span className="font-semibold text-orange-600">Vendedor:</span>
-                        <span className={isDarkMode ? 'text-gray-200' : 'text-gray-800'}>
+                        <User className="w-3 h-3 text-orange-500" />
+                        <span className="font-semibold text-orange-600 text-xs">Vendedor:</span>
+                        <span className={`text-xs ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
                           {record.vendedor}
                         </span>
                       </div>
 
                       <div className="flex items-center gap-2">
-                        <Package className="w-4 h-4 text-red-500" />
-                        <span className="font-semibold text-red-600">Rede:</span>
-                        <span className={isDarkMode ? 'text-gray-200' : 'text-gray-800'}>
+                        <Package className="w-3 h-3 text-red-500" />
+                        <span className="font-semibold text-red-600 text-xs">Rede:</span>
+                        <span className={`text-xs ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
                           {record.rede}
                         </span>
                       </div>
 
                       <div className="flex items-center gap-2">
-                        <MapPin className="w-4 h-4 text-blue-500" />
-                        <span className="font-semibold text-blue-600">UF:</span>
-                        <span className={isDarkMode ? 'text-gray-200' : 'text-gray-800'}>
+                        <MapPin className="w-3 h-3 text-blue-500" />
+                        <span className="font-semibold text-blue-600 text-xs">UF:</span>
+                        <span className={`text-xs ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
                           {record.uf}
                         </span>
                       </div>
 
                       <div className="flex items-center gap-2">
-                        <Clock className="w-4 h-4 text-yellow-500" />
-                        <span className="font-semibold text-yellow-600">Check-in:</span>
-                        <span className={isDarkMode ? 'text-gray-200' : 'text-gray-800'}>
+                        <Clock className="w-3 h-3 text-yellow-500" />
+                        <span className="font-semibold text-yellow-600 text-xs">Check-in:</span>
+                        <span className={`text-xs ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
                           {record.checkin || new Date(record.checkin_time).toLocaleTimeString('pt-BR')}
                         </span>
                       </div>
 
                       {record.checkout && (
                         <div className="flex items-center gap-2">
-                          <CheckCircle className="w-4 h-4 text-green-500" />
-                          <span className="font-semibold text-green-600">Check-out:</span>
-                          <span className={isDarkMode ? 'text-gray-200' : 'text-gray-800'}>
+                          <CheckCircle className="w-3 h-3 text-green-500" />
+                          <span className="font-semibold text-green-600 text-xs">Check-out:</span>
+                          <span className={`text-xs ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
                             {record.checkout}
                           </span>
                         </div>
@@ -1765,9 +1902,9 @@ function Home() {
 
                       {record.duracao && (
                         <div className="flex items-center gap-2">
-                          <Timer className="w-4 h-4 text-green-500" />
-                          <span className="font-semibold text-green-600">Duração:</span>
-                          <span className={isDarkMode ? 'text-gray-200' : 'text-gray-800'}>
+                          <Timer className="w-3 h-3 text-green-500" />
+                          <span className="font-semibold text-green-600 text-xs">Duração:</span>
+                          <span className={`text-xs ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
                             {record.duracao}
                           </span>
                         </div>
@@ -1776,9 +1913,9 @@ function Home() {
 
                     {/* User Info */}
                     <div className="flex items-center gap-2 pt-2 border-t border-gray-200 dark:border-gray-700">
-                      <User className="w-4 h-4 text-slate-500" />
-                      <span className="font-semibold text-slate-600">Registrado por:</span>
-                      <span className="font-bold text-slate-700 dark:text-slate-300">
+                      <User className="w-3 h-3 text-slate-500" />
+                      <span className="font-semibold text-slate-600 text-xs">Registrado por:</span>
+                      <span className="font-bold text-slate-700 dark:text-slate-300 text-xs">
                         {record.userName ? `${record.userName} (${record.userEmail || '-'})` : (record.userEmail || '-')}
                       </span>
                     </div>
@@ -1789,26 +1926,25 @@ function Home() {
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         onClick={() => setViewCommentsModal({ open: true, record })}
-                        className="w-full mt-4 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-semibold py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2"
+                        className="w-full mt-3 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-semibold py-2 px-3 rounded-md shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2 text-xs"
                       >
-                        <MessageCircle className="w-5 h-5" />
+                        <MessageCircle className="w-3 h-3" />
                         Ver {(record.comments || []).length} comentário(s)
                       </motion.button>
                     )}
                   </div>
 
                   {/* Right Section - Status and Actions */}
-                  <div className="flex flex-col items-end gap-4 min-w-[200px]">
+                  <div className="grid grid-cols-1 items-end gap-3 min-w-[160px] text-center">
                     {/* Status Badge */}
-                    <div className="flex flex-col items-end">
-                      <span className={`text-sm font-semibold mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                        Status:
+                    <div style={{display: 'grid', gridTemplateColumns: '1fr', alignItems: 'flex-end'}} className="flex flex-col items-end">
+                      <span className={`text-xs font-bold mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
                       </span>
                       <motion.span
                         initial={{ scale: 0.9 }}
                         animate={{ scale: 1 }}
                         className={`
-                          inline-block px-4 py-2 rounded-full font-bold text-sm shadow-lg
+                          inline-block px-3 py-1 rounded-full font-bold text-xs shadow-md
                           ${record.status === 'Entrega em andamento' 
                             ? 'bg-yellow-100 text-yellow-800 border border-yellow-300' 
                             : record.status === 'Entrega finalizada' 
@@ -1828,10 +1964,10 @@ function Home() {
                       <motion.div
                         initial={{ scale: 0.9 }}
                         animate={{ scale: 1 }}
-                        className="flex items-center gap-2 mb-3 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800"
+                        className="flex items-center gap-2 mb-1 p-1 bg-red-50 dark:bg-red-900/20 rounded-md border border-red-200 dark:border-red-800 text-xs"
                       >
-                        <AlertTriangle className="w-5 h-5 text-red-500" />
-                        <span className="font-bold text-red-600 dark:text-red-400">
+                        <AlertTriangle className="w-3 h-3 text-red-500 text-center"/>
+                        <span className="text-center font-semibold text-red-600 dark:text-red-400 text-xs">
                           {record.tipoProblema || record.problem_type}
                         </span>
                       </motion.div>
@@ -1839,8 +1975,8 @@ function Home() {
 
                     {/* Additional Information */}
                     {record.informacoesAdicionais || record.information ? (
-                      <div className="flex items-center gap-2 mb-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                        <MessageCircle className="w-4 h-4 text-blue-500" />
+                      <div className="flex items-center gap-2 mb-1 p-1 bg-blue-50 dark:bg-blue-900/20 rounded-md border border-blue-200 dark:border-blue-800 text-xs">
+                        <MessageCircle className="w-3 h-3 text-blue-500"  />
                         <CollapsibleText text={record.informacoesAdicionais || record.information} />
                       </div>
                     ) : null}
@@ -1851,17 +1987,17 @@ function Home() {
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         onClick={() => setViewAttachmentsModal({ open: true, record })}
-                        className="flex items-center gap-2 mb-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                        className="flex items-center gap-2 mb-1 p-1 bg-gray-50 dark:bg-gray-800 rounded-md border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                       >
-                        <Paperclip className="w-4 h-4 text-blue-500" />
-                        <span className="text-blue-600 dark:text-blue-400 font-semibold">
+                        <Paperclip className="w-3 h-3 text-blue-500" />
+                        <span className="text-blue-600 dark:text-blue-400 font-semibold text-xs">
                           {(record.attachments || []).length} anexo(s)
                         </span>
                       </motion.button>
                     )}
 
                     {/* Action Buttons */}
-                    <div className="flex flex-col gap-3 mt-4">
+                    <div className="flex flex-col gap-2 mt-3">
                       {record.status === 'Entrega em andamento' && (user?.email === record.userEmail || isAdmin(user?.email)) && (
                         <motion.button
                           whileHover={{ scale: 1.02 }}
@@ -1871,9 +2007,9 @@ function Home() {
                             setSelectedProblem('');
                             setProblemInfo('');
                           }}
-                          className="bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2"
+                          className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold py-2 px-4 rounded-md shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2 text-xs"
                         >
-                          <AlertTriangle className="w-5 h-5" />
+                          <AlertTriangle className="w-3 h-3" />
                           PROBLEMA
                         </motion.button>
                       )}
@@ -1883,9 +2019,9 @@ function Home() {
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
                           onClick={() => requestSupport(record)}
-                          className="bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2"
+                          className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white font-bold py-2 px-4 rounded-md shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2 text-xs"
                         >
-                          <AlertTriangle className="w-5 h-5" />
+                          <AlertTriangle className="w-3 h-3" />
                           SOLICITAR APOIO
                         </motion.button>
                       )}
@@ -1898,9 +2034,9 @@ function Home() {
                             setCommentModal({ open: true, record });
                             setCommentText('');
                           }}
-                          className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2"
+                          className="bg-gradient-to-r from-gray-500 to-gray-600 hover:from-purple-600 hover:to-gray-700 text-white font-bold py-2 px-4 rounded-md shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2 text-xs"
                         >
-                          <MessageCircle className="w-5 h-5" />
+                          <MessageCircle className="w-3 h-3" />
                           COMENTAR
                         </motion.button>
                       )}
@@ -1925,29 +2061,29 @@ function Home() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-2xl p-8 min-w-80 max-w-md w-full shadow-2xl relative`}
+              className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg p-6 min-w-80 max-w-md w-full shadow-xl relative`}
             >
               <button
                 onClick={() => setProblemModal({ open: false, record: null })}
-                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-2xl font-bold"
+                className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-xl font-bold"
                 title="Fechar"
               >
                 ×
               </button>
               
-              <h2 className="text-xl font-bold text-red-600 dark:text-red-400 mb-6 flex items-center gap-2">
-                <AlertTriangle className="w-6 h-6" />
+              <h2 className="text-lg font-bold text-red-600 dark:text-red-400 mb-4 flex items-center gap-2">
+                <AlertTriangle className="w-5 h-5" />
                 Registrar Problema
               </h2>
               
-              <div className="mb-6">
-                <label className="block font-semibold text-gray-700 dark:text-gray-300 mb-2">
+              <div className="mb-4">
+                <label className="block font-semibold text-gray-700 dark:text-gray-300 mb-2 text-sm">
                   Tipo de Problema:
                 </label>
                 <select
                   value={selectedProblem}
                   onChange={e => setSelectedProblem(e.target.value)}
-                  className={`w-full p-3 rounded-lg border-2 ${isDarkMode 
+                  className={`w-full p-2 rounded-md border-2 text-sm ${isDarkMode 
                     ? 'bg-gray-700 border-gray-600 text-white' 
                     : 'bg-white border-gray-200 text-gray-900'
                   } focus:border-red-500 focus:outline-none transition-colors`}
@@ -1959,14 +2095,14 @@ function Home() {
                 </select>
               </div>
               
-              <div className="mb-6">
-                <label className="block font-semibold text-gray-700 dark:text-gray-300 mb-2">
+              <div className="mb-4">
+                <label className="block font-semibold text-gray-700 dark:text-gray-300 mb-2 text-sm">
                   Observação (opcional):
                 </label>
                 <textarea
                   value={problemInfo}
                   onChange={e => setProblemInfo(e.target.value)}
-                  className={`w-full p-3 rounded-lg border-2 min-h-16 ${isDarkMode 
+                  className={`w-full p-2 rounded-md border-2 min-h-16 text-sm ${isDarkMode 
                     ? 'bg-gray-700 border-gray-600 text-white' 
                     : 'bg-white border-gray-200 text-gray-900'
                   } focus:border-red-500 focus:outline-none transition-colors`}
@@ -1977,7 +2113,7 @@ function Home() {
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="w-full py-3 px-6 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-2 px-4 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white font-bold rounded-md shadow-md hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                 disabled={!selectedProblem}
                 onClick={async () => {
                   if (!selectedProblem) return;
@@ -2045,29 +2181,29 @@ function Home() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-2xl p-8 min-w-80 max-w-md w-full shadow-2xl relative`}
+              className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg p-6 min-w-80 max-w-md w-full shadow-xl relative`}
             >
               <button
                 onClick={() => setCommentModal({ open: false, record: null })}
-                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-2xl font-bold"
+                className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-xl font-bold"
                 title="Fechar"
               >
                 ×
               </button>
               
-              <h2 className="text-xl font-bold text-purple-600 dark:text-purple-400 mb-6 flex items-center gap-2">
-                <MessageCircle className="w-6 h-6" />
+              <h2 className="text-lg font-bold text-purple-600 dark:text-purple-400 mb-4 flex items-center gap-2">
+                <MessageCircle className="w-5 h-5" />
                 Adicionar Comentário
               </h2>
               
-              <div className="mb-6">
-                <label className="block font-semibold text-gray-700 dark:text-gray-300 mb-2">
+              <div className="mb-4">
+                <label className="block font-semibold text-gray-700 dark:text-gray-300 mb-2 text-sm">
                   Comentário:
                 </label>
                 <textarea
                   value={commentText}
                   onChange={e => setCommentText(e.target.value)}
-                  className={`w-full p-3 rounded-lg border-2 min-h-20 ${isDarkMode 
+                  className={`w-full p-2 rounded-md border-2 min-h-20 text-sm ${isDarkMode 
                     ? 'bg-gray-700 border-gray-600 text-white' 
                     : 'bg-white border-gray-200 text-gray-900'
                   } focus:border-purple-500 focus:outline-none transition-colors resize-none`}
@@ -2082,18 +2218,18 @@ function Home() {
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="w-full py-3 px-6 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full py-2 px-4 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold rounded-md shadow-md hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm"
                 disabled={!commentText.trim() || savingComment}
                 onClick={handleSaveComment}
               >
                 {savingComment ? (
                   <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
+                    <div className="animate-spin rounded-full h-3 w-3 border-2 border-white border-t-transparent" />
                     Salvando...
                   </>
                 ) : (
                   <>
-                    <MessageCircle className="w-4 h-4" />
+                    <MessageCircle className="w-3 h-3" />
                     Salvar Comentário
                   </>
                 )}
@@ -2115,28 +2251,28 @@ function Home() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-2xl p-8 min-w-96 max-w-2xl w-full max-h-[80vh] shadow-2xl relative flex flex-col overflow-hidden`}
+              className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg p-6 min-w-96 max-w-2xl w-full max-h-[80vh] shadow-xl relative flex flex-col overflow-hidden`}
             >
               <button
                 onClick={() => setViewCommentsModal({ open: false, record: null })}
-                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-2xl font-bold z-10"
+                className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-xl font-bold z-10"
                 title="Fechar"
               >
                 ×
               </button>
               
-              <div className="mb-6 border-b-2 border-gray-100 dark:border-gray-700 pb-4">
-                <h2 className="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-2 flex items-center gap-2">
-                  <MessageCircle className="w-7 h-7" />
+              <div className="mb-4 border-b-2 border-gray-100 dark:border-gray-700 pb-3">
+                <h2 className="text-lg font-bold text-purple-600 dark:text-purple-400 mb-2 flex items-center gap-2">
+                  <MessageCircle className="w-5 h-5" />
                   Comentários da Entrega
                 </h2>
-                <div className="text-sm text-gray-600 dark:text-gray-400">
+                <div className="text-xs text-gray-600 dark:text-gray-400">
                   <strong>Cliente:</strong> {viewCommentsModal.record?.cliente || viewCommentsModal.record?.client} | 
                   <strong> Fretista:</strong> {viewCommentsModal.record?.fretista || viewCommentsModal.record?.driver}
                 </div>
               </div>
               
-              <div className="flex-1 overflow-y-auto pr-2 mb-6 space-y-4">
+              <div className="flex-1 overflow-y-auto pr-2 mb-4 space-y-3">
                 {viewCommentsModal.record?.comments?.length > 0 ? (
                   viewCommentsModal.record.comments.map((comment, index) => (
                     <motion.div

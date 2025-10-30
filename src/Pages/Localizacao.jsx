@@ -188,8 +188,8 @@ function Localizacao() {
     <div className="localizacao-container" style={{
       maxWidth: '1300px', 
       margin: '0 auto', 
-      padding: '0 0 32px 0',
-      backgroundColor: isDarkMode ? '#1a202c' : 'transparent'
+      padding: '0 0 20px 0',
+      backgroundColor: isDarkMode ? '#0f0f0f' : 'transparent'
     }}>
       {/* Cabeçalho moderno */}
       <PageHeader
@@ -202,14 +202,16 @@ function Localizacao() {
       <div style={{
         display: 'flex', 
         flexWrap: 'wrap', 
-        gap: 16, 
-        marginBottom: 24, 
+        gap: 12, 
+        marginBottom: 16, 
         justifyContent: 'center', 
         alignItems: 'center',
-        backgroundColor: isDarkMode ? '#2d3748' : '#fff',
-        padding: '20px',
-        borderRadius: '12px',
-        border: isDarkMode ? '1px solid #4a5568' : '1px solid #e2e8f0'
+        borderRadius: 12,
+        background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+        backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+        border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+        boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+        padding: '12px'
       }}>
         <input
           type="text"
@@ -217,12 +219,14 @@ function Localizacao() {
           value={searchTerm}
           onChange={e => setSearchTerm(e.target.value)}
           style={{
-            padding: '10px 16px', 
-            borderRadius: 8, 
-            border: isDarkMode ? '1px solid #4a5568' : '1px solid #d0d7de', 
-            fontSize: 16, 
-            minWidth: 220,
-            backgroundColor: isDarkMode ? '#1a202c' : '#fff',
+            padding: '6px 12px', 
+            borderRadius: 4, 
+            fontSize: 14, 
+            minWidth: 200,
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
             color: isDarkMode ? '#e2e8f0' : '#000'
           }}
         />
@@ -230,12 +234,14 @@ function Localizacao() {
           value={selectedFretista}
           onChange={e => setSelectedFretista(e.target.value)}
           style={{
-            padding: '10px 16px', 
-            borderRadius: 8, 
-            border: isDarkMode ? '1px solid #4a5568' : '1px solid #d0d7de', 
-            fontSize: 16, 
-            minWidth: 180,
-            backgroundColor: isDarkMode ? '#1a202c' : '#fff',
+            padding: '6px 12px', 
+            borderRadius: 4, 
+            fontSize: 14, 
+            minWidth: 160,
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
             color: isDarkMode ? '#e2e8f0' : '#000'
           }}
         >
@@ -246,12 +252,14 @@ function Localizacao() {
           value={selectedCliente}
           onChange={e => setSelectedCliente(e.target.value)}
           style={{
-            padding: '10px 16px', 
-            borderRadius: 8, 
-            border: isDarkMode ? '1px solid #4a5568' : '1px solid #d0d7de', 
-            fontSize: 16, 
-            minWidth: 180,
-            backgroundColor: isDarkMode ? '#1a202c' : '#fff',
+            padding: '6px 12px', 
+            borderRadius: 4, 
+            fontSize: 14, 
+            minWidth: 160,
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
             color: isDarkMode ? '#e2e8f0' : '#000'
           }}
         >
@@ -262,19 +270,19 @@ function Localizacao() {
           type="button"
           onClick={() => { setSearchTerm(''); setSelectedFretista(''); setSelectedCliente(''); }}
           style={{
-            padding: '10px 18px',
-            borderRadius: 8,
+            padding: '6px 12px',
+            borderRadius: 4,
             border: 'none',
             background: isDarkMode 
               ? 'linear-gradient(90deg, #38a169 0%, #3182ce 100%)' 
               : 'linear-gradient(90deg, #43a047 0%, #1976d2 100%)',
             color: '#fff',
-            fontWeight: 700,
-            fontSize: 16,
+            fontWeight: 600,
+            fontSize: 14,
             cursor: 'pointer',
-            boxShadow: '0 2px 8px #1976d233',
+            boxShadow: '0 1px 4px #1976d233',
             transition: 'background 0.2s',
-            marginLeft: 8
+            marginLeft: 6
           }}
         >
           Limpar filtros
@@ -286,68 +294,68 @@ function Localizacao() {
         width: '100%',
         maxWidth: '100%',
         margin: '0 auto',
-        marginBottom: 32,
-        borderRadius: 24,
+        marginBottom: 20,
+        borderRadius: 8,
         boxShadow: isDarkMode 
-          ? '0 8px 32px rgba(0,0,0,0.3)' 
-          : '0 8px 32px rgba(33,136,56,0.10)',
+          ? '0 4px 16px rgba(0,0,0,0.3)' 
+          : '0 4px 16px rgba(33,136,56,0.10)',
         overflow: 'hidden',
-        background: isDarkMode ? '#2d3748' : '#fff',
-        minHeight: 400,
-        height: '48vw',
-        maxHeight: 600,
+        background: isDarkMode ? '#2a2a2a' : '#fff',
+        minHeight: 350,
+        height: '40vw',
+        maxHeight: 500,
         minWidth: 0,
         position: 'relative',
         display: 'flex',
         flexDirection: 'column',
       }}>
         <div style={{
-          padding: '28px 32px 0 32px', 
+          padding: '16px 20px 0 20px', 
           background: isDarkMode 
             ? 'linear-gradient(90deg, #2d5a3d 0%, #2d4a5a 100%)' 
             : 'linear-gradient(90deg, #e3fcec 0%, #e3f0fc 100%)', 
-          borderRadius: '24px 24px 0 0'
+          borderRadius: '8px 8px 0 0'
         }}>
           <h3 style={{
-            fontSize: '1.4rem', 
+            fontSize: '1.1rem', 
             color: isDarkMode ? '#68d391' : '#218838', 
             margin: 0, 
-            fontWeight: 800, 
+            fontWeight: 700, 
             display: 'flex', 
             alignItems: 'center', 
-            gap: 10
+            gap: 8
           }}>
-            <Navigation style={{width: 24, height: 24}} />
+            <Navigation style={{width: 20, height: 20}} />
             Mapa de Localização
           </h3>
         </div>
         <div style={{
           flex: 1, 
-          minHeight: 300, 
+          minHeight: 280, 
           width: '100%', 
-          background: isDarkMode ? '#1a202c' : '#f8f9fa', 
-          borderRadius: '0 0 24px 24px', 
+          background: isDarkMode ? '#2a2a2a' : '#f8f9fa', 
+          borderRadius: '0 0 8px 8px', 
           overflow: 'hidden', 
           position: 'relative'
         }}>
             {loading || !userLocation ? (
-              <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, justifyContent: 'center', height: '100%'}}>
+              <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, justifyContent: 'center', height: '100%'}}>
               <div style={{
-                width: 56, 
-                height: 56, 
-                border: isDarkMode ? '5px solid #4a5568' : '5px solid #e0e0e0', 
-                borderTop: isDarkMode ? '5px solid #68d391' : '5px solid #218838', 
+                width: 40, 
+                height: 40, 
+                border: isDarkMode ? '4px solid #4a5568' : '4px solid #e0e0e0', 
+                borderTop: isDarkMode ? '4px solid #68d391' : '4px solid #218838', 
                 borderRadius: '50%', 
                 animation: 'spin 1s linear infinite'
               }}></div>
               <p style={{
                 color: isDarkMode ? '#a0aec0' : '#666', 
                 margin: 0, 
-                fontSize: 18
+                fontSize: 16
               }}>Carregando mapa...</p>
               </div>
             ) : (
-            <MapContainer center={[userLocation.latitude, userLocation.longitude]} zoom={15} style={{height: '100%', width: '100%', borderRadius: 0}}>
+            <MapContainer center={[userLocation.latitude, userLocation.longitude]} zoom={15} style={{height: '100%', width: '100%', borderRadius: 0, }}>
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                 <CenterMap position={userLocation} />
                 {/* Marker do usuário logado */}
@@ -374,66 +382,71 @@ function Localizacao() {
 
       {/* Cards abaixo do mapa, responsivos */}
       <div style={{
-        display: 'flex', flexDirection: 'column', gap: 28, width: '100%', maxWidth: 900, margin: '0 auto',
+        display: 'flex', flexDirection: 'column', gap: 5, width: '100%', maxWidth: 900, margin: '0 auto', borderRadius: '12px',
       }}>
         {/* Card informações do usuário */}
         <div className="card" style={{
-          padding: 24, 
-          borderRadius: 18, 
-          boxShadow: isDarkMode 
-            ? '0 4px 16px rgba(0,0,0,0.3)' 
-            : '0 4px 16px #21883811', 
-          background: isDarkMode ? '#2d3748' : '#fff',
-          border: isDarkMode ? '1px solid #4a5568' : 'none'
+          padding: 5, 
+          background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+          backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+          border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+          boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+          borderRadius: '12px'
         }}>
           <h3 style={{
-            fontSize: '1.1rem', 
+            fontSize: '1rem', 
             color: isDarkMode ? '#68d391' : '#218838', 
-            marginBottom: 18, 
-            fontWeight: 700, 
+            marginBottom: 12, 
+            fontWeight: 600, 
             display: 'flex', 
             alignItems: 'center', 
-            gap: 8
+            gap: 6
           }}>
-            <User style={{width: 20, height: 20}} />
+            <User style={{width: 18, height: 18}} />
             Seu Usuário
           </h3>
-          <div style={{display: 'flex', flexDirection: 'column', gap: 10}}>
-            <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
+          <div style={{display: 'flex', flexDirection: 'column', gap: 8}}>
+            <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
               <span style={{
-                fontWeight: 600, 
-                color: isDarkMode ? '#a0aec0' : '#495057'
+                fontWeight: 500, 
+                color: isDarkMode ? '#a0aec0' : '#495057',
+                fontSize: 14
               }}>Nome:</span>
               <span style={{
                 color: isDarkMode ? '#68d391' : '#218838', 
-                fontWeight: 700
+                fontWeight: 600,
+                fontSize: 14
               }}>{currentUser?.displayName || currentUser?.email}</span>
               </div>
-            <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
+            <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
               <span style={{
-                fontWeight: 600, 
-                color: isDarkMode ? '#a0aec0' : '#495057'
+                fontWeight: 500, 
+                color: isDarkMode ? '#a0aec0' : '#495057',
+                fontSize: 14
               }}>Tipo:</span>
               <span style={{
                 color: isDarkMode ? '#63b3ed' : '#1976d2', 
-                fontWeight: 700, 
-                textTransform: 'capitalize'
+                fontWeight: 600, 
+                textTransform: 'capitalize',
+                fontSize: 14
               }}>{currentUser?.type}</span>
             </div>
             {userLocation && (
-              <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
                 <MapPin style={{
-                  width: 18, 
-                  height: 18, 
+                  width: 16, 
+                  height: 16, 
                   color: isDarkMode ? '#63b3ed' : '#1976d2'
                 }} />
                 <span style={{
-                  fontWeight: 600, 
-                  color: isDarkMode ? '#a0aec0' : '#495057'
+                  fontWeight: 500, 
+                  color: isDarkMode ? '#a0aec0' : '#495057',
+                  fontSize: 14
                 }}>Localização:</span>
                 <span style={{
                   color: isDarkMode ? '#63b3ed' : '#1976d2', 
-                  fontWeight: 700
+                  fontWeight: 600,
+                  fontSize: 14
                 }}>
                   Lat: {userLocation.latitude.toFixed(4)}, Long: {userLocation.longitude.toFixed(4)}
                 </span>
@@ -445,65 +458,70 @@ function Localizacao() {
         {/* Card entrega atual */}
         {showCurrentDelivery && (
           <div className="card" style={{
-            padding: 24, 
-            borderRadius: 18, 
-            boxShadow: isDarkMode 
-              ? '0 4px 16px rgba(0,0,0,0.3)' 
-              : '0 4px 16px #ff980011', 
-            background: isDarkMode ? '#2d3748' : '#fff',
-            border: isDarkMode ? '1px solid #4a5568' : 'none'
+            padding: 5, 
+          background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+          backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+          border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+          boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+          borderRadius: '12px'
           }}>
             <h3 style={{
-              fontSize: '1.1rem', 
+              fontSize: '1rem', 
               color: isDarkMode ? '#fbb040' : '#ff9800', 
-              marginBottom: 18, 
-              fontWeight: 700, 
+              marginBottom: 12, 
+              fontWeight: 600, 
               display: 'flex', 
               alignItems: 'center', 
-              gap: 8
+              gap: 6
             }}>
-            <Truck style={{width: 20, height: 20}} />
+            <Truck style={{width: 18, height: 18}} />
             Entrega em Andamento
           </h3>
-            <div style={{display: 'flex', flexDirection: 'column', gap: 10}}>
-              <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
+            <div style={{display: 'flex', flexDirection: 'column', gap: 8}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
                 <span style={{
-                  fontWeight: 600, 
-                  color: isDarkMode ? '#a0aec0' : '#495057'
+                  fontWeight: 500, 
+                  color: isDarkMode ? '#a0aec0' : '#495057',
+                  fontSize: 14
                 }}>Cliente:</span>
                 <span style={{
                   color: isDarkMode ? '#fbb040' : '#ff9800', 
-                  fontWeight: 700
+                  fontWeight: 600,
+                  fontSize: 14
                 }}>{currentDelivery.client}</span>
               </div>
-              <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
                 <Clock style={{
-                  width: 18, 
-                  height: 18, 
+                  width: 16, 
+                  height: 16, 
                   color: isDarkMode ? '#68d391' : '#4caf50'
                 }} />
                 <span style={{
-                  fontWeight: 600, 
-                  color: isDarkMode ? '#a0aec0' : '#495057'
+                  fontWeight: 500, 
+                  color: isDarkMode ? '#a0aec0' : '#495057',
+                  fontSize: 14
                 }}>Tempo em Loja:</span>
                 <span style={{
                   color: isDarkMode ? '#68d391' : '#4caf50', 
-                  fontWeight: 700
+                  fontWeight: 600,
+                  fontSize: 14
                 }}>{getTimeInStore()}</span>
               </div>
-              <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
                 <Navigation style={{
-                  width: 18, 
-                  height: 18, 
+                  width: 16, 
+                  height: 16, 
                   color: isDarkMode ? '#63b3ed' : '#1976d2'
                 }} />
                 <span style={{
-                  fontWeight: 600, 
-                  color: isDarkMode ? '#a0aec0' : '#495057'
+                  fontWeight: 500, 
+                  color: isDarkMode ? '#a0aec0' : '#495057',
+                  fontSize: 14
                 }}>Status:</span>
                 <span style={{
                   color: isDarkMode ? '#63b3ed' : '#1976d2', 
-                  fontWeight: 700
+                  fontWeight: 600,
+                  fontSize: 14
                 }}>{currentDelivery.status}</span>
             </div>
           </div>
@@ -512,68 +530,69 @@ function Localizacao() {
 
         {/* Card fretistas ativos */}
         <div className="card" style={{
-          padding: 24, 
-          borderRadius: 18, 
-          boxShadow: isDarkMode 
-            ? '0 4px 16px rgba(0,0,0,0.3)' 
-            : '0 4px 16px #1976d211', 
-          background: isDarkMode ? '#2d3748' : '#fff',
-          border: isDarkMode ? '1px solid #4a5568' : 'none'
+          padding: 5, 
+          background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+          backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+          border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+          boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+          borderRadius: '12px'
         }}>
           <h3 style={{
-            fontSize: '1.1rem', 
+            fontSize: '1rem', 
             color: isDarkMode ? '#63b3ed' : '#1976d2', 
-            marginBottom: 18, 
-            fontWeight: 700, 
+            marginBottom: 12, 
+            fontWeight: 600, 
             display: 'flex', 
             alignItems: 'center', 
-            gap: 8
+            gap: 6
           }}>
-          <Truck style={{width: 20, height: 20}} />
+          <Truck style={{width: 18, height: 18}} />
           Fretistas Ativos
         </h3>
           <div style={{
-            background: isDarkMode ? '#1a202c' : '#f8f9fa', 
-            padding: 16, 
-            borderRadius: 12, 
-            minHeight: 80, 
-            maxHeight: 200, 
+            padding: 12, 
+            minHeight: 60, 
+            maxHeight: 180, 
             overflowY: 'auto',
-            border: isDarkMode ? '1px solid #4a5568' : 'none'
+          background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+          backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+          border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+          boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+          borderRadius: '12px'
           }}>
             {filteredDrivers.length === 0 ? (
               <p style={{
                 color: isDarkMode ? '#a0aec0' : '#666', 
                 margin: 0, 
-                fontSize: 15
+                fontSize: 14
               }}>Nenhum fretista online no momento.</p>
           ) : (
             <ul style={{listStyle: 'none', padding: 0, margin: 0}}>
                 {filteredDrivers.map(driver => (
                   <li key={driver.user_email} style={{
-                    marginBottom: 8, 
+                    marginBottom: 6, 
                     color: driver.user_email === currentUser.email 
                       ? (isDarkMode ? '#68d391' : '#218838') 
                       : (isDarkMode ? '#e2e8f0' : '#333'), 
-                    fontWeight: driver.user_email === currentUser.email ? 700 : 500, 
-                    fontSize: 15
+                    fontWeight: driver.user_email === currentUser.email ? 600 : 400, 
+                    fontSize: 14
                   }}>
-                    <span style={{marginRight: 6}}>{driver.user_name}</span> 
+                    <span style={{marginRight: 4}}>{driver.user_name}</span> 
                     <span style={{
                       color: isDarkMode ? '#a0aec0' : '#888', 
-                      fontSize: 13
+                      fontSize: 12
                     }}>({driver.user_email})</span>
                     {driver.user_email === currentUser.email && 
                       <span style={{
                         color: isDarkMode ? '#68d391' : '#43a047', 
-                        fontWeight: 700, 
-                        marginLeft: 6
+                        fontWeight: 600, 
+                        marginLeft: 4
                       }}>(Você)</span>
                     }
                   <span style={{
-                    marginLeft: 8, 
+                    marginLeft: 6, 
                     color: isDarkMode ? '#a0aec0' : '#888', 
-                    fontSize: 13
+                    fontSize: 12
                   }}>
                     Última atualização: {new Date(driver.last_update).toLocaleTimeString('pt-BR')}
                   </span>
@@ -592,9 +611,9 @@ function Localizacao() {
           .localizacao-container > div[style*='grid'] > div { width: 100% !important; max-width: 100% !important; }
         }
         @media (max-width: 600px) {
-          .localizacao-container { padding: 0 0 16px 0 !important; }
-          .card { border-radius: 12px !important; padding: 16px !important; }
-          .localizacao-container h2 { font-size: 1.3rem !important; }
+          .localizacao-container { padding: 0 0 12px 0 !important; }
+          .card { border-radius: 4px !important; padding: 12px !important; }
+          .localizacao-container h2 { font-size: 1.2rem !important; }
         }
       `}</style>
 
@@ -603,30 +622,30 @@ function Localizacao() {
         onClick={() => navigate('/registros')}
         style={{
           position: 'fixed',
-          bottom: 24,
-          right: 24,
-          width: 56,
-          height: 56,
+          bottom: 20,
+          right: 20,
+          width: 48,
+          height: 48,
           borderRadius: '50%',
           background: 'linear-gradient(135deg, #ff9800 0%, #ff5722 100%)',
-          boxShadow: '0 8px 24px rgba(255, 152, 0, 0.3)',
+          boxShadow: '0 4px 12px rgba(255, 152, 0, 0.3)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           cursor: 'pointer',
-          fontSize: 24,
+          fontSize: 20,
           color: '#fff',
           zIndex: 1000,
           transition: 'all 0.3s ease',
-          border: '3px solid rgba(255, 255, 255, 0.2)',
+          border: '2px solid rgba(255, 255, 255, 0.2)',
         }}
         onMouseEnter={(e) => {
           e.target.style.transform = 'scale(1.1)';
-          e.target.style.boxShadow = '0 12px 32px rgba(255, 152, 0, 0.4)';
+          e.target.style.boxShadow = '0 6px 16px rgba(255, 152, 0, 0.4)';
         }}
         onMouseLeave={(e) => {
           e.target.style.transform = 'scale(1)';
-          e.target.style.boxShadow = '0 8px 24px rgba(255, 152, 0, 0.3)';
+          e.target.style.boxShadow = '0 4px 12px rgba(255, 152, 0, 0.3)';
         }}
       >
         🚛

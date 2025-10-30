@@ -425,25 +425,35 @@ function Dashboard() {
        />
 
       {/* Filtros */}
-      <div className="card" style={{padding: 24, marginBottom: 24}}>
-        <h3 style={{fontSize: '1.3rem', color: isDarkMode ? '#10b981' : '#218838', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8}}>
-          <Filter style={{width: 20, height: 20}} />
+      <div className="card" style={{padding: 20, marginBottom: 20, background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+              backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+              border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+              marginBlock: 14,
+              boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined}}>
+        <h3 style={{fontSize: 16, marginBottom: 16, display: 'flex', alignItems: 'center', gap: 6, fontWeight: 600}}>
+          <Filter style={{width: 16, height: 16}} />
           Filtros de Análise
         </h3>
         
-        <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16}}>
+        <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12}}>
           <div>
-            <label style={{display: 'block', fontWeight: 600, color: isDarkMode ? '#9CA3AF' : '#495057', marginBottom: 8}}>📅 Período Rápido:</label>
+            <label style={{display: 'block', fontWeight: 500, color: isDarkMode ? '#9ca3af' : '#2a2a2a', marginBottom: 6, fontSize: 13}}>Período:</label>
           <select
+          style={{
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined
+            }}
             value={filterPeriod}
             onChange={(e) => setFilterPeriod(e.target.value)}
             className={`
-              w-full px-4 py-3 rounded-lg border transition-all duration-200
+              w-full px-3 py-2 rounded-md border transition-all duration-200 text-sm
               ${isDarkMode 
                 ? 'bg-dark-surface border-dark-border text-dark-text focus:border-dark-primary' 
                 : 'bg-light-surface border-light-border text-light-text focus:border-light-primary'
               }
-              focus:outline-none focus:ring-2 focus:ring-opacity-20
+              focus:outline-none focus:ring-1 focus:ring-opacity-20
               ${isDarkMode ? 'focus:ring-dark-primary' : 'focus:ring-light-primary'}
             `}
           >
@@ -463,17 +473,23 @@ function Dashboard() {
         </div>
 
           <div>
-            <label style={{display: 'block', fontWeight: 600, color: isDarkMode ? '#9CA3AF' : '#495057', marginBottom: 8}}>👤 Cliente:</label>
+            <label style={{display: 'block', fontWeight: 500, color: isDarkMode ? '#9ca3af' : '#2a2a2a', marginBottom: 6, fontSize: 13}}>Cliente:</label>
           <select
+                    style={{
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined
+            }}
             value={filterClient}
             onChange={(e) => setFilterClient(e.target.value)}
             className={`
-              w-full px-4 py-3 rounded-lg border transition-all duration-200
+              w-full px-3 py-2 rounded-md border transition-all duration-200 text-sm
               ${isDarkMode 
                 ? 'bg-dark-surface border-dark-border text-dark-text focus:border-dark-primary' 
                 : 'bg-light-surface border-light-border text-light-text focus:border-light-primary'
               }
-              focus:outline-none focus:ring-2 focus:ring-opacity-20
+              focus:outline-none focus:ring-1 focus:ring-opacity-20
               ${isDarkMode ? 'focus:ring-dark-primary' : 'focus:ring-light-primary'}
             `}
           >
@@ -485,17 +501,23 @@ function Dashboard() {
         </div>
 
           <div>
-            <label style={{display: 'block', fontWeight: 600, color: isDarkMode ? '#9CA3AF' : '#495057', marginBottom: 8}}>🚛 Fretista:</label>
+            <label style={{display: 'block', fontWeight: 500, color: isDarkMode ? '#9ca3af' : '#2a2a2a', marginBottom: 6, fontSize: 13}}>Fretista:</label>
           <select
+            style={{
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined
+            }}
             value={filterFretista}
             onChange={(e) => setFilterFretista(e.target.value)}
             className={`
-              w-full px-4 py-3 rounded-lg border transition-all duration-200
+              w-full px-3 py-2 rounded-md border transition-all duration-200 text-sm
               ${isDarkMode 
                 ? 'bg-dark-surface border-dark-border text-dark-text focus:border-dark-primary' 
                 : 'bg-light-surface border-light-border text-light-text focus:border-light-primary'
               }
-              focus:outline-none focus:ring-2 focus:ring-opacity-20
+              focus:outline-none focus:ring-1 focus:ring-opacity-20
               ${isDarkMode ? 'focus:ring-dark-primary' : 'focus:ring-light-primary'}
             `}
           >
@@ -507,17 +529,23 @@ function Dashboard() {
         </div>
 
           <div>
-            <label style={{display: 'block', fontWeight: 600, color: isDarkMode ? '#9CA3AF' : '#495057', marginBottom: 8}}>⚠️ Tipo de Problema:</label>
+            <label style={{display: 'block', fontWeight: 500, color: isDarkMode ? '#9ca3af' : '#2a2a2a', marginBottom: 6, fontSize: 13}}>Tipo de Problema:</label>
           <select
+            style={{
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined
+            }}
             value={filterProblemType}
             onChange={(e) => setFilterProblemType(e.target.value)}
             className={`
-              w-full px-4 py-3 rounded-lg border transition-all duration-200
+              w-full px-3 py-2 rounded-md border transition-all duration-200 text-sm
               ${isDarkMode 
                 ? 'bg-dark-surface border-dark-border text-dark-text focus:border-dark-primary' 
                 : 'bg-light-surface border-light-border text-light-text focus:border-light-primary'
               }
-              focus:outline-none focus:ring-2 focus:ring-opacity-20
+              focus:outline-none focus:ring-1 focus:ring-opacity-20
               ${isDarkMode ? 'focus:ring-dark-primary' : 'focus:ring-light-primary'}
             `}
           >
@@ -529,17 +557,23 @@ function Dashboard() {
         </div>
 
           <div>
-            <label style={{display: 'block', fontWeight: 600, color: isDarkMode ? '#9CA3AF' : '#495057', marginBottom: 8}}>👨‍💼 Vendedor:</label>
+            <label style={{display: 'block', fontWeight: 500, color: isDarkMode ? '#9ca3af' : '#2a2a2a', marginBottom: 6, fontSize: 13}}>Vendedor:</label>
           <select
+            style={{
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined
+            }}
             value={filterVendedor}
             onChange={(e) => setFilterVendedor(e.target.value)}
             className={`
-              w-full px-4 py-3 rounded-lg border transition-all duration-200
+              w-full px-3 py-2 rounded-md border transition-all duration-200 text-sm
               ${isDarkMode 
                 ? 'bg-dark-surface border-dark-border text-dark-text focus:border-dark-primary' 
                 : 'bg-light-surface border-light-border text-light-text focus:border-light-primary'
               }
-              focus:outline-none focus:ring-2 focus:ring-opacity-20
+              focus:outline-none focus:ring-1 focus:ring-opacity-20
               ${isDarkMode ? 'focus:ring-dark-primary' : 'focus:ring-light-primary'}
             `}
           >
@@ -551,17 +585,23 @@ function Dashboard() {
         </div>
 
           <div>
-            <label style={{display: 'block', fontWeight: 600, color: isDarkMode ? '#9CA3AF' : '#495057', marginBottom: 8}}>🏪 Rede:</label>
+            <label style={{display: 'block', fontWeight: 500, color: isDarkMode ? '#9ca3af' : '#2a2a2a', marginBottom: 6, fontSize: 13}}>Rede:</label>
           <select
+            style={{
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined
+            }}
             value={filterRede}
             onChange={(e) => setFilterRede(e.target.value)}
             className={`
-              w-full px-4 py-3 rounded-lg border transition-all duration-200
+              w-full px-3 py-2 rounded-md border transition-all duration-200 text-sm
               ${isDarkMode 
                 ? 'bg-dark-surface border-dark-border text-dark-text focus:border-dark-primary' 
                 : 'bg-light-surface border-light-border text-light-text focus:border-light-primary'
               }
-              focus:outline-none focus:ring-2 focus:ring-opacity-20
+              focus:outline-none focus:ring-1 focus:ring-opacity-20
               ${isDarkMode ? 'focus:ring-dark-primary' : 'focus:ring-light-primary'}
             `}
           >
@@ -573,17 +613,23 @@ function Dashboard() {
         </div>
 
           <div>
-            <label style={{display: 'block', fontWeight: 600, color: isDarkMode ? '#9CA3AF' : '#495057', marginBottom: 8}}>📍 UF:</label>
+            <label style={{display: 'block', fontWeight: 500, color: isDarkMode ? '#9ca3af' : '#2a2a2a', marginBottom: 6, fontSize: 13}}>UF:</label>
           <select
+            style={{
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined
+            }}
             value={filterUF}
             onChange={(e) => setFilterUF(e.target.value)}
             className={`
-              w-full px-4 py-3 rounded-lg border transition-all duration-200
+              w-full px-3 py-2 rounded-md border transition-all duration-200 text-sm
               ${isDarkMode 
                 ? 'bg-dark-surface border-dark-border text-dark-text focus:border-dark-primary' 
                 : 'bg-light-surface border-light-border text-light-text focus:border-light-primary'
               }
-              focus:outline-none focus:ring-2 focus:ring-opacity-20
+              focus:outline-none focus:ring-1 focus:ring-opacity-20
               ${isDarkMode ? 'focus:ring-dark-primary' : 'focus:ring-light-primary'}
             `}
           >
@@ -598,26 +644,17 @@ function Dashboard() {
             <button 
               type="button"
               onClick={handleClearFilters}
-              style={{
-                width: '100%',
-                padding: '10px 16px',
-                borderRadius: 8,
-                border: 'none',
-                background: 'linear-gradient(90deg, #43a047 0%, #1976d2 100%)',
-                color: '#fff',
-                fontWeight: 600,
-                fontSize: 14,
-                cursor: 'pointer',
-                boxShadow: '0 2px 8px #1976d233',
-                transition: 'background 0.2s',
-                marginLeft: 8,
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 8
-              }}
+              className={`
+                w-full px-3 py-2 rounded-md border-none text-sm font-medium cursor-pointer
+                transition-all duration-200 inline-flex items-center justify-center gap-2
+                ${isDarkMode 
+                  ? 'bg-dark-primary hover:bg-dark-primary/90 text-white' 
+                  : 'bg-light-primary hover:bg-light-primary/90 text-white'
+                }
+                shadow-sm hover:shadow-md
+              `}
             >
-              <Filter style={{width: 16, height: 16}} />
+              <Filter className="w-4 h-4" />
               Limpar Filtros
             </button>
       </div>
@@ -625,71 +662,186 @@ function Dashboard() {
         </div>
 
       {/* Ação PDF */}
-      <div className="card" style={{padding: 24, marginBottom: 24}}>
-        <div style={{display: 'flex', justifyContent: 'center'}}>
+      <div style={{
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            marginBlock: 16
+            }} className={`
+        rounded-2xl p-6 text-center shadow-lg border transition-all duration-300
+              ${isDarkMode 
+                ? 'hover:shadow-red-600/20' 
+                : 'bg-white border-light-border hover:shadow-red-600/20'
+              }
+      `}>
+        <div className="flex justify-center">
           <button 
-            className="btn btn-green"
             onClick={handleSavePdf}
             disabled={loading}
-            style={{fontSize: 14, padding: '10px 24px', display: 'inline-flex', alignItems: 'center', gap: 8}}
+            className={`
+              px-4 py-2 rounded-md text-sm font-medium cursor-pointer
+              transition-all duration-200 inline-flex items-center gap-2
+              ${isDarkMode 
+                ? 'bg-dark-success hover:bg-dark-success/90 text-white' 
+                : 'bg-light-success hover:bg-light-success/90 text-white'
+              }
+              shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed
+            `}
           >
-            <Download style={{width: 18, height: 18}} />
+            <Download className="w-4 h-4" />
             Salvar Dashboard em PDF
           </button>
         </div>
       </div>
 
       {/* Cards de Métricas Principais */}
-      <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24, marginBottom: 32}}>
-        <div className="card dashboard-stats-card" style={{padding: 24, textAlign: 'center'}}>
-          <div style={{background: isDarkMode ? 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)' : 'linear-gradient(135deg, #dc3545 0%, #c82333 100%)', borderRadius: '50%', width: 60, height: 60, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px'}}>
-            <Users style={{color: '#fff', width: 24, height: 24}} />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+        <div style={{
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            borderRadius: 16,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            }} className={`
+          rounded-lg border p-4 text-center
+          ${isDarkMode 
+            ? 'bg-dark-card border-dark-border' 
+            : 'bg-light-card border-light-border'
+          }
+        `}>
+          <div className={`
+            rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-3
+            ${isDarkMode ? 'bg-dark-danger' : 'bg-light-danger'}
+          `}>
+            <Users className="text-white w-5 h-5" />
           </div>
-          <h3 style={{fontSize: '1.2rem', color: isDarkMode ? '#10b981' : '#218838', marginBottom: 8}}>Top 1 Vendedor (Problemas)</h3>
-          <p style={{fontSize: '1.5rem', fontWeight: 700, color: '#dc3545', margin: 0}}>
-            {loading ? <Loader2 style={{width: 24, height: 24, animation: 'spin 1s linear infinite'}} /> : stats.topVendedor.name}
+          <h3 className={`
+            text-sm font-medium mb-2
+            ${isDarkMode ? 'text-dark-text' : 'text-light-text'}
+          `}>Top 1 Vendedor (Problemas)</h3>
+          <p className={`
+            text-lg font-semibold mb-1
+            ${isDarkMode ? 'text-dark-danger' : 'text-light-danger'}
+          `}>
+            {loading ? <Loader2 className="w-5 h-5 animate-spin mx-auto" /> : stats.topVendedor.name}
           </p>
-          <small style={{color: isDarkMode ? '#9ca3af' : '#666'}}>{stats.topVendedor.count} registros</small>
+          <small className={`
+            ${isDarkMode ? 'text-dark-text/70' : 'text-light-text/70'}
+          `}>{stats.topVendedor.count} registros</small>
         </div>
 
-        <div className="card dashboard-stats-card" style={{padding: 24, textAlign: 'center'}}>
-          <div style={{background: isDarkMode ? 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' : 'linear-gradient(135deg, #ff9800 0%, #f57c00 100%)', borderRadius: '50%', width: 60, height: 60, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px'}}>
-            <Building style={{color: '#fff', width: 24, height: 24}} />
+        <div style={{
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            borderRadius: 16,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            }} className={`
+          rounded-lg border p-4 text-center
+          ${isDarkMode 
+            ? 'bg-dark-card border-dark-border' 
+            : 'bg-light-card border-light-border'
+          }
+        `}>
+          <div className={`
+            rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-3
+            ${isDarkMode ? 'bg-dark-warning' : 'bg-light-warning'}
+          `}>
+            <Building className="text-white w-5 h-5" />
           </div>
-          <h3 style={{fontSize: '1.2rem', color: isDarkMode ? '#10b981' : '#218838', marginBottom: 8}}>Top 1 Rede (Problemas)</h3>
-          <p style={{fontSize: '1.5rem', fontWeight: 700, color: '#ff9800', margin: 0}}>
-            {loading ? <Loader2 style={{width: 24, height: 24, animation: 'spin 1s linear infinite'}} /> : stats.topRede.name}
+          <h3 className={`
+            text-sm font-medium mb-2
+            ${isDarkMode ? 'text-dark-text' : 'text-light-text'}
+          `}>Top 1 Rede (Problemas)</h3>
+          <p className={`
+            text-lg font-semibold mb-1
+            ${isDarkMode ? 'text-dark-warning' : 'text-light-warning'}
+          `}>
+            {loading ? <Loader2 className="w-5 h-5 animate-spin mx-auto" /> : stats.topRede.name}
           </p>
-          <small style={{color: isDarkMode ? '#9ca3af' : '#666'}}>{stats.topRede.count} registros</small>
+          <small className={`
+            ${isDarkMode ? 'text-dark-text/70' : 'text-light-text/70'}
+          `}>{stats.topRede.count} registros</small>
         </div>
 
-        <div className="card dashboard-stats-card" style={{padding: 24, textAlign: 'center'}}>
-          <div style={{background: isDarkMode ? 'linear-gradient(135deg, #ea580c 0%, #dc2626 100%)' : 'linear-gradient(135deg, #e65100 0%, #d84315 100%)', borderRadius: '50%', width: 60, height: 60, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px'}}>
-            <ShoppingCart style={{color: '#fff', width: 24, height: 24}} />
+        <div style={{
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            borderRadius: 16,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            }} className={`
+          rounded-lg border p-4 text-center
+          ${isDarkMode 
+            ? 'bg-dark-card border-dark-border' 
+            : 'bg-light-card border-light-border'
+          }
+        `}>
+          <div className={`
+            rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-3
+            ${isDarkMode ? 'bg-dark-accent' : 'bg-light-accent'}
+          `}>
+            <ShoppingCart className="text-white w-5 h-5" />
           </div>
-          <h3 style={{fontSize: '1.2rem', color: isDarkMode ? '#10b981' : '#218838', marginBottom: 8}}>Top 1 Cliente (Problemas)</h3>
-          <p style={{fontSize: '1.5rem', fontWeight: 700, color: '#e65100', margin: 0}}>
-            {loading ? <Loader2 style={{width: 24, height: 24, animation: 'spin 1s linear infinite'}} /> : stats.topCliente.name}
+          <h3 className={`
+            text-sm font-medium mb-2
+            ${isDarkMode ? 'text-dark-text' : 'text-light-text'}
+          `}>Top 1 Cliente (Problemas)</h3>
+          <p className={`
+            text-lg font-semibold mb-1
+            ${isDarkMode ? 'text-dark-accent' : 'text-light-accent'}
+          `}>
+            {loading ? <Loader2 className="w-5 h-5 animate-spin mx-auto" /> : stats.topCliente.name}
           </p>
-          <small style={{color: isDarkMode ? '#9ca3af' : '#666'}}>{stats.topCliente.count} registros</small>
+          <small className={`
+            ${isDarkMode ? 'text-dark-text/70' : 'text-light-text/70'}
+          `}>{stats.topCliente.count} registros</small>
         </div>
       </div>
 
       {/* Gráficos e Análises */}
-      <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: 24}}>
-        <div className="card dashboard-chart-section" style={{padding: 24}}>
-          <h3 style={{fontSize: '1.3rem', color: isDarkMode ? '#10b981' : '#218838', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8}}>
-            <AlertTriangle style={{width: 20, height: 20}} />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div style={{
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            borderRadius: 16,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            }} className={`
+          rounded-lg border p-4
+          ${isDarkMode 
+            ? 'bg-dark-card border-dark-border' 
+            : 'bg-light-card border-light-border'
+          }
+        `}>
+          <h3 style={{fontSize: '1.0rem', color: isDarkMode ? '#10b981' : '#218838', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8}}>
+            <AlertTriangle className="w-4 h-4" />
             Problemas por Tipo
           </h3>
           {loading ? (
-            <div style={{background: isDarkMode ? '#374151' : '#f8f9fa', padding: 40, borderRadius: 12, textAlign: 'center'}}>
-              <Loader2 style={{width: 48, height: 48, color: isDarkMode ? '#9ca3af' : '#666', marginBottom: 16, animation: 'spin 1s linear infinite'}} />
-              <p style={{color: isDarkMode ? '#9ca3af' : '#666', margin: 0}}>Carregando dados...</p>
+            <div className={`
+              p-8 rounded-lg text-center
+              ${isDarkMode ? 'bg-dark-surface' : 'bg-light-surface'}
+            `}>
+              <Loader2 className={`
+                w-8 h-8 mb-3 mx-auto animate-spin
+                ${isDarkMode ? 'text-dark-text/50' : 'text-light-text/50'}
+              `} />
+              <p className={`
+                text-sm m-0
+                ${isDarkMode ? 'text-dark-text/70' : 'text-light-text/70'}
+              `}>Carregando dados...</p>
             </div>
           ) : problemasPorTipo().length === 0 ? (
-            <div style={{background: isDarkMode ? '#374151' : '#f8f9fa', padding: 40, borderRadius: 12, textAlign: 'center'}}>
-              <p style={{color: isDarkMode ? '#9ca3af' : '#666', margin: 0}}>Nenhum problema registrado.</p>
+            <div className={`
+              p-8 rounded-lg text-center
+              ${isDarkMode ? 'bg-dark-surface' : 'bg-light-surface'}
+            `}>
+              <p className={`
+                text-sm m-0
+                ${isDarkMode ? 'text-dark-text/70' : 'text-light-text/70'}
+              `}>Nenhum problema registrado.</p>
             </div>
           ) : (
             <ResponsiveContainer width="100%" height={300}>
@@ -740,18 +892,36 @@ function Dashboard() {
           )}
         </div>
 
-        <div className="card dashboard-chart-section" style={{padding: 24}}>
-          <h3 style={{fontSize: '1.3rem', color: isDarkMode ? '#10b981' : '#218838', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8}}>
-            <Clock style={{width: 20, height: 20}} />
+        <div style={{
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            borderRadius: 16,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            }} className={`
+          rounded-lg border p-4
+          ${isDarkMode 
+            ? 'bg-dark-card border-dark-border' 
+            : 'bg-light-card border-light-border'
+          }
+        `}>
+          <h3 style={{fontSize: '1.0rem', color: isDarkMode ? '#10b981' : '#218838', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8}}>
+            <Clock className="w-4 h-4" /> 
             Top 10 Clientes - Maior Tempo Médio
           </h3>
           {loading ? (
-            <div style={{background: isDarkMode ? '#374151' : '#f8f9fa', padding: 40, borderRadius: 12, textAlign: 'center'}}>
-              <Loader2 style={{width: 48, height: 48, color: isDarkMode ? '#9ca3af' : '#666', marginBottom: 16, animation: 'spin 1s linear infinite'}} />
+            <div className={`
+              p-8 rounded-lg text-center
+              ${isDarkMode ? 'bg-dark-surface' : 'bg-light-surface'}
+            `}>
+              <Loader2 className={`
+                w-8 h-8 mb-3 mx-auto animate-spin
+                ${isDarkMode ? 'text-dark-text/50' : 'text-light-text/50'}
+              `} />
               <p style={{color: isDarkMode ? '#9ca3af' : '#666', margin: 0}}>Carregando dados...</p>
             </div>
           ) : topClientesTempoMedio().length === 0 ? (
-            <div style={{background: isDarkMode ? '#374151' : '#f8f9fa', padding: 40, borderRadius: 12, textAlign: 'center'}}>
+            <div style={{background: isDarkMode ? '#2a2a2a' : '#f8f9fa', padding: 40, borderRadius: 12, textAlign: 'center'}}>
               <p style={{color: isDarkMode ? '#9ca3af' : '#666', margin: 0}}>Nenhum dado disponível.</p>
             </div>
           ) : (
@@ -795,18 +965,22 @@ function Dashboard() {
           )}
         </div>
 
-        <div className="card dashboard-chart-section" style={{padding: 24}}>
-          <h3 style={{fontSize: '1.3rem', color: isDarkMode ? '#10b981' : '#218838', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8}}>
+        <div className="card dashboard-chart-section" style={{ background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            borderRadius: 16,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined, padding: 24, marginBlock: 5}}>
+          <h3 style={{fontSize: '1.0rem', color: isDarkMode ? '#10b981' : '#218838', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8}}>
             <XCircle style={{width: 20, height: 20}} />
             Top 10 Clientes - Mais Devoluções
           </h3>
           {loading ? (
-            <div style={{background: isDarkMode ? '#374151' : '#f8f9fa', padding: 40, borderRadius: 12, textAlign: 'center'}}>
+            <div style={{background: isDarkMode ? '#2a2a2a' : '#f8f9fa', padding: 40, borderRadius: 12, textAlign: 'center'}}>
               <Loader2 style={{width: 48, height: 48, color: isDarkMode ? '#9ca3af' : '#666', marginBottom: 16, animation: 'spin 1s linear infinite'}} />
               <p style={{color: isDarkMode ? '#9ca3af' : '#666', margin: 0}}>Carregando dados...</p>
             </div>
           ) : topClientesDevolucoes().length === 0 ? (
-            <div style={{background: isDarkMode ? '#374151' : '#f8f9fa', padding: 40, borderRadius: 12, textAlign: 'center'}}>
+            <div style={{background: isDarkMode ? '#2a2a2a' : '#f8f9fa', padding: 40, borderRadius: 12, textAlign: 'center'}}>
               <p style={{color: isDarkMode ? '#9ca3af' : '#666', margin: 0}}>Nenhum dado disponível.</p>
             </div>
           ) : (
@@ -850,18 +1024,22 @@ function Dashboard() {
           )}
         </div>
 
-        <div className="card dashboard-chart-section" style={{padding: 24}}>
-          <h3 style={{fontSize: '1.3rem', color: isDarkMode ? '#10b981' : '#218838', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8}}>
+        <div className="card dashboard-chart-section" style={{background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            borderRadius: 16,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined, padding: 24, marginBlock: 5}}>
+          <h3 style={{fontSize: '1.0rem', color: isDarkMode ? '#10b981' : '#218838', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8}}>
             <Users style={{width: 20, height: 20}} />
             Total de Registros por Fretista
           </h3>
           {loading ? (
-            <div style={{background: isDarkMode ? '#374151' : '#f8f9fa', padding: 40, borderRadius: 12, textAlign: 'center'}}>
+            <div style={{background: isDarkMode ? '#2a2a2a' : '#f8f9fa', padding: 40, borderRadius: 12, textAlign: 'center'}}>
               <Loader2 style={{width: 48, height: 48, color: isDarkMode ? '#9ca3af' : '#666', marginBottom: 16, animation: 'spin 1s linear infinite'}} />
               <p style={{color: isDarkMode ? '#9ca3af' : '#666', margin: 0}}>Carregando dados...</p>
             </div>
           ) : registrosPorFretista().length === 0 ? (
-            <div style={{background: isDarkMode ? '#374151' : '#f8f9fa', padding: 40, borderRadius: 12, textAlign: 'center'}}>
+            <div style={{background: isDarkMode ? '#2a2a2a' : '#f8f9fa', padding: 40, borderRadius: 12, textAlign: 'center'}}>
               <p style={{color: isDarkMode ? '#9ca3af' : '#666', margin: 0}}>Nenhum dado disponível.</p>
             </div>
           ) : (
@@ -905,18 +1083,22 @@ function Dashboard() {
           )}
         </div>
 
-        <div className="card dashboard-chart-section" style={{padding: 24}}>
-          <h3 style={{fontSize: '1.3rem', color: isDarkMode ? '#10b981' : '#218838', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8}}>
+        <div className="card dashboard-chart-section" style={{background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            borderRadius: 16,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined, padding: 24, marginBlock: 5}}>
+          <h3 style={{fontSize: '1.0rem', color: isDarkMode ? '#10b981' : '#218838', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8}}>
             <CheckCircle style={{width: 20, height: 20}} />
             Distribuição por Status
           </h3>
           {loading ? (
-            <div style={{background: isDarkMode ? '#374151' : '#f8f9fa', padding: 40, borderRadius: 12, textAlign: 'center'}}>
+            <div style={{background: isDarkMode ? '#2a2a2a' : '#f8f9fa', padding: 40, borderRadius: 12, textAlign: 'center'}}>
               <Loader2 style={{width: 48, height: 48, color: isDarkMode ? '#9ca3af' : '#666', marginBottom: 16, animation: 'spin 1s linear infinite'}} />
               <p style={{color: isDarkMode ? '#9ca3af' : '#666', margin: 0}}>Carregando dados...</p>
             </div>
           ) : distribuicaoStatus().length === 0 ? (
-            <div style={{background: isDarkMode ? '#374151' : '#f8f9fa', padding: 40, borderRadius: 12, textAlign: 'center'}}>
+            <div style={{background: isDarkMode ? '#2a2a2a' : '#f8f9fa', padding: 40, borderRadius: 12, textAlign: 'center'}}>
               <p style={{color: isDarkMode ? '#9ca3af' : '#666', margin: 0}}>Nenhum dado disponível.</p>
             </div>
           ) : (
@@ -947,7 +1129,7 @@ function Dashboard() {
                     <Cell 
                       key={`cell-${index}`} 
                       fill={`url(#pieGradient${index % GRADIENT_COLORS.length})`}
-                      stroke={isDarkMode ? '#374151' : '#fff'}
+                      stroke={isDarkMode ? '#2a2a2a' : '#fff'}
                       strokeWidth={2}
                     />
                   ))}
@@ -963,18 +1145,22 @@ function Dashboard() {
           )}
         </div>
 
-        <div className="card dashboard-chart-section" style={{padding: 24}}>
-          <h3 style={{fontSize: '1.3rem', color: isDarkMode ? '#10b981' : '#218838', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8}}>
+        <div className="card dashboard-chart-section" style={{background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            borderRadius: 16,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined, padding: 24, marginBlock: 5}}>
+          <h3 style={{fontSize: '0.9rem', color: isDarkMode ? '#10b981' : '#218838', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8}}>
             <AlertTriangle style={{width: 20, height: 20}} />
             Registros com Problemas por UF (%)
           </h3>
           {loading ? (
-            <div style={{background: isDarkMode ? '#374151' : '#f8f9fa', padding: 40, borderRadius: 12, textAlign: 'center'}}>
+            <div style={{background: isDarkMode ? '#2a2a2a' : '#f8f9fa', padding: 40, borderRadius: 12, textAlign: 'center'}}>
               <Loader2 style={{width: 48, height: 48, color: isDarkMode ? '#9ca3af' : '#666', marginBottom: 16, animation: 'spin 1s linear infinite'}} />
               <p style={{color: isDarkMode ? '#9ca3af' : '#666', margin: 0}}>Carregando dados...</p>
             </div>
           ) : problemasPorUF().length === 0 ? (
-            <div style={{background: isDarkMode ? '#374151' : '#f8f9fa', padding: 40, borderRadius: 12, textAlign: 'center'}}>
+            <div style={{background: isDarkMode ? '#2a2a2a' : '#f8f9fa', padding: 40, borderRadius: 12, textAlign: 'center'}}>
               <p style={{color: isDarkMode ? '#9ca3af' : '#666', margin: 0}}>Nenhum dado disponível.</p>
             </div>
           ) : (
@@ -1005,65 +1191,7 @@ function Dashboard() {
                     <Cell 
                       key={`cell-${index}`} 
                       fill={`url(#ufGradient${index % GRADIENT_COLORS.length})`}
-                      stroke={isDarkMode ? '#374151' : '#fff'}
-                      strokeWidth={2}
-                    />
-                  ))}
-                </Pie>
-                <Tooltip content={<CustomTooltip />} />
-                <Legend 
-                  verticalAlign="bottom" 
-                  height={36}
-                  iconType="circle"
-                />
-              </PieChart>
-            </ResponsiveContainer>
-          )}
-        </div>
-
-        <div className="card dashboard-chart-section" style={{padding: 24}}>
-          <h3 style={{fontSize: '1.3rem', color: isDarkMode ? '#10b981' : '#218838', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8}}>
-            <AlertTriangle style={{width: 20, height: 20}} />
-            Registros com Problemas por UF (%)
-          </h3>
-          {loading ? (
-            <div style={{background: isDarkMode ? '#374151' : '#f8f9fa', padding: 40, borderRadius: 12, textAlign: 'center'}}>
-              <Loader2 style={{width: 48, height: 48, color: isDarkMode ? '#9ca3af' : '#666', marginBottom: 16, animation: 'spin 1s linear infinite'}} />
-              <p style={{color: isDarkMode ? '#9ca3af' : '#666', margin: 0}}>Carregando dados...</p>
-            </div>
-          ) : problemasPorUF().length === 0 ? (
-            <div style={{background: isDarkMode ? '#374151' : '#f8f9fa', padding: 40, borderRadius: 12, textAlign: 'center'}}>
-              <p style={{color: isDarkMode ? '#9ca3af' : '#666', margin: 0}}>Nenhum dado disponível.</p>
-            </div>
-          ) : (
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <defs>
-                  {GRADIENT_COLORS.map((color, index) => (
-                    <radialGradient key={index} id={`ufGradient${index}`}>
-                      <stop offset="0%" stopColor={color.start} stopOpacity={0.8}/>
-                      <stop offset="100%" stopColor={color.end} stopOpacity={0.6}/>
-                    </radialGradient>
-                  ))}
-                </defs>
-                <Pie 
-                  data={problemasPorUF()} 
-                  dataKey="count" 
-                  nameKey="uf" 
-                  cx="50%" 
-                  cy="50%" 
-                  outerRadius={100}
-                  innerRadius={40}
-                  paddingAngle={2}
-                  label={({name, percent}) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                  labelLine={false}
-                  {...chartAnimation}
-                >
-                  {problemasPorUF().map((entry, index) => (
-                    <Cell 
-                      key={`cell-${index}`} 
-                      fill={`url(#ufGradient${index % GRADIENT_COLORS.length})`}
-                      stroke={isDarkMode ? '#374151' : '#fff'}
+                      stroke={isDarkMode ? '#2a2a2a' : '#fff'}
                       strokeWidth={2}
                     />
                   ))}

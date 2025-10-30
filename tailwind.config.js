@@ -8,24 +8,32 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Light Theme
-        'light-primary': '#1B8C56',
-        'light-secondary': '#F68C1F',
-        'light-bg': '#FAFAF5',
-        'light-card': '#FFFFFF',
-        'light-border': '#E9ECEF',
-        'light-text': '#333333',
-        'light-text-secondary': '#666666',
-        'light-hover': '#e6f4ea',
-        // Dark Theme
-        'dark-primary': '#00FF7F',
-        'dark-secondary': '#FF7B00',
-        'dark-bg': '#121212',
-        'dark-card': '#1E1E1E',
-        'dark-border': '#2A2A2A',
-        'dark-text': '#FFFFFF',
-        'dark-text-secondary': '#BBBBBB',
-        'dark-hover': '#1A1A1A',
+        // Light Theme - Cores corporativas profissionais
+        'light-primary': '#24cc07ff',     // Azul corporativo
+        'light-secondary': '#64748b',   // Cinza azulado
+        'light-accent': '#0f172a',      // Azul escuro
+        'light-bg': '#f8fafc',          // Cinza muito claro
+        'light-card': '#ffffff',        // Branco puro
+        'light-border': '#e2e8f0',      // Cinza claro
+        'light-text': '#1e293b',        // Cinza escuro
+        'light-text-secondary': '#64748b', // Cinza médio
+        'light-hover': '#f1f5f9',       // Cinza hover sutil
+        'light-success': '#059669',     // Verde corporativo
+        'light-warning': '#d97706',     // Laranja corporativo
+        'light-danger': '#dc2626',      // Vermelho corporativo
+        // Dark Theme - Tons corporativos escuros
+        'dark-primary': '#24cc07ff',      // Azul mais suave
+        'dark-secondary': '#94a3b8',    // Cinza claro
+        'dark-accent': '#1e40af',       // Azul escuro
+        'dark-bg': '#0F0F0F',           // Preto quase puro
+        'dark-card': '#1e293b',         // Cinza azulado escuro
+        'dark-border': '#334155',       // Cinza médio
+        'dark-text': '#f8fafc',         // Branco suave
+        'dark-text-secondary': '#cbd5e1', // Cinza claro
+        'dark-hover': '#334155',        // Cinza hover
+        'dark-success': '#10b981',      // Verde suave
+        'dark-warning': '#f59e0b',      // Laranja suave
+        'dark-danger': '#ef4444',       // Vermelho suave
       },
       boxShadow: {
         soft: '0 6px 18px rgba(0,0,0,0.08)',

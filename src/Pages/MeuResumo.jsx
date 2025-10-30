@@ -488,7 +488,7 @@ function MeuResumo() {
   };
 
   return (
-    <div className={`meu-resumo-container ${isDarkMode ? 'dark-theme' : ''}`} style={{maxWidth: '1200px', margin: '0 auto', padding: '24px 0', background: isDarkMode ? '#0a0a0a' : 'transparent', minHeight: '100vh'}}>
+    <div className={`meu-resumo-container ${isDarkMode ? 'dark-theme' : ''}`} style={{maxWidth: '1200px', margin: '0 auto', padding: '16px 0', background: isDarkMode ? '#0a0a0a' : 'transparent', minHeight: '100v'}}>
       {/* Cabeçalho moderno padrão localização */}
       <PageHeader
         title="Meu Resumo"
@@ -497,26 +497,32 @@ function MeuResumo() {
       />
 
       {/* Filtros */}
-      <div className={`card ${isDarkMode ? 'dark-card' : ''}`} style={{padding: 24, marginBottom: 24, background: isDarkMode ? '#1a1a1a' : '#fff', border: isDarkMode ? '1px solid #333' : '1px solid #e0e0e0'}}>
-        <h3 style={{fontSize: '1.3rem', color: isDarkMode ? '#00ff88' : '#218838', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8}}>
-          <Filter style={{width: 20, height: 20}} />
+      <div className={`card ${isDarkMode ? 'dark-card' : ''}`} style={{padding: 16, background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+              backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+              border: isDarkMode ? '1px solid #0F0F0F' : '1px solid #e2ddddff',
+              boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 1 5px 1 rgba(255, 255, 255, 0.1)' : 'gray'}}>
+        <h3 style={{fontSize: '1rem', color: isDarkMode ? '#00ff88' : '#218838', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 6}}>
+          <Filter style={{width: 18, height: 18}} />
           Filtros de Período
         </h3>
         
-        <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16}}>
+        <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12}}>
           <div>
-            <label style={{display: 'block', fontWeight: 600, color: isDarkMode ? '#ccc' : '#495057', marginBottom: 8}}>📅 Período Rápido:</label>
+            <label style={{display: 'block', fontWeight: 600, color: isDarkMode ? '#ccc' : '#495057', marginBottom: 6, fontSize: '0.9rem'}}>📅 Período Rápido:</label>
             <select
               value={filterPeriod}
               onChange={(e) => setFilterPeriod(e.target.value)}
               style={{
-                width: '100%', 
-                padding: '12px 16px', 
-                border: isDarkMode ? '1px solid #444' : '1px solid #e0e0e0', 
-                borderRadius: 8, 
-                fontSize: 15,
-                background: isDarkMode ? '#2a2a2a' : '#fff',
-                color: isDarkMode ? '#ccc' : '#333'
+            padding: 8, 
+            width: '100%', 
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            borderRadius: 4, 
+            fontSize: 14, 
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+            color: isDarkMode ? '#e2e8f0' : '#000'
               }}
             >
               <option value="today">Hoje</option>
@@ -532,37 +538,43 @@ function MeuResumo() {
           </div>
 
           <div>
-            <label style={{display: 'block', fontWeight: 600, color: isDarkMode ? '#ccc' : '#495057', marginBottom: 8}}>📅 Data Início:</label>
+            <label style={{display: 'block', fontWeight: 600, color: isDarkMode ? '#ccc' : '#495057', marginBottom: 6, fontSize: '0.9rem'}}>📅 Data Início:</label>
             <input
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
               style={{
-                width: '100%', 
-                padding: '12px 16px', 
-                border: isDarkMode ? '1px solid #444' : '1px solid #e0e0e0', 
-                borderRadius: 8, 
-                fontSize: 15,
-                background: isDarkMode ? '#2a2a2a' : '#fff',
-                color: isDarkMode ? '#ccc' : '#333'
+            padding: 8, 
+            width: '100%', 
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            borderRadius: 4, 
+            fontSize: 14, 
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+            color: isDarkMode ? '#e2e8f0' : '#000'
               }}
             />
           </div>
 
           <div>
-            <label style={{display: 'block', fontWeight: 600, color: isDarkMode ? '#ccc' : '#495057', marginBottom: 8}}>📅 Data Fim:</label>
+            <label style={{display: 'block', fontWeight: 600, color: isDarkMode ? '#ccc' : '#495057', marginBottom: 6, fontSize: '0.9rem'}}>📅 Data Fim:</label>
             <input
               type="date"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
               style={{
-                width: '100%', 
-                padding: '12px 16px', 
-                border: isDarkMode ? '1px solid #444' : '1px solid #e0e0e0', 
-                borderRadius: 8, 
-                fontSize: 15,
-                background: isDarkMode ? '#2a2a2a' : '#fff',
-                color: isDarkMode ? '#ccc' : '#333'
+            padding: 8, 
+            width: '100%', 
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            borderRadius: 4, 
+            fontSize: 14, 
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+            color: isDarkMode ? '#e2e8f0' : '#000'
               }}
             />
           </div>
@@ -572,17 +584,17 @@ function MeuResumo() {
               type="button"
               onClick={handleClearFilters}
               style={{
-                padding: '10px 18px',
-                borderRadius: 8,
+                padding: '8px 14px',
+                borderRadius: 4,
                 border: 'none',
                 background: isDarkMode ? 'linear-gradient(90deg, #00ff88 0%, #ff9800 100%)' : 'linear-gradient(90deg, #43a047 0%, #1976d2 100%)',
                 color: isDarkMode ? '#000' : '#fff',
-                fontWeight: 700,
-                fontSize: 16,
+                fontWeight: 600,
+                fontSize: 14,
                 cursor: 'pointer',
-                boxShadow: '0 2px 8px #1976d233',
+                boxShadow: '0 2px 6px #1976d233',
                 transition: 'background 0.2s',
-                marginLeft: 8
+                marginLeft: 6
               }}
             >
               Limpar Filtros
@@ -592,116 +604,126 @@ function MeuResumo() {
       </div>
 
       {/* Métricas do Resumo */}
-      <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 24, marginBottom: 32}}>
-        <div className={`card ${isDarkMode ? 'dark-card' : ''}`} style={{padding: 24, textAlign: 'center', background: isDarkMode ? '#1a1a1a' : '#fff', border: isDarkMode ? '1px solid #333' : '1px solid #e0e0e0'}}>
-          <div style={{background: 'linear-gradient(135deg, #4caf50 0%, #388e3c 100%)', borderRadius: '50%', width: 60, height: 60, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px'}}>
-            <CheckCircle style={{color: '#fff', width: 24, height: 24}} />
+      <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16, marginBottom: 24, }}>
+        <div className={`card ${isDarkMode ? 'dark-card' : ''}`} style={{padding: 16, textAlign: 'center', background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+              backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+              border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+              boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined, borderRadius: '12px'}}>
+          <div style={{background: 'linear-gradient(135deg, #4caf50 0%, #388e3c 100%)', borderRadius: '50%', width: 48, height: 48, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px'}}>
+            <CheckCircle style={{color: '#fff', width: 20, height: 20}} />
           </div>
-          <h3 style={{fontSize: '1.2rem', color: isDarkMode ? '#00ff88' : '#218838', marginBottom: 8}}>Entregas Finalizadas</h3>
-          <p style={{fontSize: '1.5rem', fontWeight: 700, color: '#4caf50', margin: 0}}>
-            {loading ? <Loader2 style={{width: 24, height: 24, animation: 'spin 1s linear infinite'}} /> : stats.entregasFinalizadas}
+          <h3 style={{fontSize: '1rem', color: isDarkMode ? '#00ff88' : '#218838', marginBottom: 6}}>Entregas Finalizadas</h3>
+          <p style={{fontSize: '1.3rem', fontWeight: 700, color: '#4caf50', margin: 0}}>
+            {loading ? <Loader2 style={{width: 20, height: 20, animation: 'spin 1s linear infinite'}} /> : stats.entregasFinalizadas}
           </p>
         </div>
 
         <div className="card" style={{
-          padding: 24, 
+          padding: 16, 
           textAlign: 'center',
-          backgroundColor: isDarkMode ? '#2d3748' : '#fff',
-          border: isDarkMode ? '1px solid #4a5568' : '1px solid #e2e8f0'
+          background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+          backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+          border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+          boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined, borderRadius: '12px'
         }}>
-          <div style={{background: 'linear-gradient(135deg, #dc3545 0%, #c82333 100%)', borderRadius: '50%', width: 60, height: 60, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px'}}>
-            <XCircle style={{color: '#fff', width: 24, height: 24}} />
+          <div style={{background: 'linear-gradient(135deg, #dc3545 0%, #c82333 100%)', borderRadius: '50%', width: 48, height: 48, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px'}}>
+            <XCircle style={{color: '#fff', width: 20, height: 20}} />
           </div>
-          <h3 style={{fontSize: '1.2rem', color: isDarkMode ? '#00ff88' : '#218838', marginBottom: 8}}>Devoluções</h3>
-          <p style={{fontSize: '1.5rem', fontWeight: 700, color: '#dc3545', margin: 0}}>
-            {loading ? <Loader2 style={{width: 24, height: 24, animation: 'spin 1s linear infinite'}} /> : stats.devolucoes}
+          <h3 style={{fontSize: '1rem', color: isDarkMode ? '#00ff88' : '#218838', marginBottom: 6}}>Devoluções</h3>
+          <p style={{fontSize: '1.3rem', fontWeight: 700, color: '#dc3545', margin: 0}}>
+            {loading ? <Loader2 style={{width: 20, height: 20, animation: 'spin 1s linear infinite'}} /> : stats.devolucoes}
           </p>
         </div>
 
         <div className="card" style={{
-          padding: 24, 
+          padding: 16, 
           textAlign: 'center',
-          backgroundColor: isDarkMode ? '#2d3748' : '#fff',
-          border: isDarkMode ? '1px solid #4a5568' : '1px solid #e2e8f0'
+          background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+          backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+          border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+          boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined, borderRadius: '12px'
         }}>
-          <div style={{background: 'linear-gradient(135deg, #ff9800 0%, #f57c00 100%)', borderRadius: '50%', width: 60, height: 60, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px'}}>
-            <AlertTriangle style={{color: '#fff', width: 24, height: 24}} />
+          <div style={{background: 'linear-gradient(135deg, #ff9800 0%, #f57c00 100%)', borderRadius: '50%', width: 48, height: 48, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px'}}>
+            <AlertTriangle style={{color: '#fff', width: 20, height: 20}} />
           </div>
-          <h3 style={{fontSize: '1.2rem', color: isDarkMode ? '#00ff88' : '#218838', marginBottom: 8}}>Problemas</h3>
-          <p style={{fontSize: '1.5rem', fontWeight: 700, color: '#ff9800', margin: 0}}>
-            {loading ? <Loader2 style={{width: 24, height: 24, animation: 'spin 1s linear infinite'}} /> : stats.problemas}
+          <h3 style={{fontSize: '1rem', color: isDarkMode ? '#00ff88' : '#218838', marginBottom: 6}}>Problemas</h3>
+          <p style={{fontSize: '1.3rem', fontWeight: 700, color: '#ff9800', margin: 0}}>
+            {loading ? <Loader2 style={{width: 20, height: 20, animation: 'spin 1s linear infinite'}} /> : stats.problemas}
           </p>
         </div>
 
         <div className="card" style={{
-          padding: 24, 
+          padding: 16, 
           textAlign: 'center',
-          backgroundColor: isDarkMode ? '#2d3748' : '#fff',
-          border: isDarkMode ? '1px solid #4a5568' : '1px solid #e2e8f0'
+          background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+          backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+          border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+          boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined, borderRadius: '12px'
         }}>
-          <div style={{background: 'linear-gradient(135deg, #1976d2 0%, #1565c0 100%)', borderRadius: '50%', width: 60, height: 60, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px'}}>
-            <Clock style={{color: '#fff', width: 24, height: 24}} />
+          <div style={{background: 'linear-gradient(135deg, #1976d2 0%, #1565c0 100%)', borderRadius: '50%', width: 48, height: 48, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px'}}>
+            <Clock style={{color: '#fff', width: 20, height: 20}} />
           </div>
-          <h3 style={{fontSize: '1.2rem', color: isDarkMode ? '#00ff88' : '#218838', marginBottom: 8}}>Tempo Médio</h3>
-          <p style={{fontSize: '1.5rem', fontWeight: 700, color: '#1976d2', margin: 0}}>
-            {loading ? <Loader2 style={{width: 24, height: 24, animation: 'spin 1s linear infinite'}} /> : `${stats.tempoMedio} min`}
+          <h3 style={{fontSize: '1rem', color: isDarkMode ? '#00ff88' : '#218838', marginBottom: 6}}>Tempo Médio</h3>
+          <p style={{fontSize: '1.3rem', fontWeight: 700, color: '#1976d2', margin: 0}}>
+            {loading ? <Loader2 style={{width: 20, height: 20, animation: 'spin 1s linear infinite'}} /> : `${stats.tempoMedio} min`}
           </p>
         </div>
       </div>
 
       {/* Resumo Detalhado */}
       <div className="card" style={{
-        padding: 24, 
-        marginBottom: 24,
-        backgroundColor: isDarkMode ? '#2d3748' : '#fff',
-        border: isDarkMode ? '1px solid #4a5568' : '1px solid #e2e8f0'
+        padding: 16, 
+        marginBottom: 16,
+        backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+        border: isDarkMode ? '1px solid #4a5568' : '1px solid #e2e8f0',
+        borderRadius: 6
       }}>
-        <h3 style={{fontSize: '1.3rem', color: isDarkMode ? '#00ff88' : '#218838', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8}}>
-          <BarChart3 style={{width: 20, height: 20}} />
+        <h3 style={{fontSize: '1.1rem', color: isDarkMode ? '#00ff88' : '#218838', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 6}}>
+          <BarChart3 style={{width: 18, height: 18}} />
           Resumo dos Meus Registros
         </h3>
         
         {loading ? (
           <div style={{
-            background: isDarkMode ? '#1a202c' : '#f8f9fa', 
-            padding: 40, 
-            borderRadius: 12, 
+            background: isDarkMode ? '#2a2a2a' : '#f8f9fa', 
+            padding: 24, 
+            borderRadius: 8, 
             textAlign: 'center'
           }}>
-            <Loader2 style={{width: 48, height: 48, color: isDarkMode ? '#a0aec0' : '#666', marginBottom: 16, animation: 'spin 1s linear infinite'}} />
-            <p style={{color: isDarkMode ? '#a0aec0' : '#666', margin: 0, fontSize: 16}}>Carregando dados...</p>
+            <Loader2 style={{width: 40, height: 40, color: isDarkMode ? '#a0aec0' : '#666', marginBottom: 12, animation: 'spin 1s linear infinite'}} />
+            <p style={{color: isDarkMode ? '#a0aec0' : '#666', margin: 0, fontSize: 14}}>Carregando dados...</p>
           </div>
         ) : records.length === 0 ? (
           <div style={{
-            background: isDarkMode ? '#1a202c' : '#f8f9fa', 
-            padding: 40, 
-            borderRadius: 12, 
+            background: isDarkMode ? '#2a2a2a' : '#f8f9fa', 
+            padding: 24, 
+            borderRadius: 8, 
             textAlign: 'center'
           }}>
-            <Calendar style={{width: 48, height: 48, color: isDarkMode ? '#a0aec0' : '#666', marginBottom: 16}} />
-            <p style={{color: isDarkMode ? '#a0aec0' : '#666', margin: 0, fontSize: 16}}>Nenhum resumo disponível para o período selecionado.</p>
-            <p style={{color: isDarkMode ? '#718096' : '#999', margin: '8px 0 0 0', fontSize: 14}}>Selecione um período para visualizar suas estatísticas</p>
+            <Calendar style={{width: 40, height: 40, color: isDarkMode ? '#a0aec0' : '#666', marginBottom: 12}} />
+            <p style={{color: isDarkMode ? '#a0aec0' : '#666', margin: 0, fontSize: 14}}>Nenhum resumo disponível para o período selecionado.</p>
+            <p style={{color: isDarkMode ? '#718096' : '#999', margin: '6px 0 0 0', fontSize: 12}}>Selecione um período para visualizar suas estatísticas</p>
           </div>
         ) : (
           <div style={{
-            background: isDarkMode ? '#1a202c' : '#f8f9fa', 
-            padding: 24, 
-            borderRadius: 12
+            background: isDarkMode ? '#2a2a2a' : '#f8f9fa', 
+            padding: 16, 
+            borderRadius: 8
           }}>
-            <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16}}>
+            <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12}}>
               <div style={{textAlign: 'center'}}>
-                <h4 style={{color: isDarkMode ? '#00ff88' : '#218838', marginBottom: 8}}>Total de Registros</h4>
-                <p style={{fontSize: '1.5rem', fontWeight: 700, color: isDarkMode ? '#e2e8f0' : '#495057', margin: 0}}>{records.length}</p>
+                <h4 style={{color: isDarkMode ? '#00ff88' : '#218838', marginBottom: 6, fontSize: '0.9rem'}}>Total de Registros</h4>
+                <p style={{fontSize: '1.3rem', fontWeight: 700, color: isDarkMode ? '#e2e8f0' : '#495057', margin: 0}}>{records.length}</p>
               </div>
               <div style={{textAlign: 'center'}}>
-                <h4 style={{color: isDarkMode ? '#00ff88' : '#218838', marginBottom: 8}}>Taxa de Sucesso</h4>
-                <p style={{fontSize: '1.5rem', fontWeight: 700, color: '#4caf50', margin: 0}}>
+                <h4 style={{color: isDarkMode ? '#00ff88' : '#218838', marginBottom: 6, fontSize: '0.9rem'}}>Taxa de Sucesso</h4>
+                <p style={{fontSize: '1.3rem', fontWeight: 700, color: '#4caf50', margin: 0}}>
                   {records.length > 0 ? Math.round((stats.entregasFinalizadas / records.length) * 100) : 0}%
                 </p>
               </div>
               <div style={{textAlign: 'center'}}>
-                <h4 style={{color: isDarkMode ? '#00ff88' : '#218838', marginBottom: 8}}>Taxa de Problemas</h4>
-                <p style={{fontSize: '1.5rem', fontWeight: 700, color: '#ff9800', margin: 0}}>
+                <h4 style={{color: isDarkMode ? '#00ff88' : '#218838', marginBottom: 6, fontSize: '0.9rem'}}>Taxa de Problemas</h4>
+                <p style={{fontSize: '1.3rem', fontWeight: 700, color: '#ff9800', margin: 0}}>
                   {records.length > 0 ? Math.round((stats.problemas / records.length) * 100) : 0}%
                 </p>
               </div>
@@ -712,32 +734,34 @@ function MeuResumo() {
 
       {/* Ações */}
       <div className="card" style={{
-        padding: 24,
-        backgroundColor: isDarkMode ? '#2d3748' : '#fff',
-        border: isDarkMode ? '1px solid #4a5568' : '1px solid #e2e8f0'
+        padding: 16,
+        backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+        border: isDarkMode ? '1px solid #4a5568' : '1px solid #e2e8f0',
+        borderRadius: 6
       }}>
-        <h3 style={{fontSize: '1.3rem', color: isDarkMode ? '#00ff88' : '#218838', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8}}>
-          <Send style={{width: 20, height: 20}} />
+        <h3 style={{fontSize: '1.1rem', color: isDarkMode ? '#00ff88' : '#218838', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 6}}>
+          <Send style={{width: 18, height: 18}} />
           Ações de Compartilhamento
         </h3>
         
-        <div style={{display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'center'}}>
+        <div style={{display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'center'}}>
           <button 
             className="btn btn-green"
             onClick={handleGenerateDaySummary}
             disabled={loading}
             style={{
-              fontSize: 16, 
-              padding: '14px 32px', 
+              fontSize: 14, 
+              padding: '10px 20px', 
               display: 'inline-flex', 
               alignItems: 'center', 
-              gap: 8,
+              gap: 6,
               backgroundColor: isDarkMode ? '#38a169' : '#28a745',
               borderColor: isDarkMode ? '#38a169' : '#28a745',
-              color: '#fff'
+              color: '#fff',
+              borderRadius: 4
             }}
           >
-            <Send style={{width: 18, height: 18}} />
+            <Send style={{width: 16, height: 16}} />
             Enviar Resumo do Dia (WhatsApp)
           </button>
           
@@ -746,17 +770,18 @@ function MeuResumo() {
             onClick={handleGenerateWeekSummary}
             disabled={loading}
             style={{
-              fontSize: 16, 
-              padding: '14px 32px', 
+              fontSize: 14, 
+              padding: '10px 20px', 
               display: 'inline-flex', 
               alignItems: 'center', 
-              gap: 8,
+              gap: 6,
               backgroundColor: isDarkMode ? '#3182ce' : '#007bff',
               borderColor: isDarkMode ? '#3182ce' : '#007bff',
-              color: '#fff'
+              color: '#fff',
+              borderRadius: 4
             }}
           >
-            <Send style={{width: 18, height: 18}} />
+            <Send style={{width: 16, height: 16}} />
             Enviar Resumo da Semana (WhatsApp)
           </button>
           
@@ -765,17 +790,18 @@ function MeuResumo() {
             onClick={handleGeneratePdf}
             disabled={loading}
             style={{
-              fontSize: 16, 
-              padding: '14px 32px', 
+              fontSize: 14, 
+              padding: '10px 20px', 
               display: 'inline-flex', 
               alignItems: 'center', 
-              gap: 8,
+              gap: 6,
               backgroundColor: isDarkMode ? '#dd6b20' : '#fd7e14',
               borderColor: isDarkMode ? '#dd6b20' : '#fd7e14',
-              color: '#fff'
+              color: '#fff',
+              borderRadius: 4
             }}
           >
-            <Download style={{width: 18, height: 18}} />
+            <Download style={{width: 16, height: 16}} />
             Gerar PDF (Admin)
           </button>
         </div>
@@ -786,38 +812,38 @@ function MeuResumo() {
         onClick={() => navigate('/registros')}
         style={{
           position: 'fixed',
-          bottom: 24,
-          right: 24,
-          width: 56,
-          height: 56,
+          bottom: 20,
+          right: 20,
+          width: 48,
+          height: 48,
           borderRadius: '50%',
           background: isDarkMode 
             ? 'linear-gradient(135deg, #dd6b20 0%, #c53030 100%)' 
             : 'linear-gradient(135deg, #ff9800 0%, #ff5722 100%)',
           boxShadow: isDarkMode 
-            ? '0 8px 24px rgba(221, 107, 32, 0.3)' 
-            : '0 8px 24px rgba(255, 152, 0, 0.3)',
+            ? '0 6px 18px rgba(221, 107, 32, 0.3)' 
+            : '0 6px 18px rgba(255, 152, 0, 0.3)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           cursor: 'pointer',
-          fontSize: 24,
+          fontSize: 20,
           color: '#fff',
           zIndex: 1000,
           transition: 'all 0.3s ease',
-          border: '3px solid rgba(255, 255, 255, 0.2)',
+          border: '2px solid rgba(255, 255, 255, 0.2)',
         }}
         onMouseEnter={(e) => {
           e.target.style.transform = 'scale(1.1)';
           e.target.style.boxShadow = isDarkMode 
-            ? '0 12px 32px rgba(221, 107, 32, 0.4)' 
-            : '0 12px 32px rgba(255, 152, 0, 0.4)';
+            ? '0 8px 24px rgba(221, 107, 32, 0.4)' 
+            : '0 8px 24px rgba(255, 152, 0, 0.4)';
         }}
         onMouseLeave={(e) => {
           e.target.style.transform = 'scale(1)';
           e.target.style.boxShadow = isDarkMode 
-            ? '0 8px 24px rgba(221, 107, 32, 0.3)' 
-            : '0 8px 24px rgba(255, 152, 0, 0.3)';
+            ? '0 6px 18px rgba(221, 107, 32, 0.3)' 
+            : '0 6px 18px rgba(255, 152, 0, 0.3)';
         }}
       >
         🚛

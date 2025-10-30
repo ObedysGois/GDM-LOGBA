@@ -44,7 +44,7 @@ export const ThemeProvider = ({ children }) => {
     isDarkMode,
     toggleTheme,
     colors: isDarkMode ? {
-      bg: '#0D0D0D',
+      bg: '#0F0F0F',
       bgSecondary: '#121212',
       primary: '#00FF7F',
       secondary: '#FF7B00',

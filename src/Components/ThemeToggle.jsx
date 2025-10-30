@@ -11,7 +11,7 @@ const ThemeToggle = ({ className = '' }) => {
       onClick={toggleTheme}
       className={`
         relative inline-flex items-center justify-center
-        w-12 h-6 rounded-full transition-colors duration-300 ease-in-out
+        w-10 h-5 rounded-full transition-colors duration-300 ease-in-out
         focus:outline-none focus:ring-2 focus:ring-offset-2
         ${isDarkMode 
           ? 'bg-dark-primary focus:ring-dark-primary' 
@@ -24,12 +24,12 @@ const ThemeToggle = ({ className = '' }) => {
     >
       <motion.div
         className={`
-          absolute w-5 h-5 rounded-full flex items-center justify-center
+          absolute w-4 h-4 rounded-full flex items-center justify-center
           ${isDarkMode ? 'bg-dark-bg' : 'bg-light-bg'}
-          shadow-lg
+          shadow-md
         `}
         animate={{
-          x: isDarkMode ? 24 : 2,
+          x: isDarkMode ? 20 : 2,
         }}
         transition={{
           type: "spring",
@@ -38,9 +38,9 @@ const ThemeToggle = ({ className = '' }) => {
         }}
       >
         {isDarkMode ? (
-          <Moon className="w-3 h-3 text-dark-primary" />
+          <Moon className="w-2.5 h-2.5 text-dark-primary" />
         ) : (
-          <Sun className="w-3 h-3 text-light-primary" />
+          <Sun className="w-2.5 h-2.5 text-light-primary" />
         )}
       </motion.div>
     </motion.button>

@@ -10,6 +10,7 @@ import { getAllUsers, updateUserType, deleteUser, addUser } from '../firebaseUti
 import { doc, updateDoc, collection, getDocs } from 'firebase/firestore';
 import * as XLSX from 'xlsx';
 import { db } from '../firebaseConfig.js';
+import NotificationSettings from '../Components/NotificationSettings.jsx';
 
 function Profile() {
   const { currentUser, logout } = useAuth();
@@ -188,7 +189,7 @@ function Profile() {
   };
 
   return (
-    <div className="profile-container" style={{maxWidth: '800px', margin: '0 auto', padding: '24px 0'}}>
+    <div className="profile-container" style={{maxWidth: '800px', margin: '0 auto', padding: '16px 0'}}>
       {/* Cabeçalho moderno padrão localização */}
       <PageHeader
         title="Perfil"
@@ -198,35 +199,35 @@ function Profile() {
 
 
       {currentUser ? (
-        <div style={{display: 'flex', flexDirection: 'column', gap: 24}}>
+        <div style={{display: 'flex', flexDirection: 'column', gap: 16}}>
           {/* Informações Básicas */}
-          <div className="card" style={{padding: 24}}>
-            <h3 style={{fontSize: '1.3rem', color: '#218838', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8}}>
-              <User style={{width: 20, height: 20}} />
+          <div className="card" style={{padding: 16}}>
+            <h3 style={{fontSize: '1.1rem', color: '#218838', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 6}}>
+              <User style={{width: 18, height: 18}} />
               Informações Básicas
             </h3>
-            <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 16}}>
-              <div style={{background: isDarkMode ? '#374151' : '#f8f9fa', padding: 16, borderRadius: 12}}>
-                <p style={{fontWeight: 600, color: isDarkMode ? '#d1d5db' : '#495057', margin: '0 0 8px 0'}}>📧 Email:</p>
-                <p style={{color: isDarkMode ? '#10b981' : '#218838', margin: 0, wordBreak: 'break-all'}}>{currentUser.email}</p>
+            <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 12}}>
+              <div style={{background: isDarkMode ? '#2a2a2a' : '#f8f9fa', padding: 12, borderRadius: 8}}>
+                <p style={{fontWeight: 600, color: isDarkMode ? '#d1d5db' : '#495057', margin: '0 0 6px 0', fontSize: 12}}>📧 Email:</p>
+                <p style={{color: isDarkMode ? '#10b981' : '#218838', margin: 0, wordBreak: 'break-all', fontSize: 13}}>{currentUser.email}</p>
               </div>
-              <div style={{background: isDarkMode ? '#374151' : '#f8f9fa', padding: 16, borderRadius: 12}}>
-                <p style={{fontWeight: 600, color: isDarkMode ? '#d1d5db' : '#495057', margin: '0 0 8px 0'}}>👤 Tipo de Usuário:</p>
-                <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
+              <div style={{background: isDarkMode ? '#2a2a2a' : '#f8f9fa', padding: 12, borderRadius: 8}}>
+                <p style={{fontWeight: 600, color: isDarkMode ? '#d1d5db' : '#495057', margin: '0 0 6px 0', fontSize: 12}}>👤 Tipo de Usuário:</p>
+                <div style={{display: 'flex', alignItems: 'center', gap: 6}}>
                   {isAdmin ? (
                     <>
-                      <Shield style={{width: 16, height: 16, color: '#dc3545'}} />
-                      <span style={{color: '#dc3545', fontWeight: 600}}>Administrador</span>
+                      <Shield style={{width: 14, height: 14, color: '#dc3545'}} />
+                      <span style={{color: '#dc3545', fontWeight: 600, fontSize: 13}}>Administrador</span>
                     </>
                   ) : isCollaborator ? (
                     <>
-                      <Settings style={{width: 16, height: 16, color: '#ff9800'}} />
-                      <span style={{color: '#ff9800', fontWeight: 600}}>Colaborador</span>
+                      <Settings style={{width: 14, height: 14, color: '#ff9800'}} />
+                      <span style={{color: '#ff9800', fontWeight: 600, fontSize: 13}}>Colaborador</span>
                     </>
                   ) : (
                     <>
-                      <Truck style={{width: 16, height: 16, color: '#1976d2'}} />
-                      <span style={{color: '#1976d2', fontWeight: 600}}>Fretista</span>
+                      <Truck style={{width: 14, height: 14, color: '#1976d2'}} />
+                      <span style={{color: '#1976d2', fontWeight: 600, fontSize: 13}}>Fretista</span>
                     </>
                   )}
                 </div>
@@ -234,52 +235,55 @@ function Profile() {
             </div>
           </div>
 
+          {/* Configurações de Notificações Push */}
+          <NotificationSettings />
+
           {/* Permissões e Ações */}
-          <div className="card" style={{padding: 24}}>
-            <h3 style={{fontSize: '1.3rem', color: '#218838', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8}}>
-              <Settings style={{width: 20, height: 20}} />
+          <div className="card" style={{padding: 16}}>
+            <h3 style={{fontSize: '1.1rem', color: '#218838', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 6}}>
+              <Settings style={{width: 18, height: 18}} />
               Permissões e Ações Disponíveis
             </h3>
             
             {isAdmin && (
-              <div style={{background: isDarkMode ? '#2d1b1b' : 'linear-gradient(135deg, #fff5f5 0%, #ffe6e6 100%)', border: isDarkMode ? '1px solid #7f1d1d' : '1px solid #ffcdd2', borderRadius: 12, padding: 20}}>
-                <div style={{display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12}}>
-                  <Shield style={{width: 24, height: 24, color: '#dc3545'}} />
-                  <h4 style={{color: '#dc3545', margin: 0, fontSize: '1.1rem'}}>Controles de Administrador</h4>
+              <div style={{background: isDarkMode ? '#2d1b1b' : 'linear-gradient(135deg, #fff5f5 0%, #ffe6e6 100%)', border: isDarkMode ? '1px solid #7f1d1d' : '1px solid #ffcdd2', borderRadius: 8, padding: 14}}>
+                <div style={{display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8}}>
+                  <Shield style={{width: 20, height: 20, color: '#dc3545'}} />
+                  <h4 style={{color: '#dc3545', margin: 0, fontSize: '1rem'}}>Controles de Administrador</h4>
                 </div>
-                <p style={{color: isDarkMode ? '#9ca3af' : '#666', marginBottom: 16}}>Acesso completo ao sistema com permissões de administrador.</p>
-                <div style={{display: 'flex', flexWrap: 'wrap', gap: 12}}>
-                  <button className="btn btn-red" style={{fontSize: 14}} onClick={() => setOpenUserTypeModal(true)}>👥 Gerenciar Usuários</button>
-                  <button className="btn btn-blue" style={{fontSize: 14}} onClick={() => setOpenUserConfigModal(true)}>🔧 Configurações</button>
-                  <button className="btn btn-green" style={{fontSize: 14}} onClick={() => setOpenReportModal(true)}>📊 Relatórios</button>
+                <p style={{color: isDarkMode ? '#9ca3af' : '#666', marginBottom: 12, fontSize: 12}}>Acesso completo ao sistema com permissões de administrador.</p>
+                <div style={{display: 'flex', flexWrap: 'wrap', gap: 8}}>
+                  <button className="btn btn-red" style={{fontSize: 12, padding: '6px 12px'}} onClick={() => setOpenUserTypeModal(true)}>👥 Gerenciar Usuários</button>
+                  <button className="btn btn-blue" style={{fontSize: 12, padding: '6px 12px'}} onClick={() => setOpenUserConfigModal(true)}>🔧 Configurações</button>
+                  <button className="btn btn-green" style={{fontSize: 12, padding: '6px 12px'}} onClick={() => setOpenReportModal(true)}>📊 Relatórios</button>
                 </div>
               </div>
             )}
 
             {isCollaborator && !isAdmin && (
-              <div style={{background: isDarkMode ? '#2d1f0d' : 'linear-gradient(135deg, #fff8e1 0%, #fff3e0 100%)', border: isDarkMode ? '1px solid #92400e' : '1px solid #ffcc02', borderRadius: 12, padding: 20}}>
-                <div style={{display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12}}>
-                  <Settings style={{width: 24, height: 24, color: '#ff9800'}} />
-                  <h4 style={{color: '#ff9800', margin: 0, fontSize: '1.1rem'}}>Ações de Colaborador</h4>
+              <div style={{background: isDarkMode ? '#2d1f0d' : 'linear-gradient(135deg, #fff8e1 0%, #fff3e0 100%)', border: isDarkMode ? '1px solid #92400e' : '1px solid #ffcc02', borderRadius: 8, padding: 14}}>
+                <div style={{display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8}}>
+                  <Settings style={{width: 20, height: 20, color: '#ff9800'}} />
+                  <h4 style={{color: '#ff9800', margin: 0, fontSize: '1rem'}}>Ações de Colaborador</h4>
                 </div>
-                <p style={{color: isDarkMode ? '#9ca3af' : '#666', marginBottom: 16}}>Acesso para importar rota, enviar arquivos e registrar informações.</p>
-                <div style={{display: 'flex', flexWrap: 'wrap', gap: 12}}>
-                  <button className="btn btn-orange" style={{fontSize: 14}}>📁 Importar Rota</button>
-                  <button className="btn btn-blue" style={{fontSize: 14}}>📤 Enviar Arquivos</button>
+                <p style={{color: isDarkMode ? '#9ca3af' : '#666', marginBottom: 12, fontSize: 12}}>Acesso para importar rota, enviar arquivos e registrar informações.</p>
+                <div style={{display: 'flex', flexWrap: 'wrap', gap: 8}}>
+                  <button className="btn btn-orange" style={{fontSize: 12, padding: '6px 12px'}}>📁 Importar Rota</button>
+                  <button className="btn btn-blue" style={{fontSize: 12, padding: '6px 12px'}}>📤 Enviar Arquivos</button>
                 </div>
               </div>
             )}
 
             {isFretista && (
-              <div style={{background: isDarkMode ? '#1e3a5f' : 'linear-gradient(135deg, #e3f2fd 0%, #e1f5fe 100%)', border: isDarkMode ? '1px solid #1e40af' : '1px solid #2196f3', borderRadius: 12, padding: 20}}>
-                <div style={{display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12}}>
-                  <Truck style={{width: 24, height: 24, color: '#1976d2'}} />
-                  <h4 style={{color: '#1976d2', margin: 0, fontSize: '1.1rem'}}>Ações de Fretista</h4>
+              <div style={{background: isDarkMode ? '#1e3a5f' : 'linear-gradient(135deg, #e3f2fd 0%, #e1f5fe 100%)', border: isDarkMode ? '1px solid #1e40af' : '1px solid #2196f3', borderRadius: 8, padding: 14}}>
+                <div style={{display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8}}>
+                  <Truck style={{width: 20, height: 20, color: '#1976d2'}} />
+                  <h4 style={{color: '#1976d2', margin: 0, fontSize: '1rem'}}>Ações de Fretista</h4>
                 </div>
-                <p style={{color: isDarkMode ? '#9ca3af' : '#666', marginBottom: 16}}>Acesso para registrar informações, fazer check-in/check-out e consultar dados em tempo real.</p>
-                <div style={{display: 'flex', flexWrap: 'wrap', gap: 12}}>
-                  <button className="btn btn-green" style={{fontSize: 14}}>✅ Check-in/Check-out</button>
-                  <button className="btn btn-blue" style={{fontSize: 14}}>📝 Registrar Informações</button>
+                <p style={{color: isDarkMode ? '#9ca3af' : '#666', marginBottom: 12, fontSize: 12}}>Acesso para registrar informações, fazer check-in/check-out e consultar dados em tempo real.</p>
+                <div style={{display: 'flex', flexWrap: 'wrap', gap: 8}}>
+                  <button className="btn btn-green" style={{fontSize: 12, padding: '6px 12px'}}>✅ Check-in/Check-out</button>
+                  <button className="btn btn-blue" style={{fontSize: 12, padding: '6px 12px'}}>📝 Registrar Informações</button>
                 </div>
               </div>
             )}
@@ -296,16 +300,16 @@ function Profile() {
               onClick={handleLogout}
               className="btn btn-red"
               disabled={isLoggingOut}
-              style={{fontSize: 16, padding: '14px 32px', display: 'inline-flex', alignItems: 'center', gap: 8}}
+              style={{fontSize: 12, padding: '8px 16px', display: 'inline-flex', alignItems: 'center', gap: 6}}
             >
               {isLoggingOut ? (
                 <>
-                  <div style={{width: 18, height: 18, border: `2px solid ${isDarkMode ? '#d1d5db' : '#fff'}`, borderTop: '2px solid transparent', borderRadius: '50%', animation: 'spin 1s linear infinite'}}></div>
+                  <div style={{width: 14, height: 14, border: `2px solid ${isDarkMode ? '#d1d5db' : '#fff'}`, borderTop: '2px solid transparent', borderRadius: '50%', animation: 'spin 1s linear infinite'}}></div>
                   <span>Saindo...</span>
                 </>
               ) : (
                 <>
-                  <LogOut style={{width: 18, height: 18}} />
+                  <LogOut style={{width: 14, height: 14}} />
                   <span>Sair da Conta</span>
                 </>
               )}
@@ -325,7 +329,7 @@ function Profile() {
         {loadingUsers ? (
           <div>Carregando usuários...</div>
         ) : (
-          <div style={{maxHeight: 350, overflowY: 'auto'}}>
+          <div style={{maxHeight: 300, overflowY: 'auto'}}>
             {users.length === 0 ? (
               <div>Nenhum usuário encontrado.</div>
             ) : (
@@ -358,7 +362,7 @@ function Profile() {
                         </select>
                       </td>
                       <td style={{padding:'6px 4px'}}>
-                        <button className="btn btn-green" style={{fontSize:12,padding:'4px 12px'}} onClick={() => handleSaveType(user.id)} disabled={savingUserId===user.id}>
+                        <button className="btn btn-green" style={{fontSize:11,padding:'4px 8px'}} onClick={() => handleSaveType(user.id)} disabled={savingUserId===user.id}>
                           {savingUserId===user.id ? 'Salvando...' : 'Salvar'}
                         </button>
                       </td>
@@ -374,7 +378,7 @@ function Profile() {
         {loadingUsers ? (
           <div>Carregando usuários...</div>
         ) : (
-          <div style={{maxHeight: 350, overflowY: 'auto'}}>
+          <div style={{maxHeight: 300, overflowY: 'auto'}}>
             <table style={{width:'100%',fontSize:15}}>
               <thead>
                 <tr style={{color: isDarkMode ? '#10b981' : '#218838'}}>
@@ -423,12 +427,12 @@ function Profile() {
                       </select>
                     </td>
                     <td style={{padding:'6px 4px'}}>
-                      <button className="btn btn-green" style={{fontSize:12,padding:'4px 12px'}} onClick={() => handleSaveUserConfig(user.id)} disabled={savingUserConfigId===user.id}>
+                      <button className="btn btn-green" style={{fontSize:11,padding:'4px 8px'}} onClick={() => handleSaveUserConfig(user.id)} disabled={savingUserConfigId===user.id}>
                         {savingUserConfigId===user.id ? 'Salvando...' : 'Salvar'}
                       </button>
                     </td>
                     <td style={{padding:'6px 4px'}}>
-                      <button className="btn btn-red" style={{fontSize:12,padding:'4px 12px'}} onClick={() => handleDeleteUser(user.id)} disabled={deletingUserId===user.id}>
+                      <button className="btn btn-red" style={{fontSize:11,padding:'4px 8px'}} onClick={() => handleDeleteUser(user.id)} disabled={deletingUserId===user.id}>
                         {deletingUserId===user.id ? 'Excluindo...' : 'Excluir'}
                       </button>
                     </td>
@@ -472,7 +476,7 @@ function Profile() {
                     </select>
                   </td>
                   <td colSpan={2}>
-                    <button className="btn btn-blue" style={{fontSize:12,padding:'4px 12px'}} onClick={handleAddUser} disabled={addingUserLoading}>
+                    <button className="btn btn-blue" style={{fontSize:11,padding:'4px 8px'}} onClick={handleAddUser} disabled={addingUserLoading}>
                       {addingUserLoading ? 'Adicionando...' : 'Adicionar'}
                     </button>
                   </td>
@@ -486,22 +490,22 @@ function Profile() {
         {loadingLogs ? (
           <div>Carregando registros de acesso...</div>
         ) : (
-          <div style={{maxHeight: 350, overflowY: 'auto'}}>
-            <button className="btn btn-green" style={{marginBottom:16}} onClick={handleExportXLSX}>Exportar XLSX</button>
-            <table style={{width:'100%',fontSize:15}}>
+          <div style={{maxHeight: 300, overflowY: 'auto'}}>
+            <button className="btn btn-green" style={{marginBottom:12, fontSize: 11, padding: '6px 10px'}} onClick={handleExportXLSX}>Exportar XLSX</button>
+            <table style={{width:'100%',fontSize:13}}>
               <thead>
                 <tr style={{color: isDarkMode ? '#10b981' : '#218838'}}>
-                  <th style={{textAlign:'left',padding:'6px 4px'}}>E-mail</th>
-                  <th style={{textAlign:'left',padding:'6px 4px'}}>Data</th>
-                  <th style={{textAlign:'left',padding:'6px 4px'}}>Hora</th>
+                  <th style={{textAlign:'left',padding:'6px 4px', fontSize: 12}}>E-mail</th>
+                  <th style={{textAlign:'left',padding:'6px 4px', fontSize: 12}}>Data</th>
+                  <th style={{textAlign:'left',padding:'6px 4px', fontSize: 12}}>Hora</th>
                 </tr>
               </thead>
               <tbody>
                 {accessLogs.map((log, idx) => (
                   <tr key={`${log.email}-${log.date}-${log.time}-${idx}`}>
-                    <td style={{padding:'6px 4px'}}>{log.email}</td>
-                    <td style={{padding:'6px 4px'}}>{log.date}</td>
-                    <td style={{padding:'6px 4px'}}>{log.time}</td>
+                    <td style={{padding:'6px 4px', fontSize: 12}}>{log.email}</td>
+                    <td style={{padding:'6px 4px', fontSize: 12}}>{log.date}</td>
+                    <td style={{padding:'6px 4px', fontSize: 12}}>{log.time}</td>
                   </tr>
                 ))}
               </tbody>
@@ -514,30 +518,30 @@ function Profile() {
         onClick={() => navigate('/registros')}
         style={{
           position: 'fixed',
-          bottom: 24,
-          right: 24,
-          width: 56,
-          height: 56,
+          bottom: 20,
+          right: 20,
+          width: 48,
+          height: 48,
           borderRadius: '50%',
           background: 'linear-gradient(135deg, #ff9800 0%, #ff5722 100%)',
-          boxShadow: '0 8px 24px rgba(255, 152, 0, 0.3)',
+          boxShadow: '0 6px 20px rgba(255, 152, 0, 0.3)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           cursor: 'pointer',
-          fontSize: 24,
+          fontSize: 20,
           color: '#fff',
           zIndex: 1000,
           transition: 'all 0.3s ease',
-          border: `3px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.2)'}`,
+          border: `2px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.2)'}`,
         }}
         onMouseEnter={(e) => {
           e.target.style.transform = 'scale(1.1)';
-          e.target.style.boxShadow = '0 12px 32px rgba(255, 152, 0, 0.4)';
+          e.target.style.boxShadow = '0 8px 24px rgba(255, 152, 0, 0.4)';
         }}
         onMouseLeave={(e) => {
           e.target.style.transform = 'scale(1)';
-          e.target.style.boxShadow = '0 8px 24px rgba(255, 152, 0, 0.3)';
+          e.target.style.boxShadow = '0 6px 20px rgba(255, 152, 0, 0.3)';
         }}
       >
         🚛
