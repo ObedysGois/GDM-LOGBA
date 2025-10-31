@@ -52,6 +52,11 @@ export const useNotifications = () => {
     }
 
     try {
+      // Temporariamente desabilitado para evitar erros de VAPID
+      console.log('Notificações temporariamente desabilitadas');
+      return null;
+      
+      /* 
       const currentToken = await getToken(messaging, {
         vapidKey: VAPID_KEY
       });
@@ -64,6 +69,7 @@ export const useNotifications = () => {
         console.log('Nenhum token de registro disponível.');
         return null;
       }
+      */
     } catch (error) {
       console.error('Erro ao obter token:', error);
       toast.error('Erro ao configurar notificações');

@@ -13,8 +13,11 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    console.log('DEBUG AuthContext - Iniciando listener de autenticação');
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      console.log('DEBUG AuthContext - onAuthStateChanged chamado, user:', user);
       if (user) {
+        console.log('DEBUG AuthContext - Usuário autenticado:', user.email);
         // Buscar tipo do usuário no Firestore
         const q = query(collection(db, 'users'), where('email', '==', user.email));
         const querySnapshot = await getDocs(q);
@@ -41,6 +44,19 @@ export const AuthProvider = ({ children }) => {
           }
         }
         
+        // Verificar se é expedidor baseado no domínio do email ou outros critérios
+        if (user.email.includes('@expedidor.') || user.email.includes('expedidor')) {
+          userType = 'expedidor';
+          // Atualizar no Firestore se necessário
+          if (userDoc && userDoc.data().type !== 'expedidor') {
+            try {
+              await updateDoc(doc(db, 'users', userDoc.id), { type: 'expedidor' });
+            } catch (error) {
+              console.error('Erro ao atualizar tipo para expedidor:', error);
+            }
+          }
+        }
+        
         // Se o e-mail estiver na lista de administradores, força admin
         if (adminEmails.includes(user.email)) {
           userType = 'admin';
@@ -55,10 +71,13 @@ export const AuthProvider = ({ children }) => {
         }
         
         setCurrentUser({ ...user, type: userType });
+        console.log('DEBUG AuthContext - setCurrentUser chamado com:', { ...user, type: userType });
         logUserAccess(user.email);
       } else {
+        console.log('DEBUG AuthContext - Usuário não autenticado, setCurrentUser(null)');
         setCurrentUser(null);
       }
+      console.log('DEBUG AuthContext - setLoading(false)');
       setLoading(false);
     });
     return unsubscribe;

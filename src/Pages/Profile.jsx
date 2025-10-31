@@ -473,6 +473,7 @@ function Profile() {
                       <option value="admin">Administrador</option>
                       <option value="colaborador">Colaborador</option>
                       <option value="fretista">Fretista</option>
+                      <option value="expedidor">Expedidor</option>
                     </select>
                   </td>
                   <td colSpan={2}>

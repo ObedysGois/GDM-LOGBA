@@ -682,9 +682,12 @@ ${message}`);
         icon={FileText}
       />
 
-      <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: 20}}>
+      <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 20}}>
         {/* Formulário de Seleção */}
-        <div className="card" style={{padding: 20}}>
+        <div className="card" style={{padding: 20, background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+              backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+              border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+              boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined, borderRadius: '12px'}}>
           <h3 style={{fontSize: '1.1rem', color: isDarkMode ? '#3b82f6' : '#2563eb', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8, fontWeight: 600}}>
             <FileText style={{width: 18, height: 18}} />
             Seleção de Cliente e Fretista
@@ -811,13 +814,16 @@ ${message}`);
         </div>
 
         {/* Status Atual */}
-        <div className="card" style={{padding: 20}}>
+        <div className="card" style={{padding: 20, background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+              backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+              border: isDarkMode ? '1px solid #0F0F0F' : 'undefined',
+              boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined}}>
           <h3 className="text-base font-medium text-primary-600 dark:text-primary-400 mb-4 flex items-center gap-2">
             <Clock className="w-4 h-4" />
             Status Atual da Entrega
           </h3>
           
-          <div className="flex flex-col gap-3">
+          <div  className="flex flex-col gap-3">
             <div className="bg-card-light dark:bg-card-dark p-3 rounded-lg border border-border-light dark:border-border-dark">
               <p className="text-xs font-medium text-text-secondary-light dark:text-text-secondary-dark mb-1">👤 Cliente: <span className="text-primary-600 dark:text-primary-400">{selectedClient === 'OUTRO - DIGITAR MANUALMENTE' ? otherClient : selectedClient || 'N/A'}</span></p>
               <p className="text-xs font-medium text-text-secondary-light dark:text-text-secondary-dark mb-1">🚛 Fretista: <span className="text-primary-600 dark:text-primary-400">{selectedFretista === 'OUTRO - DIGITAR MANUALMENTE' ? otherFretista : selectedFretista || 'N/A'}</span></p>
@@ -840,7 +846,10 @@ ${message}`);
       </div>
 
       {/* Botões de Ação */}
-      <div className="card" style={{padding: 20}}>
+      <div className="card" style={{padding: 20, background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+              backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+              border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+              boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined}}>
         <h3 className="text-base font-medium text-primary-600 dark:text-primary-400 mb-4 flex items-center gap-2">
           <CheckCircle className="w-4 h-4" />
           Ações de Entrega
@@ -947,7 +956,10 @@ ${message}`);
       )}
 
       {/* Botões de Ação Final */}
-      <div className="card" style={{padding: 20, marginTop: 16}}>
+      <div className="card" style={{padding: 20, marginTop: 16, background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+              backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+              border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+              boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined}}>
         <div className="flex flex-wrap gap-3 justify-center">
           {checkinTime && (deliveryStatus !== 'Entrega em andamento' || problemType) && (
             <button 
@@ -963,7 +975,7 @@ ${message}`);
             <button 
               className="btn btn-outline"
               onClick={resetForm}
-              style={{fontSize: 13, padding: '10px 20px', display: 'inline-flex', alignItems: 'center', gap: 6}}
+              style={{fontSize: 13, padding: '10px 20px', display: 'inline-flex', alignItems: 'center', gap: 6, color: '#fff', background: 'green'}}
             >
               <RefreshCw style={{width: 16, height: 16}} />
               Limpar Formulário

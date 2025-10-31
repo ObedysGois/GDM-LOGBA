@@ -13,6 +13,7 @@ import Localizacao from './Pages/Localizacao.jsx';
 import MeuResumo from './Pages/MeuResumo.jsx';
 import Monitoramento from './Pages/Monitoramento.jsx';
 import Profile from './Pages/Profile.jsx';
+import ChecklistExpedicao from './Pages/ChecklistExpedicao.jsx';
 import ToastNotification from './Components/ToastNotification.jsx';
 import './App.css';
 
@@ -54,6 +55,7 @@ function App() {
                   <Route path="meu-resumo" element={<MeuResumo />} />
                   <Route path="monitoramento" element={<Monitoramento />} />
                   <Route path="profile" element={<Profile />} />
+                  <Route path="checklist-expedicao" element={<ChecklistExpedicao />} />
                 </Route>
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>

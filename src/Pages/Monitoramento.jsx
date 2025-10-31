@@ -3,7 +3,7 @@ import { Monitor, Filter, Trash2, Share2, Edit, MessageSquare, Download, Search,
 import { getDeliveryRecordsPaginated, getDeliveryRecordsPaginatedWithPermissions, clientData, fretistas, problemTypes, updateDeliveryRecord, deleteDeliveryRecord, addDeliveryComment, getAttachmentFromLocalStorage } from '../firebaseUtils.js';
 import { supabase, STORAGE_BUCKETS } from '../supabaseConfig.js';
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 import '../App.css';
 import PageHeader from '../Components/PageHeader.jsx';
 import { useAuth } from '../AuthContext.js';
@@ -361,7 +361,7 @@ function Monitoramento() {
     generateDeliveryReport();
   };
 
-  const generateDeliveryReport = () => {
+  const generateDeliveryReport = async () => {
     try {
       // Criar novo documento PDF em paisagem
       const doc = new jsPDF('l', 'mm', 'a4');
@@ -539,22 +539,22 @@ function Monitoramento() {
         doc.text('DETALHAMENTO DOS REGISTROS', pageWidth / 2, yPosition, { align: 'center' });
         yPosition += 10;
 
-        // Verificar se autoTable está disponível
-        if (typeof doc.autoTable === 'function') {
-          // Preparar dados para a tabela (apenas campos essenciais)
-          const tableData = filteredRecords.map(record => [
-            record.checkin_time ? new Date(record.checkin_time).toLocaleDateString('pt-BR') : '-',
-            record.client || '-',
-            record.driver || '-',
-            record.userEmail || '-',
-            record.checkin_time ? new Date(record.checkin_time).toLocaleTimeString('pt-BR') : '-',
-            record.checkout_time ? new Date(record.checkout_time).toLocaleTimeString('pt-BR') : '-',
-            record.duration || '-',
-            record.status || '-'
-          ]);
+        // Preparar dados para a tabela (apenas campos essenciais)
+        const tableData = filteredRecords.map(record => [
+          record.checkin_time ? new Date(record.checkin_time).toLocaleDateString('pt-BR') : '-',
+          record.client || '-',
+          record.driver || '-',
+          record.userEmail || '-',
+          record.checkin_time ? new Date(record.checkin_time).toLocaleTimeString('pt-BR') : '-',
+          record.checkout_time ? new Date(record.checkout_time).toLocaleTimeString('pt-BR') : '-',
+          record.duration || '-',
+          record.status || '-'
+        ]);
 
-          // Configurar tabela com design moderno
-          doc.autoTable({
+        // Verificar se autoTable está disponível
+        if (typeof autoTable === 'function') {
+        // Configurar tabela com design moderno
+        autoTable(doc, {
             startY: yPosition,
             head: [['Data', 'Cliente', 'Fretista', 'Usuário', 'Check-in', 'Check-out', 'Duração', 'Status']],
             body: tableData,
@@ -830,8 +830,8 @@ function Monitoramento() {
     ]);
 
     // Verificar se autoTable está disponível
-    if (typeof doc.autoTable === 'function') {
-      doc.autoTable({
+    if (typeof autoTable === 'function') {
+      autoTable(doc, {
         startY: yPosition,
         head: [['Tipo de Problema', 'Quantidade', 'Percentual']],
         body: tableData,
@@ -919,8 +919,8 @@ function Monitoramento() {
     ]);
 
     // Verificar se autoTable está disponível
-    if (typeof doc.autoTable === 'function') {
-      doc.autoTable({
+    if (typeof autoTable === 'function') {
+      autoTable(doc, {
         startY: yPosition,
         head: [['Cliente', 'Tempo Médio', 'Total de Visitas']],
         body: tableData,
@@ -1008,8 +1008,8 @@ function Monitoramento() {
     ]);
 
     // Verificar se autoTable está disponível
-    if (typeof doc.autoTable === 'function') {
-      doc.autoTable({
+    if (typeof autoTable === 'function') {
+      autoTable(doc, {
         startY: yPosition,
         head: [['Fretista', 'Tempo Médio', 'Total de Visitas']],
         body: tableData,
@@ -1097,8 +1097,8 @@ function Monitoramento() {
     ]);
 
     // Verificar se autoTable está disponível
-    if (typeof doc.autoTable === 'function') {
-      doc.autoTable({
+    if (typeof autoTable === 'function') {
+      autoTable(doc, {
         startY: yPosition,
         head: [['Fretista', 'Quantidade', 'Percentual']],
         body: tableData,
@@ -1186,8 +1186,8 @@ function Monitoramento() {
     ]);
 
     // Verificar se autoTable está disponível
-    if (typeof doc.autoTable === 'function') {
-      doc.autoTable({
+    if (typeof autoTable === 'function') {
+      autoTable(doc, {
         startY: yPosition,
         head: [['Tipo de Problema', 'Tempo Médio', 'Quantidade']],
         body: tableData,
@@ -1275,8 +1275,8 @@ function Monitoramento() {
     ]);
 
     // Verificar se autoTable está disponível
-    if (typeof doc.autoTable === 'function') {
-      doc.autoTable({
+    if (typeof autoTable === 'function') {
+      autoTable(doc, {
         startY: yPosition,
         head: [['Cliente', 'Quantidade de Problemas', 'Percentual']],
         body: tableData,

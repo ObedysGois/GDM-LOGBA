@@ -39,13 +39,29 @@ function Layout() {
     }
   }, [location]);
 
+  // Definir permissões baseadas no tipo de usuário
+  const userType = currentUser?.type;
+  
+  // Controle de acesso por tipo de usuário
+  const canAccessLocalizacao = ['admin', 'colaborador'].includes(userType);
+  const canAccessMonitoramento = ['admin', 'colaborador'].includes(userType);
+  const canAccessProfile = ['admin', 'colaborador', 'fretista'].includes(userType);
+  const canAccessChecklistExpedicao = ['admin', 'colaborador', 'fretista', 'expedidor'].includes(userType);
+  
+  // Usuário expedidor só tem acesso ao Checklist Expedição
+  const isExpedidor = userType === 'expedidor';
+  
+  // Usuários vendedor e novo não têm acesso ao Checklist Expedição
+  const isVendedorOrNovo = ['vendedor', 'novo'].includes(userType);
+
   const handleLogout = async () => {
     try {
       await logout();
       showToast('Logout realizado com sucesso!', 'success');
       navigate('/login');
     } catch (error) {
-      showToast('Erro ao fazer logout. Tente novamente.', 'error');
+      console.error('Erro no logout:', error);
+      showToast('Erro ao fazer logout', 'error');
     }
   };
 
@@ -72,12 +88,11 @@ function Layout() {
     return null;
   }
 
-  // Determinar se o usuário pode acessar a tela de localização
-  const canAccessLocalizacao = currentUser.type === 'admin' || currentUser.type === 'colaborador';
-  const canAccessMonitoramento = currentUser.type === 'admin' || currentUser.type === 'colaborador';
-  const canAccessProfile = currentUser.type === 'admin' || currentUser.type === 'colaborador';
-
-  const menuItems = [
+  const menuItems = isExpedidor ? [
+    // Expedidor só vê Checklist Expedição
+    { path: '/checklist-expedicao', icon: Truck, label: 'Checklist Expedição' }
+  ] : isVendedorOrNovo ? [
+    // Vendedor e novo não têm acesso ao Checklist Expedição
     { path: '/', icon: Home, label: 'Home' },
     { path: '/registros', icon: FileText, label: 'Registros' },
     { path: '/dashboard', icon: BarChart3, label: 'Dashboard' },
@@ -85,6 +100,16 @@ function Layout() {
     { path: '/meu-resumo', icon: ClipboardList, label: 'Meu Resumo' },
     ...(canAccessMonitoramento ? [{ path: '/monitoramento', icon: Eye, label: 'Monitoramento' }] : []),
     ...(canAccessProfile ? [{ path: '/profile', icon: User, label: 'Perfil' }] : [])
+  ] : [
+    // Admin, colaborador e fretista têm acesso completo
+    { path: '/', icon: Home, label: 'Home' },
+    { path: '/registros', icon: FileText, label: 'Registros' },
+    { path: '/dashboard', icon: BarChart3, label: 'Dashboard' },
+    ...(canAccessLocalizacao ? [{ path: '/localizacao', icon: MapPin, label: 'Localização' }] : []),
+    { path: '/meu-resumo', icon: ClipboardList, label: 'Meu Resumo' },
+    ...(canAccessMonitoramento ? [{ path: '/monitoramento', icon: Eye, label: 'Monitoramento' }] : []),
+    ...(canAccessProfile ? [{ path: '/profile', icon: User, label: 'Perfil' }] : []),
+    { path: '/checklist-expedicao', icon: Truck, label: 'Checklist Expedição' }
   ];
 
   return (
