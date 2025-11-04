@@ -264,6 +264,8 @@ body, html, #root {
 .btn-red:hover { background: #b71c1c; }
 .btn-blue { background: #1976d2; color: #fff; }
 .btn-blue:hover { background: #0d47a1; }
+.btn-purple { background: #9c27b0; color: #fff; }
+.btn-purple:hover { background: #7b1fa2; }
 .btn-outline { background: #fff; color: #218838; border: 2px solid #218838; }
 .btn-outline:hover { background: #e6f4ea; }
 
@@ -1074,4 +1076,22 @@ textarea:focus {
   100% {
     background-position: 200% 0;
   }
+}
+
+/* Estilos para tooltips do mapa */
+.leaflet-tooltip.user-tooltip,
+.leaflet-tooltip.driver-tooltip {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border: 2px solid #333 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  font-size: 12px !important;
+  font-weight: bold !important;
+  padding: 4px 8px !important;
+  color: #333 !important;
+}
+
+.leaflet-tooltip.user-tooltip::before,
+.leaflet-tooltip.driver-tooltip::before {
+  border-top-color: #333 !important;
 }

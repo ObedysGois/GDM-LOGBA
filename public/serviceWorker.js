@@ -295,32 +295,12 @@ async function getCurrentPosition() {
 // Função para enviar localização para o Firebase
 async function sendLocationToFirebase(locationData) {
   try {
-    // Verificar conexão com a internet antes de tentar enviar
-    if (!navigator.onLine) {
-      console.warn('Sem conexão com a internet, armazenando para tentar mais tarde');
-      await storeLocationForRetry(locationData);
-      return { success: false, offline: true };
-    }
-    
-    const response = await fetch('/api/updateLocation', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(locationData),
-    });
-    
-    if (!response.ok) {
-      console.warn(`Resposta do servidor não foi OK: ${response.status} ${response.statusText}`);
-      await storeLocationForRetry(locationData);
-      return { success: false, status: response.status };
-    }
-    
-    return await response.json();
+    // Service worker não deve mais tentar enviar localizações
+    // O rastreamento automático é feito pelo AuthContext
+    console.log('Rastreamento de localização desabilitado no service worker - usando AuthContext');
+    return { success: true, disabled: true };
   } catch (error) {
     console.error('Erro ao enviar localização:', error);
-    // Armazenar para tentar novamente mais tarde
-    await storeLocationForRetry(locationData);
     return { success: false, error: error.message };
   }
 }

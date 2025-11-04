@@ -7,8 +7,6 @@ const ADMIN_EMAILS = [
     "adm.salvador@frutasdocemel.com.br",
     "usuariodocemel@gmail.com",
     "obedysg@gmail.com",
-    "faturamentosalvador@frutasdocemel.com.br",
-    "jessica.louvores@frutasdocemel.com.br"
   ];
   
   export const isAdmin = (userEmail) => {

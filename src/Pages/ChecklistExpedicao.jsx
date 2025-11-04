@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useAuth } from '../AuthContext';
+import PageHeader from '../Components/PageHeader.jsx';
 import { ToastContext } from '../App.js';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, 
@@ -25,6 +26,9 @@ const ChecklistExpedicao = () => {
   const { theme } = useTheme();
   const { currentUser: user } = useAuth();
   const { showToast } = useContext(ToastContext);
+  
+  // Add isDarkMode variable for consistent theme usage
+  const { isDarkMode } = useTheme();
   
   // Estados principais - DEVEM vir antes de qualquer return condicional
   const [activeTab, setActiveTab] = useState('form');
@@ -168,8 +172,6 @@ const ChecklistExpedicao = () => {
   userType = typeMapping[userType] || userType;
   
   console.log('DEBUG - Mapped userType:', userType);
-  
-  const isDarkMode = theme === 'dark';
   
   // Verificar se o usuário tem acesso à tela
   const hasAccess = ['colaborador', 'administrador', 'fretista', 'expedidor'].includes(userType);
@@ -1050,21 +1052,21 @@ const ChecklistExpedicao = () => {
 
   // Controle de acesso por tipo de usuário
   const canAccessForm = () => {
-    return ['colaborador', 'administrador', 'expedidor'].includes(userType);
+    return ['colaborador', 'administrador', 'expedidor', 'gerencia'].includes(userType);
   };
 
   const canAccessAnalytics = () => {
-    return ['colaborador', 'administrador', 'fretista', 'expedidor'].includes(userType);
+    return ['colaborador', 'administrador', 'fretista', 'expedidor', 'gerencia'].includes(userType);
   };
 
   const canAccessTable = () => {
-    return ['colaborador', 'administrador', 'fretista', 'expedidor'].includes(userType);
+    return ['colaborador', 'administrador', 'fretista', 'expedidor', 'gerencia'].includes(userType);
   };
 
   const canAccessReports = () => {
-    return ['colaborador', 'administrador', 'expedidor'].includes(userType);
+    return ['colaborador', 'administrador', 'expedidor', 'gerencia'].includes(userType);
   };
-
+  
   // Componente do Formulário
   const FormSection = () => {
     if (!canAccessForm()) return null;
@@ -1073,16 +1075,8 @@ const ChecklistExpedicao = () => {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        style={{
-          padding: 24,
-          marginBottom: 24,
-          background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
-          backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
-          border: isDarkMode ? '1px solid #0F0F0F' : '1px solid #e0e0e0',
-          borderRadius: 16,
-          boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : '0 4px 12px rgba(0,0,0,0.1)'
-        }}
       >
+        {/* titulo antes do filtro */}
         <div className="flex items-center gap-3 mb-6">
           <div className={`p-3 rounded-lg ${theme === 'dark' ? 'bg-blue-900' : 'bg-blue-100'}`}>
             <Plus className="w-6 h-6 text-blue-600" />
@@ -1092,12 +1086,16 @@ const ChecklistExpedicao = () => {
 
         {/* Informações Básicas */}
         <div style={{
-          background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.8) 0%, rgba(25, 25, 25, 0.6) 100%)' : '#f8fafc',
-          backdropFilter: isDarkMode ? 'blur(15px)' : 'none',
-          border: isDarkMode ? '1px solid #0F0F0F' : '1px solid #e2e8f0',
-          borderRadius: 12,
-          padding: 16,
-          marginBottom: 24
+            padding: 16, 
+            width: '100%', 
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            borderRadius: '12px', 
+            fontSize: 14, 
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+            color: isDarkMode ? '#e2e8f0' : '#000'
         }}>
           <div className="flex items-center gap-2 mb-4">
             <Building className="w-5 h-5 text-blue-600" />
@@ -1114,15 +1112,16 @@ const ChecklistExpedicao = () => {
                 value={formData.empresa}
                 onChange={(e) => setFormData(prev => ({ ...prev, empresa: e.target.value }))}
                 style={{
-                  width: '100%',
-                  padding: '12px',
-                  border: isDarkMode ? '1px solid #0F0F0F' : '1px solid #e2e8f0',
-                  borderRadius: 8,
-                  fontSize: 14,
-                  background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.8) 0%, rgba(25, 25, 25, 0.6) 100%)' : '#fff',
-                  color: isDarkMode ? '#FFFFFF' : '#333',
-                  backdropFilter: isDarkMode ? 'blur(15px)' : 'none',
-                  transition: 'all 0.2s ease'
+            padding: 8, 
+            width: '100%', 
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            borderRadius: '12px', 
+            fontSize: 14, 
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+            color: isDarkMode ? '#e2e8f0' : '#000'
                 }}
                 onFocus={(e) => e.target.style.borderColor = '#3b82f6'}
                 onBlur={(e) => e.target.style.borderColor = isDarkMode ? '#0F0F0F' : '#e2e8f0'}
@@ -1148,15 +1147,16 @@ const ChecklistExpedicao = () => {
                 value={formData.data}
                 onChange={(e) => setFormData(prev => ({ ...prev, data: e.target.value }))}
                 style={{
-                  width: '100%',
-                  padding: '12px',
-                  border: isDarkMode ? '1px solid #0F0F0F' : '1px solid #e2e8f0',
-                  borderRadius: 8,
-                  fontSize: 14,
-                  background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.8) 0%, rgba(25, 25, 25, 0.6) 100%)' : '#fff',
-                  color: isDarkMode ? '#FFFFFF' : '#333',
-                  backdropFilter: isDarkMode ? 'blur(15px)' : 'none',
-                  transition: 'all 0.2s ease'
+            padding: 8, 
+            width: '100%', 
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            borderRadius: '12px', 
+            fontSize: 14, 
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+            color: isDarkMode ? '#e2e8f0' : '#000'
                 }}
                 onFocus={(e) => e.target.style.borderColor = '#10b981'}
                 onBlur={(e) => e.target.style.borderColor = isDarkMode ? '#0F0F0F' : '#e2e8f0'}
@@ -1173,6 +1173,18 @@ const ChecklistExpedicao = () => {
               <select
                 value={showCustomPlaca ? 'OUTRO_DIGITAR' : formData.placa}
                 onChange={(e) => handlePlacaChange(e.target.value)}
+                                style={{
+            padding: 8, 
+            width: '100%', 
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            borderRadius: '12px', 
+            fontSize: 14, 
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+            color: isDarkMode ? '#e2e8f0' : '#000'
+                }}
                 className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all ${theme === 'dark' ? 'bg-gray-600 border-gray-500 text-white' : 'bg-white border-gray-300'}`}
                 required
               >
@@ -1191,6 +1203,18 @@ const ChecklistExpedicao = () => {
                   type="text"
                   value={customPlaca}
                   onChange={(e) => handleCustomPlacaChange(e.target.value)}
+                                  style={{
+            padding: 8, 
+            width: '100%', 
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(39, 39, 39, 0.9) 0%, rgba(39, 39, 39, 0.9) 100%)' : 'white',
+            borderRadius: '12px', 
+            fontSize: 14, 
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+            color: isDarkMode ? '#e2e8f0' : '#000'
+                }}
                   className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all mt-2 ${theme === 'dark' ? 'bg-gray-600 border-gray-500 text-white' : 'bg-white border-gray-300'}`}
                   placeholder="Digite a placa personalizada"
                   required
@@ -1208,6 +1232,18 @@ const ChecklistExpedicao = () => {
                 <input
                   type="text"
                   value={formData.fretista}
+                                  style={{
+            padding: 8, 
+            width: '100%', 
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            borderRadius: '12px', 
+            fontSize: 14, 
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+            color: isDarkMode ? '#e2e8f0' : '#000'
+                }}
                   readOnly
                   className={`w-full p-3 border rounded-lg ${theme === 'dark' ? 'bg-gray-600 border-gray-500 text-slate-300' : 'bg-gray-100 border-gray-300 text-gray-600'}`}
                   placeholder="Auto-preenchido pela placa"
@@ -1215,6 +1251,18 @@ const ChecklistExpedicao = () => {
               ) : (
                 <>
                   <select
+                                  style={{
+            padding: 8, 
+            width: '100%', 
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            borderRadius: '12px', 
+            fontSize: 14, 
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+            color: isDarkMode ? '#e2e8f0' : '#000'
+                }}
                     value={showCustomFretista ? 'OUTRO_DIGITAR' : formData.fretista}
                     onChange={(e) => handleFretistaChange(e.target.value)}
                     className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all ${theme === 'dark' ? 'bg-gray-600 border-gray-500 text-white' : 'bg-white border-gray-300'}`}
@@ -1233,6 +1281,18 @@ const ChecklistExpedicao = () => {
                     <input
                       type="text"
                       value={customFretista}
+                                                        style={{
+            padding: 8, 
+            width: '100%', 
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(39, 39, 39, 0.9) 0%, rgba(39, 39, 39, 0.9) 100%)' : 'white',
+            borderRadius: '12px', 
+            fontSize: 14, 
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+            color: isDarkMode ? '#e2e8f0' : '#000'
+                }}
                       onChange={(e) => handleCustomFretistaChange(e.target.value)}
                       className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all mt-2 ${theme === 'dark' ? 'bg-gray-600 border-gray-500 text-white' : 'bg-white border-gray-300'}`}
                       placeholder="Digite o nome do fretista"
@@ -1459,11 +1519,21 @@ const ChecklistExpedicao = () => {
       >
         {/* Cards de Estatísticas */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className={`${theme === 'dark' ? 'bg-slate-800' : 'bg-white'} rounded-lg shadow-lg p-6`}>
+          <div 
+            className="rounded-lg p-6 shadow-lg"
+            style={{
+              background: isDarkMode 
+                ? 'linear-gradient(135deg, #1e293b 0%, #334155 100%)'
+                : 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
+              boxShadow: isDarkMode 
+                ? '0 10px 25px rgba(0, 0, 0, 0.3)'
+                : '0 10px 25px rgba(0, 0, 0, 0.1)'
+            }}
+          >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Total Checklists</p>
-                <p className="text-2xl font-bold">{stats.total}</p>
+                <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Total Checklists</p>
+                <p className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{stats.total}</p>
               </div>
               <div className="p-3 bg-blue-100 rounded-full">
                 <Truck className="w-6 h-6 text-blue-600" />
@@ -1471,11 +1541,21 @@ const ChecklistExpedicao = () => {
             </div>
           </div>
 
-          <div className={`${theme === 'dark' ? 'bg-slate-800' : 'bg-white'} rounded-lg shadow-lg p-6`}>
+          <div 
+            className="rounded-lg p-6 shadow-lg"
+            style={{
+              background: isDarkMode 
+                ? 'linear-gradient(135deg, #1e293b 0%, #334155 100%)'
+                : 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
+              boxShadow: isDarkMode 
+                ? '0 10px 25px rgba(0, 0, 0, 0.3)'
+                : '0 10px 25px rgba(0, 0, 0, 0.1)'
+            }}
+          >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">PBR Expedidos</p>
-                <p className="text-2xl font-bold">{stats.totalPBR}</p>
+                <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>PBR Expedidos</p>
+                <p className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{stats.totalPBR}</p>
               </div>
               <div className="p-3 bg-green-100 rounded-full">
                 <Package className="w-6 h-6 text-green-600" />
@@ -1483,11 +1563,21 @@ const ChecklistExpedicao = () => {
             </div>
           </div>
 
-          <div className={`${theme === 'dark' ? 'bg-slate-800' : 'bg-white'} rounded-lg shadow-lg p-6`}>
+          <div 
+            className="rounded-lg p-6 shadow-lg"
+            style={{
+              background: isDarkMode 
+                ? 'linear-gradient(135deg, #1e293b 0%, #334155 100%)'
+                : 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
+              boxShadow: isDarkMode 
+                ? '0 10px 25px rgba(0, 0, 0, 0.3)'
+                : '0 10px 25px rgba(0, 0, 0, 0.1)'
+            }}
+          >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Descartáveis</p>
-                <p className="text-2xl font-bold">{stats.totalDesc}</p>
+                <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Descartáveis</p>
+                <p className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{stats.totalDesc}</p>
               </div>
               <div className="p-3 bg-yellow-100 rounded-full">
                 <Trash2 className="w-6 h-6 text-yellow-600" />
@@ -1495,11 +1585,21 @@ const ChecklistExpedicao = () => {
             </div>
           </div>
 
-          <div className={`${theme === 'dark' ? 'bg-slate-800' : 'bg-white'} rounded-lg shadow-lg p-6`}>
+          <div 
+            className="rounded-lg p-6 shadow-lg"
+            style={{
+              background: isDarkMode 
+                ? 'linear-gradient(135deg, #1e293b 0%, #334155 100%)'
+                : 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
+              boxShadow: isDarkMode 
+                ? '0 10px 25px rgba(0, 0, 0, 0.3)'
+                : '0 10px 25px rgba(0, 0, 0, 0.1)'
+            }}
+          >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Pendentes</p>
-                <p className="text-2xl font-bold">{stats.pendentes}</p>
+                <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Pendentes</p>
+                <p className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{stats.pendentes}</p>
               </div>
               <div className="p-3 bg-red-100 rounded-full">
                 <AlertTriangle className="w-6 h-6 text-red-600" />
@@ -1507,11 +1607,21 @@ const ChecklistExpedicao = () => {
             </div>
           </div>
 
-          <div className={`${theme === 'dark' ? 'bg-slate-800' : 'bg-white'} rounded-lg shadow-lg p-6`}>
+          <div 
+            className="rounded-lg p-6 shadow-lg"
+            style={{
+              background: isDarkMode 
+                ? 'linear-gradient(135deg, #1e293b 0%, #334155 100%)'
+                : 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
+              boxShadow: isDarkMode 
+                ? '0 10px 25px rgba(0, 0, 0, 0.3)'
+                : '0 10px 25px rgba(0, 0, 0, 0.1)'
+            }}
+          >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Conformes</p>
-                <p className="text-2xl font-bold">{stats.conformes}</p>
+                <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Conformes</p>
+                <p className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{stats.conformes}</p>
               </div>
               <div className="p-3 bg-green-100 rounded-full">
                 <CheckCircle className="w-6 h-6 text-green-600" />
@@ -1519,11 +1629,21 @@ const ChecklistExpedicao = () => {
             </div>
           </div>
 
-          <div className={`${theme === 'dark' ? 'bg-slate-800' : 'bg-white'} rounded-lg shadow-lg p-6`}>
+          <div 
+            className="rounded-lg p-6 shadow-lg"
+            style={{
+              background: isDarkMode 
+                ? 'linear-gradient(135deg, #1e293b 0%, #334155 100%)'
+                : 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
+              boxShadow: isDarkMode 
+                ? '0 10px 25px rgba(0, 0, 0, 0.3)'
+                : '0 10px 25px rgba(0, 0, 0, 0.1)'
+            }}
+          >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Atrasos</p>
-                <p className="text-2xl font-bold">{stats.atrasos}</p>
+                <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Atrasos</p>
+                <p className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{stats.atrasos}</p>
               </div>
               <div className="p-3 bg-orange-100 rounded-full">
                 <Clock className="w-6 h-6 text-orange-600" />
@@ -1531,11 +1651,21 @@ const ChecklistExpedicao = () => {
             </div>
           </div>
 
-          <div className={`${theme === 'dark' ? 'bg-slate-800' : 'bg-white'} rounded-lg shadow-lg p-6`}>
+          <div 
+            className="rounded-lg p-6 shadow-lg"
+            style={{
+              background: isDarkMode 
+                ? 'linear-gradient(135deg, #1e293b 0%, #334155 100%)'
+                : 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
+              boxShadow: isDarkMode 
+                ? '0 10px 25px rgba(0, 0, 0, 0.3)'
+                : '0 10px 25px rgba(0, 0, 0, 0.1)'
+            }}
+          >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Não Conformes</p>
-                <p className="text-2xl font-bold">{stats.naoConformes}</p>
+                <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Não Conformes</p>
+                <p className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{stats.naoConformes}</p>
               </div>
               <div className="p-3 bg-red-100 rounded-full">
                 <XCircle className="w-6 h-6 text-red-600" />
@@ -1543,11 +1673,21 @@ const ChecklistExpedicao = () => {
             </div>
           </div>
 
-          <div className={`${theme === 'dark' ? 'bg-slate-800' : 'bg-white'} rounded-lg shadow-lg p-6`}>
+          <div 
+            className="rounded-lg p-6 shadow-lg"
+            style={{
+              background: isDarkMode 
+                ? 'linear-gradient(135deg, #1e293b 0%, #334155 100%)'
+                : 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
+              boxShadow: isDarkMode 
+                ? '0 10px 25px rgba(0, 0, 0, 0.3)'
+                : '0 10px 25px rgba(0, 0, 0, 0.1)'
+            }}
+          >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Temp. Média</p>
-                <p className="text-2xl font-bold">{stats.tempMedia}°C</p>
+                <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Temp. Média</p>
+                <p className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{stats.tempMedia}°C</p>
               </div>
               <div className="p-3 bg-blue-100 rounded-full">
                 <Thermometer className="w-6 h-6 text-blue-600" />
@@ -1557,34 +1697,77 @@ const ChecklistExpedicao = () => {
         </div>
 
         {/* Filtros */}
-        <div className={`${theme === 'dark' ? 'bg-slate-800' : 'bg-white'} rounded-lg shadow-lg p-6`}>
-          <h3 className="text-lg font-semibold mb-4">Filtros</h3>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div 
+          className="card"
+          style={{
+            padding: 20, 
+            marginBottom: 20, 
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            marginBlock: 14,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined
+          }}
+        >
+          <h3 style={{fontSize: 16, marginBottom: 16, display: 'flex', alignItems: 'center', gap: 6, fontWeight: 600}}>
+            Filtros
+          </h3>
+          <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12}}>
             <div>
-              <label className="block text-sm font-medium mb-2">Buscar</label>
+              <label style={{display: 'block', fontWeight: 500, color: isDarkMode ? '#9ca3af' : '#2a2a2a', marginBottom: 6, fontSize: 13}}>Buscar:</label>
               <input
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Fretista, placa, empresa..."
-                className={`w-full p-3 border rounded-lg ${theme === 'dark' ? 'bg-slate-700 border-gray-600' : 'bg-white border-gray-300'}`}
+                style={{
+                  padding: 8, 
+                  width: '100%', 
+                  background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+                  borderRadius: 4, 
+                  fontSize: 14, 
+                  backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+                  border: isDarkMode ? '1px solid #0F0F0F' : '1px solid #d1d5db',
+                  boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+                  color: isDarkMode ? '#ffffff' : '#111827'
+                }}
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Data</label>
+              <label style={{display: 'block', fontWeight: 500, color: isDarkMode ? '#9ca3af' : '#2a2a2a', marginBottom: 6, fontSize: 13}}>Data:</label>
               <input
                 type="date"
                 value={dateFilter}
                 onChange={(e) => setDateFilter(e.target.value)}
-                className={`w-full p-3 border rounded-lg ${theme === 'dark' ? 'bg-slate-700 border-gray-600' : 'bg-white border-gray-300'}`}
+                style={{
+                  padding: 8, 
+                  width: '100%', 
+                  background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+                  borderRadius: 4, 
+                  fontSize: 14, 
+                  backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+                  border: isDarkMode ? '1px solid #0F0F0F' : '1px solid #d1d5db',
+                  boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+                  color: isDarkMode ? '#ffffff' : '#111827'
+                }}
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Status</label>
+              <label style={{display: 'block', fontWeight: 500, color: isDarkMode ? '#9ca3af' : '#2a2a2a', marginBottom: 6, fontSize: 13}}>Status:</label>
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className={`w-full p-3 border rounded-lg ${theme === 'dark' ? 'bg-slate-700 border-gray-600' : 'bg-white border-gray-300'}`}
+                style={{
+                  padding: 8, 
+                  width: '100%', 
+                  background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+                  borderRadius: 4, 
+                  fontSize: 14, 
+                  backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+                  border: isDarkMode ? '1px solid #0F0F0F' : '1px solid #d1d5db',
+                  boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+                  color: isDarkMode ? '#ffffff' : '#111827'
+                }}
               >
                 <option value="">Todos</option>
                 <option value="Conforme">Conforme</option>
@@ -1592,14 +1775,23 @@ const ChecklistExpedicao = () => {
                 <option value="Excesso">Excesso</option>
               </select>
             </div>
-            <div className="flex items-end">
-              <button
+            <div style={{display: 'flex', alignItems: 'end'}}>
+              <button 
+                type="button"
                 onClick={() => {
                   setSearchTerm('');
                   setDateFilter('');
                   setStatusFilter('');
                 }}
-                className="w-full p-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
+                className={`
+                  w-full px-3 py-2 rounded-md border-none text-sm font-medium cursor-pointer
+                  transition-all duration-200 inline-flex items-center justify-center gap-2
+                  ${isDarkMode 
+                    ? 'bg-dark-primary hover:bg-dark-primary/90 text-white' 
+                    : 'bg-light-primary hover:bg-light-primary/90 text-white'
+                  }
+                  shadow-sm hover:shadow-md
+                `}
               >
                 Limpar Filtros
               </button>
@@ -1679,28 +1871,62 @@ const ChecklistExpedicao = () => {
         {/* Gráficos */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Gráfico de Atrasos nos Últimos 7 Dias */}
-          <div className={`${theme === 'dark' ? 'bg-slate-800' : 'bg-white'} rounded-lg shadow-lg p-6`}>
-            <h3 className="text-lg font-semibold mb-4">Atrasos nos Últimos 7 Dias</h3>
+          <div 
+            className="rounded-lg p-6 shadow-lg"
+            style={{
+              background: isDarkMode 
+                ? 'linear-gradient(135deg, #1e293b 0%, #334155 100%)'
+                : 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
+              boxShadow: isDarkMode 
+                ? '0 10px 25px rgba(0, 0, 0, 0.3)'
+                : '0 10px 25px rgba(0, 0, 0, 0.1)'
+            }}
+          >
+            <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Atrasos nos Últimos 7 Dias</h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={atrasos7Dias}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="data" />
-                <YAxis />
-                <Tooltip />
+                <CartesianGrid strokeDasharray="3 3" stroke={isDarkMode ? '#374151' : '#e5e7eb'} />
+                <XAxis dataKey="data" stroke={isDarkMode ? '#9ca3af' : '#6b7280'} />
+                <YAxis stroke={isDarkMode ? '#9ca3af' : '#6b7280'} />
+                <Tooltip 
+                  contentStyle={{
+                    backgroundColor: isDarkMode ? '#1f2937' : '#ffffff',
+                    border: `1px solid ${isDarkMode ? '#374151' : '#e5e7eb'}`,
+                    borderRadius: '8px',
+                    color: isDarkMode ? '#ffffff' : '#111827'
+                  }}
+                />
                 <Bar dataKey="atrasos" fill="#f59e0b" />
               </BarChart>
             </ResponsiveContainer>
           </div>
 
           {/* Gráfico de Temperatura Média por Fretista */}
-          <div className={`${theme === 'dark' ? 'bg-slate-800' : 'bg-white'} rounded-lg shadow-lg p-6`}>
-            <h3 className="text-lg font-semibold mb-4">Temperatura Média por Fretista</h3>
+          <div 
+            className="rounded-lg p-6 shadow-lg"
+            style={{
+              background: isDarkMode 
+                ? 'linear-gradient(135deg, #1e293b 0%, #334155 100%)'
+                : 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
+              boxShadow: isDarkMode 
+                ? '0 10px 25px rgba(0, 0, 0, 0.3)'
+                : '0 10px 25px rgba(0, 0, 0, 0.1)'
+            }}
+          >
+            <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Temperatura Média por Fretista</h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={tempPorFretista}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="fretista" />
-                <YAxis />
-                <Tooltip />
+                <CartesianGrid strokeDasharray="3 3" stroke={isDarkMode ? '#374151' : '#e5e7eb'} />
+                <XAxis dataKey="fretista" stroke={isDarkMode ? '#9ca3af' : '#6b7280'} />
+                <YAxis stroke={isDarkMode ? '#9ca3af' : '#6b7280'} />
+                <Tooltip 
+                  contentStyle={{
+                    backgroundColor: isDarkMode ? '#1f2937' : '#ffffff',
+                    border: `1px solid ${isDarkMode ? '#374151' : '#e5e7eb'}`,
+                    borderRadius: '8px',
+                    color: isDarkMode ? '#ffffff' : '#111827'
+                  }}
+                />
                 <Bar dataKey="temperatura" fill="#3b82f6" />
               </BarChart>
             </ResponsiveContainer>
@@ -1718,51 +1944,76 @@ const ChecklistExpedicao = () => {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className={`${theme === 'dark' ? 'bg-slate-800' : 'bg-white'} rounded-lg shadow-lg p-6`}
+        className="rounded-lg p-6 shadow-lg"
+        style={{
+          background: isDarkMode 
+            ? 'linear-gradient(135deg, #1e293b 0%, #334155 100%)'
+            : 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
+          boxShadow: isDarkMode 
+            ? '0 10px 25px rgba(0, 0, 0, 0.3)'
+            : '0 10px 25px rgba(0, 0, 0, 0.1)'
+        }}
       >
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold">Registros de Expedição</h2>
-          <div className="text-sm text-gray-500">
+          <h2 className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Registros de Expedição</h2>
+          <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
             {filteredRegistros.length} registros encontrados
           </div>
         </div>
 
         {loading ? (
-          <div className="text-center py-8">Carregando...</div>
+          <div className={`text-center py-8 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Carregando...</div>
         ) : (
           <>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className={`${theme === 'dark' ? 'bg-slate-700' : 'bg-gray-50'}`}>
-                    <th className="p-3 text-left">Data</th>
-                    <th className="p-3 text-left">Empresa</th>
-                    <th className="p-3 text-left">Placa</th>
-                    <th className="p-3 text-left">Fretista</th>
-                    <th className="p-3 text-left">Chegada</th>
-                    <th className="p-3 text-left">Saída</th>
-                    <th className="p-3 text-left">Temp.</th>
-                    <th className="p-3 text-left">Baú</th>
-                    <th className="p-3 text-left">Pontualidade</th>
-                    <th className="p-3 text-left">Qtd. PBR</th>
-                    <th className="p-3 text-left">Qtd. Desc.</th>
-                    <th className="p-3 text-left">Qtd. Dev.</th>
-                    <th className="p-3 text-left">Saldo</th>
-                    <th className="p-3 text-left">Status</th>
-                    <th className="p-3 text-left">Observação</th>
-                    <th className="p-3 text-left">Ações</th>
+                  <tr 
+                    className="rounded-lg"
+                    style={{
+                      background: isDarkMode ? '#374151' : '#f9fafb'
+                    }}
+                  >
+                    <th className={`p-3 text-left ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Data</th>
+                    <th className={`p-3 text-left ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Empresa</th>
+                    <th className={`p-3 text-left ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Placa</th>
+                    <th className={`p-3 text-left ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Fretista</th>
+                    <th className={`p-3 text-left ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Chegada</th>
+                    <th className={`p-3 text-left ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Saída</th>
+                    <th className={`p-3 text-left ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Temp.</th>
+                    <th className={`p-3 text-left ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Baú</th>
+                    <th className={`p-3 text-left ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Pontualidade</th>
+                    <th className={`p-3 text-left ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Qtd. PBR</th>
+                    <th className={`p-3 text-left ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Qtd. Desc.</th>
+                    <th className={`p-3 text-left ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Qtd. Dev.</th>
+                    <th className={`p-3 text-left ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Saldo</th>
+                    <th className={`p-3 text-left ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Status</th>
+                    <th className={`p-3 text-left ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Observação</th>
+                    <th className={`p-3 text-left ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Ações</th>
                   </tr>
                 </thead>
                 <tbody>
                   {currentRecords.map((registro) => (
-                    <tr key={registro.id} className={`border-b ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'} hover:bg-gray-50 ${theme === 'dark' ? 'hover:bg-slate-700' : ''}`}>
-                      <td className="p-3">{new Date(registro.data).toLocaleDateString('pt-BR')}</td>
-                      <td className="p-3">{registro.empresa}</td>
-                      <td className="p-3">{registro.placa}</td>
-                      <td className="p-3">{registro.fretista}</td>
-                      <td className="p-3">{registro.hora_chegada}</td>
-                      <td className="p-3">{registro.hora_saida}</td>
-                      <td className="p-3">{registro.temperatura}°C</td>
+                    <tr 
+                      key={registro.id} 
+                      className="border-b transition-colors"
+                      style={{
+                        borderColor: isDarkMode ? '#374151' : '#e5e7eb'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = isDarkMode ? '#374151' : '#f9fafb';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = 'transparent';
+                      }}
+                    >
+                      <td className={`p-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-900'}`}>{new Date(registro.data).toLocaleDateString('pt-BR')}</td>
+                      <td className={`p-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-900'}`}>{registro.empresa}</td>
+                      <td className={`p-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-900'}`}>{registro.placa}</td>
+                      <td className={`p-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-900'}`}>{registro.fretista}</td>
+                      <td className={`p-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-900'}`}>{registro.hora_chegada}</td>
+                      <td className={`p-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-900'}`}>{registro.hora_saida}</td>
+                      <td className={`p-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-900'}`}>{registro.temperatura}°C</td>
                       <td className="p-3">
                         <span className={`px-2 py-1 rounded-full text-xs ${
                           registro.condicao_bau === 'Conforme' 
@@ -1781,10 +2032,10 @@ const ChecklistExpedicao = () => {
                           {registro.pontualidade}
                         </span>
                       </td>
-                      <td className="p-3">{registro.qtd_pbr}</td>
-                      <td className="p-3">{registro.qtd_desc}</td>
-                      <td className="p-3">{registro.qtd_devolvida}</td>
-                      <td className="p-3">{registro.saldo}</td>
+                      <td className={`p-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-900'}`}>{registro.qtd_pbr}</td>
+                      <td className={`p-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-900'}`}>{registro.qtd_desc}</td>
+                      <td className={`p-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-900'}`}>{registro.qtd_devolvida}</td>
+                      <td className={`p-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-900'}`}>{registro.saldo}</td>
                       <td className="p-3">
                         <span className={`px-2 py-1 rounded-full text-xs ${
                           registro.status === 'Conforme' 
@@ -1796,7 +2047,7 @@ const ChecklistExpedicao = () => {
                           {registro.status}
                         </span>
                       </td>
-                      <td className="p-3 max-w-xs truncate">{registro.observacao}</td>
+                      <td className={`p-3 max-w-xs truncate ${isDarkMode ? 'text-gray-300' : 'text-gray-900'}`}>{registro.observacao}</td>
                       <td className="p-3">
                         <div className="flex gap-2">
                           <button
@@ -1805,7 +2056,11 @@ const ChecklistExpedicao = () => {
                               setFormData(registro);
                               setShowModal(true);
                             }}
-                            className="p-1 text-blue-600 hover:bg-blue-100 rounded"
+                            className={`p-1 rounded transition-colors ${
+                              isDarkMode 
+                                ? 'text-blue-400 hover:bg-blue-900/30' 
+                                : 'text-blue-600 hover:bg-blue-100'
+                            }`}
                           >
                             <Edit className="w-4 h-4" />
                           </button>
@@ -1814,7 +2069,11 @@ const ChecklistExpedicao = () => {
                               setEditingRecord(registro);
                               setShowModal(true);
                             }}
-                            className="p-1 text-green-600 hover:bg-green-100 rounded"
+                            className={`p-1 rounded transition-colors ${
+                              isDarkMode 
+                                ? 'text-green-400 hover:bg-green-900/30' 
+                                : 'text-green-600 hover:bg-green-100'
+                            }`}
                           >
                             <Eye className="w-4 h-4" />
                           </button>
@@ -1835,11 +2094,19 @@ const ChecklistExpedicao = () => {
                                 }
                               }
                             }}
-                            className="p-1 text-red-600 hover:bg-red-100 rounded"
+                            className={`p-1 rounded transition-colors ${
+                              isDarkMode 
+                                ? 'text-red-400 hover:bg-red-900/30' 
+                                : 'text-red-600 hover:bg-red-100'
+                            }`}
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
-                          <button className="p-1 text-purple-600 hover:bg-purple-100 rounded">
+                          <button className={`p-1 rounded transition-colors ${
+                            isDarkMode 
+                              ? 'text-purple-400 hover:bg-purple-900/30' 
+                              : 'text-purple-600 hover:bg-purple-100'
+                          }`}>
                             <Image className="w-4 h-4" />
                           </button>
                         </div>
@@ -1852,24 +2119,32 @@ const ChecklistExpedicao = () => {
 
             {/* Paginação */}
             <div className="flex items-center justify-between mt-6">
-              <div className="text-sm text-gray-500">
+              <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
                 Mostrando {indexOfFirstRecord + 1} a {Math.min(indexOfLastRecord, filteredRegistros.length)} de {filteredRegistros.length} registros
               </div>
               <div className="flex gap-2">
                 <button
                   onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                   disabled={currentPage === 1}
-                  className="px-3 py-1 border rounded disabled:opacity-50"
+                  className={`px-3 py-1 border rounded disabled:opacity-50 transition-colors ${
+                    isDarkMode 
+                      ? 'border-gray-600 text-gray-300 hover:bg-gray-700 disabled:text-gray-500' 
+                      : 'border-gray-300 text-gray-700 hover:bg-gray-50 disabled:text-gray-400'
+                  }`}
                 >
                   Anterior
                 </button>
-                <span className="px-3 py-1">
+                <span className={`px-3 py-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                   Página {currentPage} de {totalPages}
                 </span>
                 <button
                   onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                   disabled={currentPage === totalPages}
-                  className="px-3 py-1 border rounded disabled:opacity-50"
+                  className={`px-3 py-1 border rounded disabled:opacity-50 transition-colors ${
+                    isDarkMode 
+                      ? 'border-gray-600 text-gray-300 hover:bg-gray-700 disabled:text-gray-500' 
+                      : 'border-gray-300 text-gray-700 hover:bg-gray-50 disabled:text-gray-400'
+                  }`}
                 >
                   Próxima
                 </button>
@@ -1889,64 +2164,98 @@ const ChecklistExpedicao = () => {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className={`${theme === 'dark' ? 'bg-slate-800' : 'bg-white'} rounded-lg shadow-lg p-6`}
+        className="rounded-lg p-6 shadow-lg"
+        style={{
+          background: isDarkMode 
+            ? 'linear-gradient(135deg, #1e293b 0%, #334155 100%)'
+            : 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
+          boxShadow: isDarkMode 
+            ? '0 10px 25px rgba(0, 0, 0, 0.3)'
+            : '0 10px 25px rgba(0, 0, 0, 0.1)'
+        }}
       >
         <div className="flex items-center gap-3 mb-6">
-          <div className={`p-2 rounded-lg ${theme === 'dark' ? 'bg-green-900' : 'bg-green-100'}`}>
-            <Download className="w-6 h-6 text-green-600" />
+          <div 
+            className="p-2 rounded-lg"
+            style={{
+              background: isDarkMode ? '#065f46' : '#dcfce7'
+            }}
+          >
+            <Download className={`w-6 h-6 ${isDarkMode ? 'text-green-400' : 'text-green-600'}`} />
           </div>
-          <h2 className="text-xl font-bold">Relatórios e Exportação</h2>
+          <h2 className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Relatórios e Exportação</h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <button
             onClick={generatePDF}
-            className="flex items-center gap-3 p-4 border-2 border-dashed border-red-300 rounded-lg hover:border-red-500 hover:bg-red-50 transition-colors"
+            className={`flex items-center gap-3 p-4 border-2 border-dashed rounded-lg transition-colors ${
+              isDarkMode 
+                ? 'border-red-600 hover:border-red-400 hover:bg-red-900/20 text-red-400' 
+                : 'border-red-300 hover:border-red-500 hover:bg-red-50 text-red-600'
+            }`}
           >
-            <FileText className="w-8 h-8 text-red-600" />
+            <FileText className="w-8 h-8" />
             <div className="text-left">
-              <div className="font-semibold">Gerar PDF</div>
-              <div className="text-sm text-gray-500">Relatório completo</div>
+              <div className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Gerar PDF</div>
+              <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Relatório completo</div>
             </div>
           </button>
 
           <button
             onClick={generateXLS}
-            className="flex items-center gap-3 p-4 border-2 border-dashed border-green-300 rounded-lg hover:border-green-500 hover:bg-green-50 transition-colors"
+            className={`flex items-center gap-3 p-4 border-2 border-dashed rounded-lg transition-colors ${
+              isDarkMode 
+                ? 'border-green-600 hover:border-green-400 hover:bg-green-900/20 text-green-400' 
+                : 'border-green-300 hover:border-green-500 hover:bg-green-50 text-green-600'
+            }`}
           >
-            <Download className="w-8 h-8 text-green-600" />
+            <Download className="w-8 h-8" />
             <div className="text-left">
-              <div className="font-semibold">Gerar XLS</div>
-              <div className="text-sm text-gray-500">Planilha Excel</div>
+              <div className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Gerar XLS</div>
+              <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Planilha Excel</div>
             </div>
           </button>
 
           <button
             onClick={generateHTML}
-            className="flex items-center gap-3 p-4 border-2 border-dashed border-blue-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
+            className={`flex items-center gap-3 p-4 border-2 border-dashed rounded-lg transition-colors ${
+              isDarkMode 
+                ? 'border-blue-600 hover:border-blue-400 hover:bg-blue-900/20 text-blue-400' 
+                : 'border-blue-300 hover:border-blue-500 hover:bg-blue-50 text-blue-600'
+            }`}
           >
-            <FileText className="w-8 h-8 text-blue-600" />
+            <FileText className="w-8 h-8" />
             <div className="text-left">
-              <div className="font-semibold">Gerar HTML</div>
-              <div className="text-sm text-gray-500">Página web</div>
+              <div className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Gerar HTML</div>
+              <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Página web</div>
             </div>
           </button>
 
           <button
             onClick={shareWhatsApp}
-            className="flex items-center gap-3 p-4 border-2 border-dashed border-green-300 rounded-lg hover:border-green-500 hover:bg-green-50 transition-colors"
+            className={`flex items-center gap-3 p-4 border-2 border-dashed rounded-lg transition-colors ${
+              isDarkMode 
+                ? 'border-green-600 hover:border-green-400 hover:bg-green-900/20 text-green-400' 
+                : 'border-green-300 hover:border-green-500 hover:bg-green-50 text-green-600'
+            }`}
           >
-            <Share className="w-8 h-8 text-green-600" />
+            <Share className="w-8 h-8" />
             <div className="text-left">
-              <div className="font-semibold">WhatsApp</div>
-              <div className="text-sm text-gray-500">Compartilhar resumo</div>
+              <div className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>WhatsApp</div>
+              <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Compartilhar resumo</div>
             </div>
           </button>
         </div>
 
-        <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-          <h3 className="font-semibold text-blue-800 mb-2">Informações dos Relatórios</h3>
-          <ul className="text-sm text-blue-700 space-y-1">
+        <div 
+          className="mt-6 p-4 rounded-lg"
+          style={{
+            background: isDarkMode ? '#1e3a8a' : '#dbeafe'
+          }}
+        >
+          <h3 className={`font-semibold mb-2 ${isDarkMode ? 'text-blue-300' : 'text-blue-800'}`}>Informações dos Relatórios</h3>
+          <ul className={`text-sm space-y-1 ${isDarkMode ? 'text-blue-200' : 'text-blue-700'}`}>
             <li>• PDF: Relatório completo com todas as informações</li>
             <li>• XLS: Planilha para análise de dados</li>
             <li>• HTML: Página web para visualização</li>
@@ -1958,65 +2267,121 @@ const ChecklistExpedicao = () => {
   };
 
   return (
-    <div className={`min-h-screen ${theme === 'dark' ? 'bg-slate-900 text-slate-100' : 'bg-gray-50 text-gray-900'}`}>
-      <div className="container mx-auto px-4 py-6">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">Checklist Expedição</h1>
-          <p className={`${theme === 'dark' ? 'text-slate-400' : 'text-gray-500'}`}>Controle completo de expedição de mercadorias</p>
-        </div>
+      <div className={`checklist-expedicao-container ${isDarkMode ? '#0f0f0f' : ''}`} style={{maxWidth: '1200px', margin: '0 auto', padding: '16px 0', background: isDarkMode ? '#0f0f0f' : 'transparent', minHeight: '100v'}}>
+      {/* Cabeçalho moderno padrão localização */}
+      <PageHeader
+        title="Checklist Expedição"
+        subtitle="Acompanhe os registros da expedição de cargas"
+        icon={User}
+      />
 
         {/* Tabs */}
         <div className="flex flex-wrap gap-2 mb-6">
           {canAccessForm() && (
             <button
               onClick={() => setActiveTab('form')}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                activeTab === 'form'
-                  ? 'bg-blue-600 text-white'
-                  : theme === 'dark' ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-white text-gray-700 hover:bg-gray-100'
-              }`}
+              style={{
+                width: '100%',
+                padding: '12px 24px',
+                borderRadius: '12px',
+                fontWeight: '600',
+                transition: 'all 0.3s ease',
+                background: activeTab === 'form' 
+                  ? 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)'
+                  : isDarkMode 
+                    ? 'linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.8) 100%)'
+                    : 'linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.9) 100%)',
+                color: activeTab === 'form' ? '#ffffff' : isDarkMode ? '#e2e8f0' : '#334155',
+                border: isDarkMode ? '1px solid #334155' : '1px solid #e2e8f0',
+                boxShadow: activeTab === 'form' 
+                  ? '0 8px 25px rgba(59, 130, 246, 0.3)'
+                  : isDarkMode 
+                    ? '0 4px 15px rgba(0, 0, 0, 0.2)'
+                    : '0 4px 15px rgba(0, 0, 0, 0.1)'
+              }}
             >
-              1ª Parte - Formulário
+              📝 1ª Parte - Formulário
             </button>
           )}
           
           {canAccessAnalytics() && (
             <button
               onClick={() => setActiveTab('analytics')}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                activeTab === 'analytics'
-                  ? 'bg-blue-600 text-white'
-                  : theme === 'dark' ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-white text-gray-700 hover:bg-gray-100'
-              }`}
+              style={{
+                width: '100%',
+                padding: '12px 24px',
+                borderRadius: '12px',
+                fontWeight: '600',
+                transition: 'all 0.3s ease',
+                background: activeTab === 'analytics' 
+                  ? 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)'
+                  : isDarkMode 
+                    ? 'linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.8) 100%)'
+                    : 'linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.9) 100%)',
+                color: activeTab === 'analytics' ? '#ffffff' : isDarkMode ? '#e2e8f0' : '#334155',
+                border: isDarkMode ? '1px solid #334155' : '1px solid #e2e8f0',
+                boxShadow: activeTab === 'analytics' 
+                  ? '0 8px 25px rgba(59, 130, 246, 0.3)'
+                  : isDarkMode 
+                    ? '0 4px 15px rgba(0, 0, 0, 0.2)'
+                    : '0 4px 15px rgba(0, 0, 0, 0.1)'
+              }}
             >
-              2ª Parte - Análises
+              📊 2ª Parte - Análises
             </button>
           )}
           
           {canAccessTable() && (
             <button
               onClick={() => setActiveTab('table')}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                activeTab === 'table'
-                  ? 'bg-blue-600 text-white'
-                  : theme === 'dark' ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-white text-gray-700 hover:bg-gray-100'
-              }`}
+              style={{
+                width: '100%',
+                padding: '12px 24px',
+                borderRadius: '12px',
+                fontWeight: '600',
+                transition: 'all 0.3s ease',
+                background: activeTab === 'table' 
+                  ? 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)'
+                  : isDarkMode 
+                    ? 'linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.8) 100%)'
+                    : 'linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.9) 100%)',
+                color: activeTab === 'table' ? '#ffffff' : isDarkMode ? '#e2e8f0' : '#334155',
+                border: isDarkMode ? '1px solid #334155' : '1px solid #e2e8f0',
+                boxShadow: activeTab === 'table' 
+                  ? '0 8px 25px rgba(59, 130, 246, 0.3)'
+                  : isDarkMode 
+                    ? '0 4px 15px rgba(0, 0, 0, 0.2)'
+                    : '0 4px 15px rgba(0, 0, 0, 0.1)'
+              }}
             >
-              3ª Parte - Tabela
+              📋 3ª Parte - Tabela
             </button>
           )}
           
           {canAccessReports() && (
             <button
               onClick={() => setActiveTab('reports')}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                activeTab === 'reports'
-                  ? 'bg-blue-600 text-white'
-                  : theme === 'dark' ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-white text-gray-700 hover:bg-gray-100'
-              }`}
+              style={{
+                width: '100%',
+                padding: '12px 24px',
+                borderRadius: '12px',
+                fontWeight: '600',
+                transition: 'all 0.3s ease',
+                background: activeTab === 'reports' 
+                  ? 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)'
+                  : isDarkMode 
+                    ? 'linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.8) 100%)'
+                    : 'linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.9) 100%)',
+                color: activeTab === 'reports' ? '#ffffff' : isDarkMode ? '#e2e8f0' : '#334155',
+                border: isDarkMode ? '1px solid #334155' : '1px solid #e2e8f0',
+                boxShadow: activeTab === 'reports' 
+                  ? '0 8px 25px rgba(59, 130, 246, 0.3)'
+                  : isDarkMode 
+                    ? '0 4px 15px rgba(0, 0, 0, 0.2)'
+                    : '0 4px 15px rgba(0, 0, 0, 0.1)'
+              }}
             >
-              4ª Parte - Relatórios
+              📄 4ª Parte - Relatórios
             </button>
           )}
         </div>
@@ -2171,7 +2536,6 @@ const ChecklistExpedicao = () => {
            </div>
          )}
        </div>
-     </div>
    );
  };
 

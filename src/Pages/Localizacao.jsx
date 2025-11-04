@@ -1,31 +1,55 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MapPin, Navigation, Clock, User, Building, Truck } from 'lucide-react';
+import { MapPin, Navigation, Filter, Clock, User, Building, Truck } from 'lucide-react';
 import PageHeader from '../Components/PageHeader.jsx';
+import LocationHistory from '../Components/LocationHistory.jsx';
 import { useTheme } from '../contexts/ThemeContext.js';
 import '../App.css';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap, Tooltip } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { useAuth } from '../AuthContext.js';
 import { ToastContext } from '../App.js';
 import { useNavigate } from 'react-router-dom';
-import { saveUserLocation, getOnlineUserLocations } from '../firebaseUtils.js';
+import { saveUserLocation, getOnlineUserLocations, getDeliveryRecordsByUser } from '../firebaseUtils.js';
 import { saveUserData, hasLoggedInToday } from '../indexedDBUtils.js';
 
-// Ícone customizado para o usuário logado
-const userIcon = new L.Icon({
-  iconUrl: 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
-  iconSize: [36, 36],
-  iconAnchor: [18, 36],
-  popupAnchor: [0, -36],
-});
-// Ícone para outros fretistas
-const driverIcon = new L.Icon({
-  iconUrl: 'https://cdn-icons-png.flaticon.com/512/854/854878.png',
-  iconSize: [32, 32],
-  iconAnchor: [16, 32],
-  popupAnchor: [0, -32],
-});
+// Função para gerar cores diferentes para cada usuário
+const generateUserColor = (userEmail) => {
+  const colors = [
+    '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', 
+    '#DDA0DD', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E9',
+    '#F8C471', '#82E0AA', '#F1948A', '#85C1E9', '#D7BDE2'
+  ];
+  
+  // Usar hash do email para garantir cor consistente
+  let hash = 0;
+  for (let i = 0; i < userEmail.length; i++) {
+    const char = userEmail.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32bit integer
+  }
+  
+  return colors[Math.abs(hash) % colors.length];
+};
+
+// Função para criar ícone colorido
+const createColoredIcon = (color, isCurrentUser = false) => {
+  const size = isCurrentUser ? [32, 32] : [28, 28];
+  const anchor = isCurrentUser ? [16, 32] : [14, 28];
+  
+  return new L.Icon({
+    iconUrl: `data:image/svg+xml;base64,${btoa(`
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+        <path fill="${color}" stroke="#fff" stroke-width="2" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+      </svg>
+    `)}`,
+    iconSize: size,
+    iconAnchor: anchor,
+    popupAnchor: [0, -anchor[1]],
+  });
+};
+
+const userIcon = createColoredIcon('#FF6B6B', true); // Vermelho para o usuário atual
 
 function Localizacao() {
   const { currentUser } = useAuth();
@@ -41,13 +65,13 @@ function Localizacao() {
   const [selectedFretista, setSelectedFretista] = useState("");
   const [selectedCliente, setSelectedCliente] = useState("");
 
-  // Proteção de rota: só admin e colaborador
+  // Proteção de rota: admin, colaborador e fretista
   useEffect(() => {
-    if (currentUser && currentUser.type !== 'admin' && currentUser.type !== 'colaborador') {
-      showToast('Acesso negado! Apenas administradores e colaboradores podem acessar a localização.', 'error');
+    if (currentUser && !['admin', 'colaborador', 'fretista'].includes(currentUser.type)) {
+      showToast('Acesso negado! Apenas administradores, colaboradores e fretistas podem acessar a localização.', 'error');
       navigate('/');
     }
-  }, [currentUser, navigate, showToast]);
+  }, [currentUser, navigate]); // Removido showToast das dependências para evitar loop infinito
 
   // Registra o service worker para atualização em segundo plano
   useEffect(() => {
@@ -131,23 +155,51 @@ function Localizacao() {
     let interval;
     const fetchDrivers = async () => {
       const drivers = await getOnlineUserLocations();
-      setOnlineDrivers(drivers);
+      // Remove duplicatas baseado no email do usuário
+      const uniqueDrivers = drivers.filter((driver, index, self) => 
+        index === self.findIndex(d => d.user_email === driver.user_email)
+      );
+      setOnlineDrivers(uniqueDrivers);
     };
     fetchDrivers();
     interval = setInterval(fetchDrivers, 10000); // Atualiza a cada 10s
     return () => clearInterval(interval);
   }, []);
 
-  // Simula entrega em andamento (substitua por lógica real se necessário)
+  // Busca entrega real em andamento do usuário
   useEffect(() => {
-    setTimeout(() => {
-      setCurrentDelivery({
-        client: 'Assai Paralela',
-        startTime: new Date(Date.now() - 30 * 60 * 1000), // 30 min atrás
-        status: 'Em andamento',
-      });
-    }, 1000);
-  }, []);
+    const fetchCurrentDelivery = async () => {
+      if (!currentUser?.email) return;
+      
+      try {
+        const userRecords = await getDeliveryRecordsByUser(currentUser.email);
+        const activeDelivery = userRecords.find(record => 
+          record.status === 'Entrega em andamento' && record.checkin_time
+        );
+        
+        if (activeDelivery) {
+          setCurrentDelivery({
+            client: activeDelivery.client,
+            startTime: new Date(activeDelivery.checkin_time),
+            status: activeDelivery.status,
+            id: activeDelivery.id
+          });
+        } else {
+          setCurrentDelivery(null);
+        }
+      } catch (error) {
+        console.error('Erro ao buscar entrega em andamento:', error);
+        setCurrentDelivery(null);
+      }
+    };
+
+    fetchCurrentDelivery();
+    
+    // Atualiza a cada 30 segundos para manter dados atualizados
+    const interval = setInterval(fetchCurrentDelivery, 30000);
+    
+    return () => clearInterval(interval);
+  }, [currentUser?.email]);
 
   const getTimeInStore = () => {
     if (!currentDelivery?.startTime) return '0 min';
@@ -198,6 +250,16 @@ function Localizacao() {
         icon={MapPin}
       />
 
+      {/* Filtros de Localização */}
+      <div className="card" style={{padding: 20, marginBottom: 20, background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+              backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+              border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+              marginBlock: 14,
+              boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined}}>
+        <h3 style={{fontSize: 16, marginBottom: 16, display: 'flex', alignItems: 'center', gap: 6, fontWeight: 600}}>
+          <Filter style={{width: 16, height: 16}} />
+          Filtros de Localização
+        </h3>      
       {/* Filtros dinâmicos */}
       <div style={{
         display: 'flex', 
@@ -218,52 +280,55 @@ function Localizacao() {
           placeholder="Buscar por nome, e-mail ou cliente..."
           value={searchTerm}
           onChange={e => setSearchTerm(e.target.value)}
-          style={{
-            padding: '6px 12px', 
+                      style={{
+            padding: 8, 
+            width: '100%', 
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
             borderRadius: 4, 
             fontSize: 14, 
-            minWidth: 200,
             backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
             border: isDarkMode ? '1px solid #0F0F0F' : undefined,
             boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
             backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
             color: isDarkMode ? '#e2e8f0' : '#000'
-          }}
+            }}
         />
         <select
           value={selectedFretista}
           onChange={e => setSelectedFretista(e.target.value)}
-          style={{
-            padding: '6px 12px', 
+                      style={{
+            padding: 8, 
+            width: '100%', 
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
             borderRadius: 4, 
             fontSize: 14, 
-            minWidth: 160,
             backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
             border: isDarkMode ? '1px solid #0F0F0F' : undefined,
             boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
             backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
             color: isDarkMode ? '#e2e8f0' : '#000'
-          }}
+            }}
         >
-          <option value="">Todos os Fretistas</option>
+          <option value="">🚛 Todos os Fretistas</option>
           {fretistasList.map(f => <option key={f} value={f}>{f}</option>)}
         </select>
         <select
           value={selectedCliente}
           onChange={e => setSelectedCliente(e.target.value)}
-          style={{
-            padding: '6px 12px', 
+            style={{
+            padding: 8, 
+            width: '100%', 
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
             borderRadius: 4, 
             fontSize: 14, 
-            minWidth: 160,
             backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
             border: isDarkMode ? '1px solid #0F0F0F' : undefined,
             boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
             backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
             color: isDarkMode ? '#e2e8f0' : '#000'
-          }}
+            }}
         >
-          <option value="">Todos os Clientes</option>
+          <option value="">👤 Todos os Clientes</option>
           {clientesList.map(c => <option key={c} value={c}>{c}</option>)}
         </select>
         <button
@@ -288,6 +353,8 @@ function Localizacao() {
           Limpar filtros
         </button>
       </div>
+      </div>
+
 
       {/* Mapa ampliado e responsivo */}
       <div style={{
@@ -360,21 +427,31 @@ function Localizacao() {
                 <CenterMap position={userLocation} />
                 {/* Marker do usuário logado */}
                 <Marker position={[userLocation.latitude, userLocation.longitude]} icon={userIcon}>
+                  <Tooltip permanent direction="top" offset={[0, -40]} className="user-tooltip">
+                    <span style={{fontWeight: 'bold', color: '#333'}}>Você</span>
+                  </Tooltip>
                   <Popup>
                     <b>Você</b><br />
                     {currentUser?.displayName || currentUser?.email}
                   </Popup>
                 </Marker>
                 {/* Markers dos fretistas online */}
-              {filteredDrivers.filter(d => d.user_email !== currentUser.email).map(driver => (
-                  <Marker key={driver.user_email} position={[driver.latitude, driver.longitude]} icon={driverIcon}>
+              {filteredDrivers.filter(d => d.user_email !== currentUser.email).map((driver, index) => {
+                const driverColor = generateUserColor(driver.user_email);
+                const driverIcon = createColoredIcon(driverColor);
+                
+                return (
+                  <Marker key={`${driver.user_email}-${driver.last_update || index}`} position={[driver.latitude, driver.longitude]} icon={driverIcon}>
+                    <Tooltip permanent direction="top" offset={[0, -35]} className="driver-tooltip">
+                      <span style={{fontWeight: 'bold', color: '#333'}}>{driver.user_name}</span>
+                    </Tooltip>
                     <Popup>
                       <b>{driver.user_name}</b><br />
-                      {driver.user_email}
                       <br />Última atualização: {new Date(driver.last_update).toLocaleTimeString('pt-BR')}
                     </Popup>
                   </Marker>
-                ))}
+                );
+              })}
               </MapContainer>
             )}
           </div>
@@ -568,8 +645,8 @@ function Localizacao() {
               }}>Nenhum fretista online no momento.</p>
           ) : (
             <ul style={{listStyle: 'none', padding: 0, margin: 0}}>
-                {filteredDrivers.map(driver => (
-                  <li key={driver.user_email} style={{
+                {filteredDrivers.map((driver, index) => (
+                  <li key={`${driver.user_email}-${driver.last_update || index}`} style={{
                     marginBottom: 6, 
                     color: driver.user_email === currentUser.email 
                       ? (isDarkMode ? '#68d391' : '#218838') 
@@ -578,10 +655,6 @@ function Localizacao() {
                     fontSize: 14
                   }}>
                     <span style={{marginRight: 4}}>{driver.user_name}</span> 
-                    <span style={{
-                      color: isDarkMode ? '#a0aec0' : '#888', 
-                      fontSize: 12
-                    }}>({driver.user_email})</span>
                     {driver.user_email === currentUser.email && 
                       <span style={{
                         color: isDarkMode ? '#68d391' : '#43a047', 
@@ -603,6 +676,9 @@ function Localizacao() {
         </div>
       </div>
       </div>
+
+      {/* Histórico de Localização */}
+      <LocationHistory />
 
       {/* Responsividade mobile */}
       <style>{`

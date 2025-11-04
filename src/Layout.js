@@ -43,16 +43,19 @@ function Layout() {
   const userType = currentUser?.type;
   
   // Controle de acesso por tipo de usuário
-  const canAccessLocalizacao = ['admin', 'colaborador'].includes(userType);
-  const canAccessMonitoramento = ['admin', 'colaborador'].includes(userType);
-  const canAccessProfile = ['admin', 'colaborador', 'fretista'].includes(userType);
-  const canAccessChecklistExpedicao = ['admin', 'colaborador', 'fretista', 'expedidor'].includes(userType);
+  const canAccessLocalizacao = ['admin', 'colaborador', 'fretista', 'comercial'].includes(userType);
+  const canAccessMonitoramento = ['admin', 'colaborador', 'gerencia', 'comercial'].includes(userType);
+  const canAccessProfile = ['admin', 'colaborador', 'fretista', 'gerencia', 'comercial', 'novo'].includes(userType);
+  const canAccessChecklistExpedicao = ['admin', 'colaborador', 'fretista', 'expedidor', 'gerencia'].includes(userType);
+  const canAccessRegistros = ['admin', 'colaborador', 'fretista'].includes(userType);
+  const canAccessDashboard = ['admin', 'colaborador', 'fretista', 'gerencia', 'comercial'].includes(userType);
+  const canAccessHome = ['admin', 'colaborador', 'fretista', 'gerencia', 'comercial'].includes(userType);
   
   // Usuário expedidor só tem acesso ao Checklist Expedição
   const isExpedidor = userType === 'expedidor';
   
-  // Usuários vendedor e novo não têm acesso ao Checklist Expedição
-  const isVendedorOrNovo = ['vendedor', 'novo'].includes(userType);
+  // Usuário novo só tem acesso ao Perfil
+  const isNovo = userType === 'novo';
 
   const handleLogout = async () => {
     try {
@@ -91,25 +94,20 @@ function Layout() {
   const menuItems = isExpedidor ? [
     // Expedidor só vê Checklist Expedição
     { path: '/checklist-expedicao', icon: Truck, label: 'Checklist Expedição' }
-  ] : isVendedorOrNovo ? [
-    // Vendedor e novo não têm acesso ao Checklist Expedição
-    { path: '/', icon: Home, label: 'Home' },
-    { path: '/registros', icon: FileText, label: 'Registros' },
-    { path: '/dashboard', icon: BarChart3, label: 'Dashboard' },
-    ...(canAccessLocalizacao ? [{ path: '/localizacao', icon: MapPin, label: 'Localização' }] : []),
-    { path: '/meu-resumo', icon: ClipboardList, label: 'Meu Resumo' },
-    ...(canAccessMonitoramento ? [{ path: '/monitoramento', icon: Eye, label: 'Monitoramento' }] : []),
+  ] : isNovo ? [
+    // Usuário novo só tem acesso ao Perfil
     ...(canAccessProfile ? [{ path: '/profile', icon: User, label: 'Perfil' }] : [])
   ] : [
-    // Admin, colaborador e fretista têm acesso completo
-    { path: '/', icon: Home, label: 'Home' },
-    { path: '/registros', icon: FileText, label: 'Registros' },
-    { path: '/dashboard', icon: BarChart3, label: 'Dashboard' },
+    // Outros usuários têm acesso baseado em suas permissões
+    ...(canAccessHome ? [{ path: '/', icon: Home, label: 'Home' }] : []),
+    ...(canAccessRegistros ? [{ path: '/registros', icon: FileText, label: 'Registros' }] : []),
+    ...(canAccessDashboard ? [{ path: '/dashboard', icon: BarChart3, label: 'Dashboard' }] : []),
     ...(canAccessLocalizacao ? [{ path: '/localizacao', icon: MapPin, label: 'Localização' }] : []),
-    { path: '/meu-resumo', icon: ClipboardList, label: 'Meu Resumo' },
+    // Meu Resumo: todos exceto gerencia e expedidor
+    ...(userType !== 'gerencia' ? [{ path: '/meu-resumo', icon: ClipboardList, label: 'Meu Resumo' }] : []),
     ...(canAccessMonitoramento ? [{ path: '/monitoramento', icon: Eye, label: 'Monitoramento' }] : []),
     ...(canAccessProfile ? [{ path: '/profile', icon: User, label: 'Perfil' }] : []),
-    { path: '/checklist-expedicao', icon: Truck, label: 'Checklist Expedição' }
+    ...(canAccessChecklistExpedicao ? [{ path: '/checklist-expedicao', icon: Truck, label: 'Checklist Expedição' }] : [])
   ];
 
   return (
@@ -125,22 +123,34 @@ function Layout() {
               initial={{ x: -300 }}
               animate={{ x: 0 }}
               exit={{ x: -300 }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }} style={
+                        {
+              background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+              backdropFilter: isDarkMode ? 'blur(10px)' : 'none',
+              border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+              boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined
+        }
+              }
               className={`
-                fixed top-0 left-0 h-full w-80 z-50 shadow-2xl
-                ${isDarkMode ? 'bg-dark-card border-dark-border' : 'bg-light-card border-light-border'}
-                border-r transition-colors duration-300
+                fixed top-0 left-0 h-full w-70 z-50 shadow-2xl 
               `}
             >
               {/* Logo Section */}
-              <div className={`
-                p-6 border-b
+              <div style={
+                        {
+          background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+              backdropFilter: isDarkMode ? 'blur(10px)' : 'none',
+              border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+              boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined
+        }
+              } className={`
+                p-4 border-b
                 ${isDarkMode ? 'border-dark-border' : 'border-light-border'}
               `}>
                 <div className="flex items-center space-x-3">
                   <div className={`
-                    w-12 h-12 rounded-xl overflow-hidden
-                    ${isDarkMode ? 'bg-dark-primary' : 'bg-light-primary'}
+                    w-12 h-10 rounded-xl overflow-hidden
+                    ${isDarkMode ? 'bg-black-primary' : 'bg-white-primary'}
                   `}>
                     <img 
                       src="/assets/logodocemel.png" 
@@ -149,16 +159,16 @@ function Layout() {
                     />
                   </div>
                   <div>
-                    <h2 className="text-xl font-bold">LOG.BA</h2>
-                    <p className={`text-sm ${isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'}`}>
-                      Sistema de Transporte
+                    <h2 className="text-sm font-bold">LOG.BA</h2>
+                    <p className={`text-xs ${isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'}`}>
+                      Sistema de Transportes Logísticas
                     </p>
                   </div>
                 </div>
               </div>
 
               {/* Navigation Menu */}
-              <nav className="p-4 space-y-2">
+              <nav  className="p-4 space-y-0">
                 {menuItems.map((item) => {
                   const IconComponent = item.icon;
                   const isActive = location.pathname === item.path;
@@ -173,42 +183,47 @@ function Layout() {
                         setSidebarOpen(false);
                       }}
                       className={`
-                        w-full flex items-center space-x-3 p-4 rounded-xl
+                        w-full flex items-center space-x-3 p-3 rounded-xl
                         transition-all duration-200 text-left
                         ${isActive 
                           ? isDarkMode 
-                            ? 'bg-dark-primary text-white shadow-lg' 
+                            ? 'bg-dark-hover text-white shadow-lg' 
                             : 'bg-light-primary text-white shadow-lg'
                           : isDarkMode
-                            ? 'hover:bg-dark-hover text-dark-text'
+                            ? 'hover:bg-dark-cinza text-dark-text'
                             : 'hover:bg-light-hover text-light-text'
                         }
                       `}
                     >
-                      <IconComponent className="w-5 h-5" />
-                      <span className="font-medium text-sm">{item.label}</span>
+                      <IconComponent className="w-4 h-4" />
+                      <span className="text-sm  font-poppins font-bold">{item.label}</span>
                     </motion.button>
                   );
                 })}
               </nav>
 
               {/* User Info & Logout */}
-              <div className={`
+              <div style={
+                        {
+          background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+              backdropFilter: isDarkMode ? 'blur(10px)' : 'none',
+              border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+              boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined
+        }} className={`
                 absolute bottom-0 left-0 right-0 p-4 border-t
-                ${isDarkMode ? 'border-dark-border bg-dark-card' : 'border-light-border bg-light-card'}
               `}>
                 <div className="flex items-center space-x-3 mb-4">
                   <div className={`
                     w-10 h-10 rounded-full flex items-center justify-center
-                    ${isDarkMode ? 'bg-dark-primary' : 'bg-light-primary'}
+                    ${isDarkMode ? 'bg-dark-hover' : 'bg-light-primary'}
                   `}>
-                    <User className="w-5 h-5 text-white" />
+                    <User className="w-4 h-4 text-light-card" />
                   </div>
                   <div className="flex-1">
                     <p className="font-medium text-sm">
                       {currentUser?.displayName || currentUser?.email?.split('@')[0] || 'Usuário'}
                     </p>
-                    <p className={`text-xs ${isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'}`}>
+                    <p className={`text-xs ${isDarkMode ? 'text-dark-accent' : 'text-dark-accent'}`}>
                       {currentUser?.type === 'admin' ? 'Administrador' : 
                        currentUser?.type === 'fretista' ? 'Fretista' : 'Motorista'}
                     </p>
@@ -220,16 +235,16 @@ function Layout() {
                   whileTap={{ scale: 0.98 }}
                   onClick={handleLogout}
                   className={`
-                    w-full flex items-center justify-center space-x-2 p-3 rounded-xl
+                    w-full flex items-center justify-center space-x-2 p-1 rounded-xl
                     transition-all duration-200
                     ${isDarkMode 
-                      ? 'bg-red-600 hover:bg-red-700 text-white' 
-                      : 'bg-red-500 hover:bg-red-600 text-white'
+                      ? 'bg-red-600 hover:bg-red-700 text-light-card text-bold' 
+                      : 'bg-red-500 hover:bg-red-600 text-light-card text-bold'
                     }
                   `}
                 >
                   <LogOut className="w-4 h-4" />
-                  <span className="font-medium">Sair</span>
+                  <span className="font-medium text-light-card text-bold">Sair</span>
                 </motion.button>
               </div>
             </motion.div>
@@ -247,10 +262,15 @@ function Layout() {
       </AnimatePresence>
 
       {/* Topbar */}
-      <header className={`
-        fixed top-0 left-0 right-0 z-30 h-16 shadow-lg
-        ${isDarkMode ? 'bg-dark-card border-dark-border' : 'bg-light-card border-light-border'}
-        border-b transition-colors duration-300
+      <header style={
+        {
+          background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+              backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+              border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+              boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined
+        }
+      } className={`
+        fixed top-0 left-0 right-0 z-30 h-14 shadow-lg
       `}>
         <div className="flex items-center justify-between h-full px-4">
           <div className="flex items-center space-x-4">
@@ -271,8 +291,8 @@ function Layout() {
             
             <div className="flex items-center space-x-3">
               <div className={`
-                w-10 h-10 rounded-lg overflow-hidden
-                ${isDarkMode ? 'bg-dark-primary' : 'bg-light-primary'}
+                w-14 h-12 rounded-lg overflow-hidden
+                ${isDarkMode ? 'bg-black-primary' : 'bg-white-primary'}
               `}>
                 <img 
                   src="/assets/logodocemel.png" 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Filter, Send, Download, Calendar, BarChart3, Clock, CheckCircle, XCircle, AlertTriangle, Loader2, User } from 'lucide-react';
-import { getDeliveryRecordsByUser } from '../firebaseUtils.js';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Filter, Send, Download, Calendar, BarChart3, Clock, Package, CheckCircle, XCircle, AlertTriangle, Loader2, User, Timer } from 'lucide-react';
+import { getDeliveryRecordsByUser, getDeliveryRecordsWithFiltersAndPermissions } from '../firebaseUtils.js';
 import { useAuth } from '../AuthContext.js';
 import { useTheme } from '../contexts/ThemeContext';
 import '../App.css';
@@ -149,9 +150,22 @@ function MeuResumo() {
 
       console.log('🔍 Filtros aplicados:', { startDateFilter, endDateFilter, filterPeriod, startDate, endDate });
 
-      // Buscar registros do usuário
-      const allRecords = await getDeliveryRecordsByUser(currentUser.email);
-      console.log('📥 Registros brutos do usuário:', allRecords.length);
+      // Verificar se o usuário tem permissão para ver todos os registros
+      const userCanSeeAllRecords = currentUser.type === 'admin' || 
+                                   currentUser.type === 'colaborador' || 
+                                   currentUser.type === 'gerencia';
+
+      let allRecords;
+      if (userCanSeeAllRecords) {
+        // Admin, colaborador e gerência veem todos os registros
+        const filters = {}; // Sem filtros específicos, busca todos
+        allRecords = await getDeliveryRecordsWithFiltersAndPermissions(filters, currentUser);
+        console.log('📥 Registros de todos os usuários:', allRecords.length);
+      } else {
+        // Fretistas veem apenas seus próprios registros
+        allRecords = await getDeliveryRecordsByUser(currentUser.email);
+        console.log('📥 Registros do usuário:', allRecords.length);
+      }
       
       // Filtrar por período
       const filteredRecords = allRecords.filter(record => {
@@ -488,7 +502,7 @@ function MeuResumo() {
   };
 
   return (
-    <div className={`meu-resumo-container ${isDarkMode ? 'dark-theme' : ''}`} style={{maxWidth: '1200px', margin: '0 auto', padding: '16px 0', background: isDarkMode ? '#0a0a0a' : 'transparent', minHeight: '100v'}}>
+    <div className={`meu-resumo-container ${isDarkMode ? '#0f0f0f' : ''}`} style={{maxWidth: '1200px', margin: '0 auto', padding: '16px 0', background: isDarkMode ? '#0f0f0f' : 'transparent', minHeight: '100v'}}>
       {/* Cabeçalho moderno padrão localização */}
       <PageHeader
         title="Meu Resumo"
@@ -588,7 +602,7 @@ function MeuResumo() {
                 borderRadius: 4,
                 border: 'none',
                 background: isDarkMode ? 'linear-gradient(90deg, #00ff88 0%, #ff9800 100%)' : 'linear-gradient(90deg, #43a047 0%, #1976d2 100%)',
-                color: isDarkMode ? '#000' : '#fff',
+                color: isDarkMode ? '#fff' : '#fff',
                 fontWeight: 600,
                 fontSize: 14,
                 cursor: 'pointer',
@@ -603,80 +617,206 @@ function MeuResumo() {
         </div>
       </div>
 
-      {/* Métricas do Resumo */}
-      <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16, marginBottom: 24, }}>
-        <div className={`card ${isDarkMode ? 'dark-card' : ''}`} style={{padding: 16, textAlign: 'center', background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+        {/* Cards Estatísticos */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8"
+        >
+          {/* Card Total */}
+          <motion.div
+            whileHover={{ scale: 1.05, y: -5 }}
+            transition={{ type: "spring", stiffness: 300 }}
+            className={`
+              rounded-2xl p-6 text-center shadow-lg border transition-all duration-300
+              ${isDarkMode 
+                ? 'hover:shadow-blue-500/20' 
+                : 'bg-white border-light-border hover:shadow-light-primary/20'
+              }
+            `}
+            style={{
+              background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
               backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
               border: isDarkMode ? '1px solid #0F0F0F' : undefined,
-              boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined, borderRadius: '12px'}}>
-          <div style={{background: 'linear-gradient(135deg, #4caf50 0%, #388e3c 100%)', borderRadius: '50%', width: 48, height: 48, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px'}}>
-            <CheckCircle style={{color: '#fff', width: 20, height: 20}} />
-          </div>
-          <h3 style={{fontSize: '1rem', color: isDarkMode ? '#00ff88' : '#218838', marginBottom: 6}}>Entregas Finalizadas</h3>
-          <p style={{fontSize: '1.3rem', fontWeight: 700, color: '#4caf50', margin: 0}}>
-            {loading ? <Loader2 style={{width: 20, height: 20, animation: 'spin 1s linear infinite'}} /> : stats.entregasFinalizadas}
-          </p>
-        </div>
+              boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined
+            }}
+          >
+            <div className="flex items-center justify-center mb-3">
+              <Package className="w-8 h-8 text-blue-500" />
+            </div>
+            <div className="text-3xl font-bold text-blue-500 mb-2">
+              {stats.total}
+            </div>
+            <div className={`text-sm font-medium ${
+              isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'
+            }`}>
+              Total
+            </div>
+          </motion.div>
 
-        <div className="card" style={{
-          padding: 16, 
-          textAlign: 'center',
-          background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
-          backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
-          border: isDarkMode ? '1px solid #0F0F0F' : undefined,
-          boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined, borderRadius: '12px'
-        }}>
-          <div style={{background: 'linear-gradient(135deg, #dc3545 0%, #c82333 100%)', borderRadius: '50%', width: 48, height: 48, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px'}}>
-            <XCircle style={{color: '#fff', width: 20, height: 20}} />
-          </div>
-          <h3 style={{fontSize: '1rem', color: isDarkMode ? '#00ff88' : '#218838', marginBottom: 6}}>Devoluções</h3>
-          <p style={{fontSize: '1.3rem', fontWeight: 700, color: '#dc3545', margin: 0}}>
-            {loading ? <Loader2 style={{width: 20, height: 20, animation: 'spin 1s linear infinite'}} /> : stats.devolucoes}
-          </p>
-        </div>
+          {/* Card Em Andamento */}
+          <motion.div
+            whileHover={{ scale: 1.05, y: -5 }}
+            transition={{ type: "spring", stiffness: 300 }}
+            className={`
+              rounded-2xl p-6 text-center shadow-lg border transition-all duration-300
+              ${isDarkMode 
+                ? 'hover:shadow-amber-500/20' 
+                : 'bg-white border-light-border hover:shadow-amber-500/20'
+              }
+            `}
+            style={{
+              background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+              backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+              border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+              boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined
+            }}
+          >
+            <div className="flex items-center justify-center mb-3">
+              <Clock className="w-8 h-8 text-amber-500" />
+            </div>
+            <div className="text-3xl font-bold text-amber-500 mb-2">
+              {stats.emAndamento}
+            </div>
+            <div className={`text-sm font-medium ${
+              isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'
+            }`}>
+              Em Andamento
+            </div>
+          </motion.div>
 
-        <div className="card" style={{
-          padding: 16, 
-          textAlign: 'center',
-          background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
-          backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
-          border: isDarkMode ? '1px solid #0F0F0F' : undefined,
-          boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined, borderRadius: '12px'
-        }}>
-          <div style={{background: 'linear-gradient(135deg, #ff9800 0%, #f57c00 100%)', borderRadius: '50%', width: 48, height: 48, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px'}}>
-            <AlertTriangle style={{color: '#fff', width: 20, height: 20}} />
-          </div>
-          <h3 style={{fontSize: '1rem', color: isDarkMode ? '#00ff88' : '#218838', marginBottom: 6}}>Problemas</h3>
-          <p style={{fontSize: '1.3rem', fontWeight: 700, color: '#ff9800', margin: 0}}>
-            {loading ? <Loader2 style={{width: 20, height: 20, animation: 'spin 1s linear infinite'}} /> : stats.problemas}
-          </p>
-        </div>
+          {/* Card Com Problema */}
+          <motion.div
+            whileHover={{ scale: 1.05, y: -5 }}
+            transition={{ type: "spring", stiffness: 300 }}
+            className={`
+              rounded-2xl p-6 text-center shadow-lg border transition-all duration-300
+              ${isDarkMode 
+                ? 'hover:shadow-red-500/20' 
+                : 'bg-white border-light-border hover:shadow-red-500/20'
+              }
+            `}
+            style={{
+              background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+              backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+              border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+              boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined
+            }}
+          >
+            <div className="flex items-center justify-center mb-3">
+              <AlertTriangle className="w-8 h-8 text-red-500" />
+            </div>
+            <div className="text-3xl font-bold text-red-500 mb-2">
+              {stats.comProblema}
+            </div>
+            <div className={`text-sm font-medium ${
+              isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'
+            }`}>
+              Com Problemas
+            </div>
+          </motion.div>
 
-        <div className="card" style={{
-          padding: 16, 
-          textAlign: 'center',
-          background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
-          backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
-          border: isDarkMode ? '1px solid #0F0F0F' : undefined,
-          boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined, borderRadius: '12px'
-        }}>
-          <div style={{background: 'linear-gradient(135deg, #1976d2 0%, #1565c0 100%)', borderRadius: '50%', width: 48, height: 48, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px'}}>
-            <Clock style={{color: '#fff', width: 20, height: 20}} />
-          </div>
-          <h3 style={{fontSize: '1rem', color: isDarkMode ? '#00ff88' : '#218838', marginBottom: 6}}>Tempo Médio</h3>
-          <p style={{fontSize: '1.3rem', fontWeight: 700, color: '#1976d2', margin: 0}}>
-            {loading ? <Loader2 style={{width: 20, height: 20, animation: 'spin 1s linear infinite'}} /> : `${stats.tempoMedio} min`}
-          </p>
-        </div>
-      </div>
+          {/* Card Finalizada */}
+          <motion.div
+            whileHover={{ scale: 1.05, y: -5 }}
+            transition={{ type: "spring", stiffness: 300 }}
+            className={`
+              rounded-2xl p-6 text-center shadow-lg border transition-all duration-300
+              ${isDarkMode 
+                ? 'hover:shadow-green-500/20' 
+                : 'bg-white border-light-border hover:shadow-green-500/20'
+              }
+            `}
+            style={{
+              background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+              backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+              border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+              boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined
+            }}
+          >
+            <div className="flex items-center justify-center mb-3">
+              <CheckCircle className="w-8 h-8 text-green-500" />
+            </div>
+            <div className="text-3xl font-bold text-green-500 mb-2">
+              {stats.finalizada}
+            </div>
+            <div className={`text-sm font-medium ${
+              isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'
+            }`}>
+              Finalizadas
+            </div>
+          </motion.div>
+
+          {/* Card Devolvida */}
+          <motion.div
+            whileHover={{ scale: 1.05, y: -5 }}
+            transition={{ type: "spring", stiffness: 300 }}
+            className={`
+              rounded-2xl p-6 text-center shadow-lg border transition-all duration-300
+              ${isDarkMode 
+                ? 'hover:shadow-red-600/20' 
+                : 'bg-white border-light-border hover:shadow-red-600/20'
+              }
+            `}
+            style={{
+              background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+              backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+              border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+              boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined
+            }}
+          >
+            <div className="flex items-center justify-center mb-3">
+              <XCircle className="w-8 h-8 text-red-600" />
+            </div>
+            <div className="text-3xl font-bold text-red-600 mb-2">
+              {stats.devolvida}
+            </div>
+            <div className={`text-sm font-medium ${
+              isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'
+            }`}>
+              Devolvidas
+            </div>
+          </motion.div>
+
+          {/* Card Tempo Médio */}
+          <motion.div
+            whileHover={{ scale: 1.05, y: -5 }}
+            transition={{ type: "spring", stiffness: 300 }}
+            className={`
+              rounded-2xl p-6 text-center shadow-lg border transition-all duration-300
+              ${isDarkMode 
+                ? 'hover:shadow-purple-500/20' 
+                : 'bg-white border-light-border hover:shadow-purple-500/20'
+              }
+            `}
+            style={{
+              background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+              backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+              border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+              boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined
+            }}
+          >
+            <div className="flex items-center justify-center mb-3">
+              <Timer className="w-8 h-8 text-purple-500" />
+            </div>
+            <div className="text-3xl font-bold text-purple-500 mb-2">
+              {stats.tempoMedio}
+            </div>
+            <div className={`text-sm font-medium ${
+              isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'
+            }`}>
+              Tempo Médio
+            </div>
+          </motion.div>
+        </motion.div>
 
       {/* Resumo Detalhado */}
       <div className="card" style={{
-        padding: 16, 
-        marginBottom: 16,
-        backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
-        border: isDarkMode ? '1px solid #4a5568' : '1px solid #e2e8f0',
-        borderRadius: 6
+              padding: 16, textAlign: 'center', background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+              backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+              border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+              boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined, borderRadius: '12px'
       }}>
         <h3 style={{fontSize: '1.1rem', color: isDarkMode ? '#00ff88' : '#218838', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 6}}>
           <BarChart3 style={{width: 18, height: 18}} />
@@ -695,7 +835,11 @@ function MeuResumo() {
           </div>
         ) : records.length === 0 ? (
           <div style={{
-            background: isDarkMode ? '#2a2a2a' : '#f8f9fa', 
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined, borderRadius: '12px',
+            background: isDarkMode ? '#2a2a2a' : '#eeeeeeff', 
             padding: 24, 
             borderRadius: 8, 
             textAlign: 'center'
@@ -735,9 +879,10 @@ function MeuResumo() {
       {/* Ações */}
       <div className="card" style={{
         padding: 16,
-        backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
-        border: isDarkMode ? '1px solid #4a5568' : '1px solid #e2e8f0',
-        borderRadius: 6
+          background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+          backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+          border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+          boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined, borderRadius: '12px'
       }}>
         <h3 style={{fontSize: '1.1rem', color: isDarkMode ? '#00ff88' : '#218838', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 6}}>
           <Send style={{width: 18, height: 18}} />
@@ -751,7 +896,7 @@ function MeuResumo() {
             disabled={loading}
             style={{
               fontSize: 14, 
-              padding: '10px 20px', 
+              padding: '10px', 
               display: 'inline-flex', 
               alignItems: 'center', 
               gap: 6,
@@ -771,7 +916,7 @@ function MeuResumo() {
             disabled={loading}
             style={{
               fontSize: 14, 
-              padding: '10px 20px', 
+              padding: '10px', 
               display: 'inline-flex', 
               alignItems: 'center', 
               gap: 6,
@@ -791,7 +936,7 @@ function MeuResumo() {
             disabled={loading}
             style={{
               fontSize: 14, 
-              padding: '10px 20px', 
+              padding: '10px', 
               display: 'inline-flex', 
               alignItems: 'center', 
               gap: 6,

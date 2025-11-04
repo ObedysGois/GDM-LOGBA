@@ -9,7 +9,7 @@ module.exports = {
     extend: {
       colors: {
         // Light Theme - Cores corporativas profissionais
-        'light-primary': '#24cc07ff',     // Azul corporativo
+        'light-primary': '#0c6909ff',     // Azul corporativo
         'light-secondary': '#64748b',   // Cinza azulado
         'light-accent': '#0f172a',      // Azul escuro
         'light-bg': '#f8fafc',          // Cinza muito claro
@@ -34,6 +34,7 @@ module.exports = {
         'dark-success': '#10b981',      // Verde suave
         'dark-warning': '#f59e0b',      // Laranja suave
         'dark-danger': '#ef4444',       // Vermelho suave
+        'dark-cinza': '#262729ff',        // Cinza hover mais escuro
       },
       boxShadow: {
         soft: '0 6px 18px rgba(0,0,0,0.08)',

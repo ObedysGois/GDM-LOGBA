@@ -15,6 +15,7 @@ import Monitoramento from './Pages/Monitoramento.jsx';
 import Profile from './Pages/Profile.jsx';
 import ChecklistExpedicao from './Pages/ChecklistExpedicao.jsx';
 import ToastNotification from './Components/ToastNotification.jsx';
+import GeolocationPermission from './Components/GeolocationPermission.jsx';
 import './App.css';
 
 // Context para toast notifications
@@ -68,6 +69,9 @@ function App() {
                 duration={toast.duration}
                 onClose={closeToast} 
               />
+              
+              {/* Componente para solicitar permissão de geolocalização */}
+              <GeolocationPermission />
               
               {/* React Hot Toast para notificações push */}
               <Toaster

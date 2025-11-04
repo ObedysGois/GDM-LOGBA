@@ -123,9 +123,9 @@ function Registros() {
     const loadActiveDelivery = async () => {
       if (!user) return;
       
-      // Verificar se o usuário é do tipo fretista
-      if (user.type !== 'fretista') {
-        // Se não for fretista, não carrega entregas ativas
+      // Verificar se o usuário tem permissão para criar/gerenciar registros
+      if (!['fretista', 'admin'].includes(user.type)) {
+        // Se não for fretista ou admin, não carrega entregas ativas
         return;
       }
       
@@ -697,6 +697,13 @@ ${message}`);
             <div>
               <label style={{display: 'block', fontWeight: 500, color: isDarkMode ? '#cbd5e1' : '#64748b', marginBottom: 6, fontSize: '0.875rem'}}>Cliente:</label>
               <select
+                        style={{
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+            color: isDarkMode ? '#e2e8f0' : '#000'
+            }}
                 value={selectedClient}
                 onChange={(e) => {
                   setSelectedClient(e.target.value);
@@ -734,6 +741,13 @@ ${message}`);
             <div>
               <label style={{display: 'block', fontWeight: 500, color: isDarkMode ? '#cbd5e1' : '#64748b', marginBottom: 6, fontSize: '0.875rem'}}>Fretista:</label>
               <select
+                        style={{
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined, backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+            color: isDarkMode ? '#e2e8f0' : '#000'
+            }}
                 value={selectedFretista}
                 onChange={(e) => {
                   setSelectedFretista(e.target.value);

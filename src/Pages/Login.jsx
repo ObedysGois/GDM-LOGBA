@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, updateProfile } from 'firebase/auth';
 import { motion } from 'framer-motion';
 import { auth } from '../firebaseConfig.js';
 import { useAuth } from '../AuthContext.js';
 import { useTheme } from '../contexts/ThemeContext.js';
-import { LogIn, UserPlus, Mail, Lock, Loader2, Eye, EyeOff } from 'lucide-react';
+import { LogIn, UserPlus, Mail, Lock, Loader2, Eye, EyeOff, User } from 'lucide-react';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [loginType, setLoginType] = useState('login'); // 'login' or 'register'
@@ -42,9 +43,17 @@ function Login() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      
+      // Atualizar o perfil do usuário com o nome
+      await updateProfile(user, {
+        displayName: username
+      });
+      
       alert('Cadastro realizado com sucesso!');
       setLoginType('login');
+      setUsername(''); // Limpar o campo de nome
     } catch (error) {
       alert(`Erro no cadastro: ${error.message}`);
     } finally {
@@ -70,7 +79,7 @@ function Login() {
       <div 
         className="min-h-screen flex items-center justify-center fixed inset-0 z-50"
         style={{
-          backgroundImage: 'url(/assets/backgroundlogin.png)',
+          backgroundImage: 'url(/assets/logosplash.png)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat'
@@ -86,8 +95,8 @@ function Login() {
           <div className="text-center space-y-4">
             <div className="w-full flex justify-center mb-4">
               <img 
-                src="/assets/logodocemelnew.png" 
-                alt="Logo Doce Mel" 
+                src="/assets/logosplash.png" 
+                alt="Logo Splash" 
                 className="w-full h-32 object-contain"
               />
             </div>
@@ -145,7 +154,7 @@ function Login() {
             className="w-full flex justify-center mb-4"
           >
             <img 
-              src="/assets/logodocemelnew.png" 
+              src="/assets/logodocemel.png" 
               alt="Logo Doce Mel" 
               className="w-full h-24 object-contain"
             />
@@ -223,6 +232,30 @@ function Login() {
               />
             </div>
           </motion.div>
+
+          {/* Campo Nome de Usuário - apenas no cadastro */}
+          {loginType === 'register' && (
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.55, duration: 0.5 }}
+            >
+              <label className="block text-xs font-medium mb-1 text-white">
+                Nome de Usuário
+              </label>
+              <div className="relative">
+                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white text-opacity-70" />
+                <input
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  required={loginType === 'register'}
+                  placeholder="Seu nome completo"
+                  className="w-full pl-10 pr-3 py-2.5 rounded-lg border border-white border-opacity-30 transition-all duration-300 text-sm bg-white bg-opacity-20 backdrop-blur-sm text-white placeholder-white placeholder-opacity-60 focus:border-white focus:border-opacity-50 focus:ring-2 focus:ring-white focus:ring-opacity-20 focus:outline-none"
+                />
+              </div>
+            </motion.div>
+          )}
 
           {/* Campo Senha */}
           <motion.div

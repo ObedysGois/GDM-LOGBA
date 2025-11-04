@@ -1,0 +1,153 @@
+.location-history-container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
+  overflow: hidden;
+}
+
+.location-history-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.location-history-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.history-count {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.loading, .error, .no-history {
+  padding: 40px 20px;
+  text-align: center;
+  color: #666;
+}
+
+.error {
+  color: #e74c3c;
+}
+
+.no-history p {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+}
+
+.no-history small {
+  color: #999;
+  font-size: 14px;
+}
+
+.history-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.history-item {
+  padding: 16px 20px;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background-color 0.2s ease;
+}
+
+.history-item:hover {
+  background-color: #f8f9fa;
+}
+
+.history-item:last-child {
+  border-bottom: none;
+}
+
+.history-time {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.history-location {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.coordinates {
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  color: #333;
+  font-weight: 500;
+}
+
+.address {
+  font-size: 14px;
+  color: #555;
+  font-weight: 500;
+}
+
+.status {
+  margin-top: 4px;
+}
+
+.online, .offline {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.online {
+  color: #27ae60;
+  background-color: rgba(39, 174, 96, 0.1);
+}
+
+.offline {
+  color: #e74c3c;
+  background-color: rgba(231, 76, 60, 0.1);
+}
+
+/* Scrollbar customization */
+.history-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.history-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.history-list::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.history-list::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .location-history-header {
+    padding: 12px 16px;
+  }
+  
+  .location-history-header h3 {
+    font-size: 16px;
+  }
+  
+  .history-item {
+    padding: 12px 16px;
+  }
+  
+  .coordinates {
+    font-size: 12px;
+  }
+}

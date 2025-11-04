@@ -41,13 +41,30 @@ Para consultas filtradas por cliente:
 - `client` (Ascending)
 - `timestamp` (Descending)
 
-#### 3. **Índice para Consultas por Driver + Timestamp**
-Para consultas filtradas por fretista:
+#### 4. **Índice para Histórico de Localização**
+Para consultas de histórico de localização por usuário:
 
-**Coleção:** `deliveries`
+**Coleção:** `user_location_history`
 **Campos:**
-- `driver` (Ascending)
+- `user_email` (Ascending)
 - `timestamp` (Descending)
+
+**Como criar:**
+1. Vá para o [Firebase Console](https://console.firebase.google.com)
+2. Selecione seu projeto
+3. Vá para **Firestore Database** > **Indexes**
+4. Clique em **Create Index**
+5. Configure:
+   - Collection ID: `user_location_history`
+   - Fields: 
+     - `user_email` (Ascending)
+     - `timestamp` (Descending)
+6. Clique em **Create**
+
+**Ou use o link direto gerado pelo erro:**
+```
+https://console.firebase.google.com/v1/r/project/gdm-log-ba-2f8c5/firestore/indexes/_/create?collection=user_location_history&field0=user_email&mode0=ASCENDING&field1=timestamp&mode1=DESCENDING
+```
 
 #### 4. **Índice para Consultas por Status + Timestamp**
 Para consultas filtradas por status:
@@ -122,4 +139,4 @@ No Firebase Console, você pode:
 
 - [Firebase Console](https://console.firebase.google.com)
 - [Firestore Indexes Documentation](https://firebase.google.com/docs/firestore/query-data/indexing)
-- [Firestore Query Limitations](https://firebase.google.com/docs/firestore/query-data/queries#query_limitations) 
+- [Firestore Query Limitations](https://firebase.google.com/docs/firestore/query-data/queries#query_limitations)

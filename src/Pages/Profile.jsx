@@ -168,7 +168,9 @@ function Profile() {
   // Dummy user roles for demonstration
   const isAdmin = currentUser && ['colaboradordocemel@gmail.com', 'jrobed10@gmail.com', 'eujunio13@gmail.com', 'adm.salvador@frutasdocemel.com.br', 'usuariodocemel@gmail.com', 'obedysg@gmail.com', 'faturamentosalvador@frutasdocemel.com.br', 'jessica.louvores@frutasdocemel.com.br'].includes(currentUser.email);
   const isCollaborator = currentUser && (isAdmin || currentUser.email === 'collaborator@example.com'); // Example collaborator email
-  const isFretista = currentUser && !isAdmin && !isCollaborator; // Default if not admin or collaborator
+  const isGerencia = currentUser && currentUser.type === 'gerencia'; // Gerencia user type
+  const isComercial = currentUser && currentUser.type === 'comercial'; // Comercial user type
+  const isFretista = currentUser && !isAdmin && !isCollaborator && !isGerencia && !isComercial; // Default if not admin, collaborator, gerencia or comercial
 
   const handleLogout = async () => {
     if (isLoggingOut) return; // Evitar múltiplos cliques
@@ -201,7 +203,10 @@ function Profile() {
       {currentUser ? (
         <div style={{display: 'flex', flexDirection: 'column', gap: 16}}>
           {/* Informações Básicas */}
-          <div className="card" style={{padding: 16}}>
+          <div className="card" style={{padding: 16, background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+              backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+              border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+              boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined, borderRadius: '12px'}}>
             <h3 style={{fontSize: '1.1rem', color: '#218838', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 6}}>
               <User style={{width: 18, height: 18}} />
               Informações Básicas
@@ -239,14 +244,20 @@ function Profile() {
           <NotificationSettings />
 
           {/* Permissões e Ações */}
-          <div className="card" style={{padding: 16}}>
+          <div className="card" style={{padding: 16, background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+              backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+              border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+              boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined, borderRadius: '12px'}}>
             <h3 style={{fontSize: '1.1rem', color: '#218838', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 6}}>
               <Settings style={{width: 18, height: 18}} />
               Permissões e Ações Disponíveis
             </h3>
             
             {isAdmin && (
-              <div style={{background: isDarkMode ? '#2d1b1b' : 'linear-gradient(135deg, #fff5f5 0%, #ffe6e6 100%)', border: isDarkMode ? '1px solid #7f1d1d' : '1px solid #ffcdd2', borderRadius: 8, padding: 14}}>
+              <div style={{background: isDarkMode ? '#2a2a2a' : '#f8f9fa',
+              backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+              border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+              boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined, borderRadius: '12px', padding: 14}}>
                 <div style={{display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8}}>
                   <Shield style={{width: 20, height: 20, color: '#dc3545'}} />
                   <h4 style={{color: '#dc3545', margin: 0, fontSize: '1rem'}}>Controles de Administrador</h4>
@@ -261,7 +272,10 @@ function Profile() {
             )}
 
             {isCollaborator && !isAdmin && (
-              <div style={{background: isDarkMode ? '#2d1f0d' : 'linear-gradient(135deg, #fff8e1 0%, #fff3e0 100%)', border: isDarkMode ? '1px solid #92400e' : '1px solid #ffcc02', borderRadius: 8, padding: 14}}>
+              <div style={{background: isDarkMode ? '#2a2a2a' : '#f8f9fa',
+              backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+              border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+              boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined, borderRadius: '12px', padding: 14}}>
                 <div style={{display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8}}>
                   <Settings style={{width: 20, height: 20, color: '#ff9800'}} />
                   <h4 style={{color: '#ff9800', margin: 0, fontSize: '1rem'}}>Ações de Colaborador</h4>
@@ -274,8 +288,47 @@ function Profile() {
               </div>
             )}
 
-            {isFretista && (
-              <div style={{background: isDarkMode ? '#1e3a5f' : 'linear-gradient(135deg, #e3f2fd 0%, #e1f5fe 100%)', border: isDarkMode ? '1px solid #1e40af' : '1px solid #2196f3', borderRadius: 8, padding: 14}}>
+            {isGerencia && (
+              <div style={{background: isDarkMode ? '#2a2a2a' : '#f8f9fa',
+              backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+              border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+              boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined, borderRadius: '12px', padding: 14}}>
+                <div style={{display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8}}>
+                  <Shield style={{width: 20, height: 20, color: '#9c27b0'}} />
+                  <h4 style={{color: '#9c27b0', margin: 0, fontSize: '1rem'}}>Ações de Gerência</h4>
+                </div>
+                <p style={{color: isDarkMode ? '#9ca3af' : '#666', marginBottom: 12, fontSize: 12}}>Acesso completo para gerenciar operações, relatórios e análises.</p>
+                <div style={{display: 'flex', flexWrap: 'wrap', gap: 8}}>
+                  <button className="btn btn-purple" style={{fontSize: 12, padding: '6px 12px'}}>📊 Relatórios</button>
+                  <button className="btn btn-blue" style={{fontSize: 12, padding: '6px 12px'}}>📈 Análises</button>
+                  <button className="btn btn-green" style={{fontSize: 12, padding: '6px 12px'}}>⚙️ Configurações</button>
+                </div>
+              </div>
+            )}
+
+            {isComercial && (
+              <div style={{background: isDarkMode ? '#2a2a2a' : '#f8f9fa',
+              backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+              border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+              boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined, borderRadius: '12px', padding: 14}}>
+                <div style={{display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8}}>
+                  <Shield style={{width: 20, height: 20, color: '#ff5722'}} />
+                  <h4 style={{color: '#ff5722', margin: 0, fontSize: '1rem'}}>Ações Comerciais</h4>
+                </div>
+                <p style={{color: isDarkMode ? '#9ca3af' : '#666', marginBottom: 12, fontSize: 12}}>Acesso para visualizar dados comerciais, relatórios e monitoramento de operações.</p>
+                <div style={{display: 'flex', flexWrap: 'wrap', gap: 8}}>
+                  <button className="btn btn-orange" style={{fontSize: 12, padding: '6px 12px'}}>📊 Dashboard</button>
+                  <button className="btn btn-blue" style={{fontSize: 12, padding: '6px 12px'}}>📍 Localização</button>
+                  <button className="btn btn-green" style={{fontSize: 12, padding: '6px 12px'}}>📈 Monitoramento</button>
+                </div>
+              </div>
+            )}
+
+            {isFretista && !isGerencia && !isComercial && (
+              <div style={{background: isDarkMode ? '#2a2a2a' : '#f8f9fa',
+              backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+              border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+              boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined, borderRadius: '12px', padding: 14}}>
                 <div style={{display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8}}>
                   <Truck style={{width: 20, height: 20, color: '#1976d2'}} />
                   <h4 style={{color: '#1976d2', margin: 0, fontSize: '1rem'}}>Ações de Fretista</h4>
@@ -290,7 +343,10 @@ function Profile() {
           </div>
 
           {/* Botão de Logout */}
-          <div className="card" style={{padding: 24, textAlign: 'center'}}>
+          <div className="card" style={{padding: 24, textAlign: 'center', background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+              backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+              border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+              boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined, borderRadius: '12px'}}>
             <h3 style={{fontSize: '1.3rem', color: '#dc3545', marginBottom: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8}}>
               <LogOut style={{width: 20, height: 20}} />
               Sair da Conta
@@ -359,6 +415,8 @@ function Profile() {
                           <option value="admin">Administrador</option>
                           <option value="colaborador">Colaborador</option>
                           <option value="fretista">Fretista</option>
+                          <option value="gerencia">Gerência</option>
+                          <option value="comercial">Comercial</option>
                         </select>
                       </td>
                       <td style={{padding:'6px 4px'}}>
@@ -424,6 +482,8 @@ function Profile() {
                         <option value="admin">Administrador</option>
                         <option value="colaborador">Colaborador</option>
                         <option value="fretista">Fretista</option>
+                        <option value="gerencia">Gerência</option>
+                        <option value="comercial">Comercial</option>
                       </select>
                     </td>
                     <td style={{padding:'6px 4px'}}>
@@ -474,6 +534,8 @@ function Profile() {
                       <option value="colaborador">Colaborador</option>
                       <option value="fretista">Fretista</option>
                       <option value="expedidor">Expedidor</option>
+                      <option value="gerencia">Gerência</option>
+                      <option value="comercial">Comercial</option>
                     </select>
                   </td>
                   <td colSpan={2}>

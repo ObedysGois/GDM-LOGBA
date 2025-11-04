@@ -1517,8 +1517,8 @@ ${message}`);
 
   const handleEditRecord = (record) => {
     // Verificar se o usuário tem permissão para editar
-    if (currentUser && currentUser.type !== 'admin') {
-      alert('Apenas administradores podem editar registros.');
+    if (currentUser && !['admin', 'colaborador', 'gerencia'].includes(currentUser.type)) {
+      alert('Apenas administradores, colaboradores e gerência podem editar registros.');
       return;
     }
     
@@ -1661,7 +1661,10 @@ ${message}`);
       />
 
       {/* Filtros */}
-      <div className={`card ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`} style={{padding: 16, marginBottom: 16}}>
+      <div className={`card ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`} style={{padding: 16, marginBottom: 16, background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+              backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+              border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+              boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined, borderRadius: '12px'}}>
         <h3 style={{fontSize: 16, color: isDarkMode ? '#10b981' : '#218838', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 6}}>
           <Filter style={{width: 18, height: 18}} />
           Filtros de Busca
@@ -1672,10 +1675,21 @@ ${message}`);
           <div>
             <label style={{display: 'block', fontWeight: 600, color: isDarkMode ? '#d1d5db' : '#495057', marginBottom: 6, fontSize: 13}}>⏱️ Período:</label>
             <select
+                      style={{
+            padding: 8, 
+            width: '100%', 
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            borderRadius: 4, 
+            fontSize: 14, 
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+            color: isDarkMode ? '#e2e8f0' : '#000'
+            }}
               value={filterPeriod}
               onChange={e => setFilterPeriod(e.target.value)}
               className={`${isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`}
-              style={{width: '100%', padding: '8px 12px', borderRadius: 4, fontSize: 13}}
             >
               {periodOptions.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
             </select>
@@ -1687,8 +1701,18 @@ ${message}`);
             value={filterClient}
               onChange={e => setFilterClient(e.target.value)}
               className={`${isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`}
-              style={{width: '100%', padding: '8px 12px', borderRadius: 4, fontSize: 13}}
-          >
+          style={{
+            padding: 8, 
+            width: '100%', 
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            borderRadius: 4, 
+            fontSize: 14, 
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+            color: isDarkMode ? '#e2e8f0' : '#000'
+            }}          >
               <option value="">Todos os clientes</option>
             {clients.map((client) => (
               <option key={client} value={client}>{client}</option>
@@ -1702,8 +1726,18 @@ ${message}`);
             value={filterFretista}
               onChange={e => setFilterFretista(e.target.value)}
               className={`${isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`}
-              style={{width: '100%', padding: '8px 12px', borderRadius: 4, fontSize: 13}}
-          >
+          style={{
+            padding: 8, 
+            width: '100%', 
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            borderRadius: 4, 
+            fontSize: 14, 
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+            color: isDarkMode ? '#e2e8f0' : '#000'
+            }}          >
               <option value="">Todos os fretistas</option>
             {fretistas.map((fretista) => (
               <option key={fretista} value={fretista}>{fretista}</option>
@@ -1717,8 +1751,18 @@ ${message}`);
               value={filterUser}
               onChange={e => setFilterUser(e.target.value)}
               className={`${isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`}
-              style={{width: '100%', padding: '8px 12px', borderRadius: 4, fontSize: 13}}
-            >
+          style={{
+            padding: 8, 
+            width: '100%', 
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            borderRadius: 4, 
+            fontSize: 14, 
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+            color: isDarkMode ? '#e2e8f0' : '#000'
+            }}            >
               <option value="">Todos os usuários</option>
               {userList.map((user) => (
                 <option key={user} value={user}>{user}</option>
@@ -1732,8 +1776,18 @@ ${message}`);
               value={filterStatus}
               onChange={e => setFilterStatus(e.target.value)}
               className={`${isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`}
-              style={{width: '100%', padding: '8px 12px', borderRadius: 4, fontSize: 13}}
-            >
+          style={{
+            padding: 8, 
+            width: '100%', 
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            borderRadius: 4, 
+            fontSize: 14, 
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+            color: isDarkMode ? '#e2e8f0' : '#000'
+            }}            >
               <option value="">Todos os status</option>
               {statusList.map((status) => (
                 <option key={status} value={status}>{status}</option>
@@ -1747,8 +1801,18 @@ ${message}`);
               value={filterRede}
               onChange={e => setFilterRede(e.target.value)}
               className={`${isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`}
-              style={{width: '100%', padding: '8px 12px', borderRadius: 4, fontSize: 13}}
-            >
+          style={{
+            padding: 8, 
+            width: '100%', 
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            borderRadius: 4, 
+            fontSize: 14, 
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+            color: isDarkMode ? '#e2e8f0' : '#000'
+            }}            >
               <option value="">Todas as redes</option>
               {redeList.map((rede) => (
                 <option key={rede} value={rede}>{rede}</option>
@@ -1762,8 +1826,18 @@ ${message}`);
               value={filterVendedor}
               onChange={e => setFilterVendedor(e.target.value)}
               className={`${isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`}
-              style={{width: '100%', padding: '8px 12px', borderRadius: 4, fontSize: 13}}
-            >
+          style={{
+            padding: 8, 
+            width: '100%', 
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            borderRadius: 4, 
+            fontSize: 14, 
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+            color: isDarkMode ? '#e2e8f0' : '#000'
+            }}            >
               <option value="">Todos os vendedores</option>
               {vendedorList.map((vendedor) => (
                 <option key={vendedor} value={vendedor}>{vendedor}</option>
@@ -1777,8 +1851,18 @@ ${message}`);
               value={filterUF}
               onChange={e => setFilterUF(e.target.value)}
               className={`${isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`}
-              style={{width: '100%', padding: '8px 12px', borderRadius: 4, fontSize: 13}}
-            >
+          style={{
+            padding: 8, 
+            width: '100%', 
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            borderRadius: 4, 
+            fontSize: 14, 
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+            color: isDarkMode ? '#e2e8f0' : '#000'
+            }}            >
               <option value="">Todas as UFs</option>
               {ufList.map((uf) => (
                 <option key={uf} value={uf}>{uf}</option>
@@ -1792,8 +1876,18 @@ ${message}`);
             value={filterProblemType}
               onChange={e => setFilterProblemType(e.target.value)}
               className={`${isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`}
-              style={{width: '100%', padding: '8px 12px', borderRadius: 4, fontSize: 13}}
-          >
+          style={{
+            padding: 8, 
+            width: '100%', 
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            borderRadius: 4, 
+            fontSize: 14, 
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+            color: isDarkMode ? '#e2e8f0' : '#000'
+            }}          >
               <option value="">Todos os tipos</option>
             {problemTypes.map((problem) => (
               <option key={problem} value={problem}>{problem}</option>
@@ -1807,8 +1901,18 @@ ${message}`);
             value={filterHasAttachments}
               onChange={e => setFilterHasAttachments(e.target.value)}
               className={`${isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`}
-              style={{width: '100%', padding: '8px 12px', borderRadius: 4, fontSize: 13}}
-          >
+          style={{
+            padding: 8, 
+            width: '100%', 
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            borderRadius: 4, 
+            fontSize: 14, 
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+            color: isDarkMode ? '#e2e8f0' : '#000'
+            }}          >
             <option value="all">Todos</option>
             <option value="with">Com Anexos</option>
             <option value="without">Sem Anexos</option>
@@ -2052,17 +2156,17 @@ ${message}`);
                         </button>
                         <button 
                           onClick={() => handleEditRecord(record)}
-                          style={{background: isDarkMode ? '#fb923c' : '#ff9800', color: '#fff', border: 'none', borderRadius: 3, padding: '4px 6px', cursor: 'pointer', fontSize: 11, opacity: currentUser && currentUser.type !== 'admin' ? 0.5 : 1}}
-                          title={currentUser && currentUser.type !== 'admin' ? 'Apenas administradores podem editar' : 'Editar'}
-                          disabled={currentUser && currentUser.type !== 'admin'}
+                          style={{background: isDarkMode ? '#fb923c' : '#ff9800', color: '#fff', border: 'none', borderRadius: 3, padding: '4px 6px', cursor: 'pointer', fontSize: 11, opacity: currentUser && !['admin', 'colaborador', 'gerencia'].includes(currentUser.type) ? 0.5 : 1}}
+                          title={currentUser && !['admin', 'colaborador', 'gerencia'].includes(currentUser.type) ? 'Apenas administradores, colaboradores e gerência podem editar' : 'Editar'}
+                          disabled={currentUser && !['admin', 'colaborador', 'gerencia'].includes(currentUser.type)}
                         >
                           <Edit style={{width: 11, height: 11}} />
                         </button>
                         <button 
                           onClick={async () => {
                             // Verificar se o usuário tem permissão para excluir
-                            if (currentUser && currentUser.type !== 'admin') {
-                              alert('Apenas administradores podem excluir registros.');
+                            if (currentUser && !['admin', 'colaborador', 'gerencia'].includes(currentUser.type)) {
+                              alert('Apenas administradores, colaboradores e gerência podem excluir registros.');
                               return;
                             }
                             

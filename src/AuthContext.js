@@ -1,16 +1,145 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { auth } from './firebaseConfig.js';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { logUserAccess, addUser } from './firebaseUtils.js';
+import { logUserAccess, addUser, saveUserLocation, saveLocationToHistory } from './firebaseUtils.js';
 import { getDocs, query, collection, where, updateDoc, doc } from 'firebase/firestore';
 import { db } from './firebaseConfig.js';
 import { adminEmails } from './firebaseUtils.js';
+import { saveUserData, savePendingLocation } from './indexedDBUtils.js';
+import { 
+  checkGeolocationPermission, 
+  hasLocationTrackingPermission,
+  watchPosition,
+  clearWatch
+} from './utils/geolocationUtils.js';
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const locationWatchId = useRef(null);
+  const locationUpdateInterval = useRef(null);
+
+  // Função para iniciar rastreamento automático de localização
+  const startLocationTracking = async (user) => {
+    // Verificar se o usuário tem permissão para rastreamento
+    if (!user || !hasLocationTrackingPermission(user.type)) {
+      console.log('Usuário não tem permissão para rastreamento de localização:', user?.type);
+      return;
+    }
+
+    // Verificar status da permissão de geolocalização
+    const permissionStatus = await checkGeolocationPermission();
+    
+    if (permissionStatus === 'unsupported') {
+      console.log('Geolocalização não suportada neste navegador');
+      return;
+    }
+    
+    if (permissionStatus === 'denied') {
+      console.log('Permissão de geolocalização negada pelo usuário');
+      return;
+    }
+
+    // Salvar dados do usuário no IndexedDB para uso offline
+    try {
+      await saveUserData(user);
+    } catch (error) {
+      console.error('Erro ao salvar dados do usuário no IndexedDB:', error);
+    }
+
+    // Função para atualizar localização
+    const updateLocation = async (position) => {
+      const { latitude, longitude } = position.coords;
+      
+      const locationData = {
+        user_email: user.email,
+        user_name: user.displayName || user.email,
+        latitude,
+        longitude,
+        is_online: true,
+      };
+
+      try {
+        // Tentar salvar no Firebase (localização atual)
+        const success = await saveUserLocation(locationData);
+        
+        // Salvar no histórico independentemente do sucesso da localização atual
+        await saveLocationToHistory(locationData);
+        
+        if (!success) {
+          // Se falhar, salvar no IndexedDB para sincronização posterior
+          await savePendingLocation(locationData);
+        }
+      } catch (error) {
+        console.error('Erro ao salvar localização:', error);
+        // Salvar no IndexedDB como fallback
+        try {
+          await savePendingLocation(locationData);
+          // Tentar salvar no histórico mesmo em caso de erro
+          await saveLocationToHistory(locationData);
+        } catch (indexedDBError) {
+          console.error('Erro ao salvar localização no IndexedDB:', indexedDBError);
+        }
+      }
+    };
+
+    // Função para lidar com erros de geolocalização
+    const handleLocationError = (error) => {
+      let errorMessage = 'Erro ao obter localização';
+      
+      switch (error.code) {
+        case error.PERMISSION_DENIED:
+          errorMessage = 'Permissão de localização negada';
+          break;
+        case error.POSITION_UNAVAILABLE:
+          errorMessage = 'Localização não disponível';
+          break;
+        case error.TIMEOUT:
+          errorMessage = 'Tempo limite para obter localização';
+          break;
+        default:
+          errorMessage = 'Erro desconhecido ao obter localização';
+          break;
+      }
+      
+      console.log(errorMessage, error);
+    };
+
+    // Iniciar rastreamento contínuo usando a função utilitária
+    try {
+      locationWatchId.current = watchPosition(
+        updateLocation,
+        handleLocationError,
+        {
+          enableHighAccuracy: true,
+          timeout: 20000,
+          maximumAge: 30000 // Cache por 30 segundos
+        }
+      );
+
+      if (locationWatchId.current) {
+        console.log('Rastreamento de localização iniciado para:', user.email);
+      }
+    } catch (error) {
+      console.error('Erro ao iniciar rastreamento de localização:', error);
+    }
+  };
+
+  // Função para parar rastreamento de localização
+  const stopLocationTracking = () => {
+    if (locationWatchId.current) {
+      clearWatch(locationWatchId.current);
+      locationWatchId.current = null;
+      console.log('Rastreamento de localização parado');
+    }
+
+    if (locationUpdateInterval.current) {
+      clearInterval(locationUpdateInterval.current);
+      locationUpdateInterval.current = null;
+    }
+  };
 
   useEffect(() => {
     console.log('DEBUG AuthContext - Iniciando listener de autenticação');
@@ -27,18 +156,19 @@ export const AuthProvider = ({ children }) => {
         if (!querySnapshot.empty) {
           userDoc = querySnapshot.docs[0];
           const userData = userDoc.data();
-          userType = userData.type || 'fretista';
+          userType = userData.type || 'novo'; // padrão agora é 'novo'
         } else {
-          // Usuário não existe no Firestore - cadastrar automaticamente como fretista
+          // Usuário não existe no Firestore - cadastrar automaticamente como 'novo'
           try {
             const newUserData = {
               email: user.email,
-              type: 'fretista',
+              type: 'novo', // Novos usuários são cadastrados como 'novo'
               nome: user.displayName || user.email.split('@')[0],
               createdAt: new Date().toISOString()
             };
             await addUser(newUserData);
-            console.log('Usuário cadastrado automaticamente como fretista:', user.email);
+            console.log('Usuário cadastrado automaticamente como novo:', user.email);
+            userType = 'novo';
           } catch (error) {
             console.error('Erro ao cadastrar usuário automaticamente:', error);
           }
@@ -70,17 +200,31 @@ export const AuthProvider = ({ children }) => {
           }
         }
         
-        setCurrentUser({ ...user, type: userType });
-        console.log('DEBUG AuthContext - setCurrentUser chamado com:', { ...user, type: userType });
+        const userData = { ...user, type: userType };
+        setCurrentUser(userData);
+        console.log('DEBUG AuthContext - setCurrentUser chamado com:', userData);
         logUserAccess(user.email);
+        
+        // Iniciar rastreamento automático de localização
+        await startLocationTracking(userData);
       } else {
         console.log('DEBUG AuthContext - Usuário não autenticado, setCurrentUser(null)');
+        
+        // Parar rastreamento de localização
+        stopLocationTracking();
+        
         setCurrentUser(null);
       }
       console.log('DEBUG AuthContext - setLoading(false)');
       setLoading(false);
     });
-    return unsubscribe;
+    
+    // Cleanup function
+    return () => {
+      console.log('DEBUG AuthContext - Limpando listener de autenticação');
+      stopLocationTracking();
+      unsubscribe();
+    };
   }, []);
 
   const logout = async () => {

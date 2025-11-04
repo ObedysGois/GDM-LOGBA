@@ -93,13 +93,34 @@ function Home() {
   const statusList = Array.from(new Set(latestRecords.map(r => r.status).filter(Boolean)));
   const fretistaList = Array.from(new Set(latestRecords.map(r => r.driver).filter(Boolean)));
 
+  // Função para calcular tempo médio de finalização
+  const calculateAverageTime = (records) => {
+    let totalDurationMinutes = 0;
+    let validDurations = 0;
+    
+    records.forEach(record => {
+      if (record.duration) {
+        const match = record.duration.match(/(\d+)\s*min/);
+        if (match) {
+          totalDurationMinutes += parseInt(match[1]);
+          validDurations++;
+        }
+      }
+    });
+    
+    return validDurations > 0 
+      ? `${Math.round(totalDurationMinutes / validDurations)} min` 
+      : 'N/A';
+  };
+
   // Estatísticas dos registros
   const stats = {
     total: latestRecords.length,
     emAndamento: latestRecords.filter(r => r.status === 'Entrega em andamento').length,
     comProblema: latestRecords.filter(r => r.problem_type || r.tipoProblema).length,
     finalizada: latestRecords.filter(r => r.status === 'Entrega finalizada').length,
-    devolvida: latestRecords.filter(r => r.status === 'Entrega devolvida').length
+    devolvida: latestRecords.filter(r => r.status === 'Entrega devolvida').length,
+    tempoMedio: calculateAverageTime(latestRecords)
   };
 
   // Função para limpar filtros
@@ -305,14 +326,14 @@ function Home() {
       }
     }, 60000); // Verificar a cada minuto
     return () => clearInterval(interval);
-  }, [latestRecords.length, checkNotifications]); // Incluindo latestRecords.length como dependência
+  }, [latestRecords.length]); // Removido checkNotifications das dependências para evitar loop infinito
 
   // Verificar notificações quando os registros mudarem
   useEffect(() => {
     if (latestRecords.length > 0) {
       checkNotifications();
     }
-  }, [latestRecords.length, checkNotifications]); // Usando latestRecords.length para evitar dependência do array completo
+  }, [latestRecords.length]); // Removido checkNotifications das dependências para evitar loop infinito
 
   // Mostrar toast sempre que uma nova notificação for criada
   useEffect(() => {
@@ -342,10 +363,10 @@ function Home() {
     localStorage.setItem('dismissedNotifications', JSON.stringify(dismissed));
   };
 
-  // Corrigir a função markAsBeingMonitored para incluir colaboradores
+  // Corrigir a função markAsBeingMonitored para incluir colaboradores e gerência
   const markAsBeingMonitored = async (recordId) => {
-    if (user?.type !== 'admin' && user?.type !== 'colaborador') {
-      showToast('Apenas administradores e colaboradores podem marcar entregas como sendo acompanhadas.', 'warning');
+    if (!['admin', 'colaborador', 'gerencia'].includes(user?.type)) {
+      showToast('Apenas administradores, colaboradores e gerência podem marcar entregas como sendo acompanhadas.', 'warning');
       return;
     }
 
@@ -380,10 +401,13 @@ function Home() {
     return true;
   };
 
-  // Permissão de comentário (admin/colaborador em todos, fretista só o próprio)
+  // Definir tipo de usuário comercial
+  const isComercial = user && user.type === 'comercial';
+
+  // Permissão de comentário (admin/colaborador/comercial em todos, fretista só o próprio)
   const canComment = (record) => {
     if (!user) return false;
-    if (isAdmin(user?.email) || isCollaborator(user)) return true;
+    if (isAdmin(user?.email) || isCollaborator(user) || isComercial) return true;
     return record?.userEmail === user?.email;
   };
 
@@ -731,7 +755,7 @@ function Home() {
                   return formatter.format(now);
                 })()}
               </span>
-              <span style={{fontSize: 12, color: routeImageInfo?.is_local ? background: isDarkMode ? '#ffffffff' : '#51ac56ff', fontWeight: 600}}>
+              <span style={{fontSize: 12, color: routeImageInfo?.is_local ? (isDarkMode ? '#ffffffff' : '#51ac56ff') : (isDarkMode ? '#ffffffff' : '#51ac56ff'), fontWeight: 600}}>
                 💾 Status: {routeImageInfo?.is_local ? 'Salva localmente' : 'Salva no Supabase'}
               </span>
             </div>
@@ -1153,7 +1177,7 @@ function Home() {
                       flexWrap: 'wrap',
                       marginTop: 8
                     }}>
-                      {(record.userEmail === user.email || isAdmin(user?.email)) && (
+                      {(record.userEmail === user.email || isAdmin(user?.email)) && !isComercial && (
                         <button 
                           onClick={() => {
                             setProblemModal({ open: true, record });
@@ -1192,7 +1216,7 @@ function Home() {
                           PROBLEMA
                         </button>
                       )}
-                      {(record.userEmail === user.email || isAdmin(user?.email)) && (
+                      {(record.userEmail === user.email || isAdmin(user?.email)) && !isComercial && (
                         <button 
                           onClick={() => requestSupport(record)}
                           style={{
@@ -1226,7 +1250,7 @@ function Home() {
                           APOIO
                         </button>
                       )}
-                      {(user?.type === 'admin' || user?.type === 'colaborador') && (
+                      {['admin', 'colaborador', 'gerencia', 'comercial'].includes(user?.type) && (
                         <button 
                           onClick={() => markAsBeingMonitored(record.id)}
                           style={{
@@ -1405,7 +1429,7 @@ function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8"
+          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8"
         >
           {/* Card Total */}
           <motion.div
@@ -1561,6 +1585,37 @@ function Home() {
               Devolvidas
             </div>
           </motion.div>
+
+          {/* Card Tempo Médio */}
+          <motion.div
+            whileHover={{ scale: 1.05, y: -5 }}
+            transition={{ type: "spring", stiffness: 300 }}
+            className={`
+              rounded-2xl p-6 text-center shadow-lg border transition-all duration-300
+              ${isDarkMode 
+                ? 'hover:shadow-purple-500/20' 
+                : 'bg-white border-light-border hover:shadow-purple-500/20'
+              }
+            `}
+            style={{
+              background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+              backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+              border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+              boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined
+            }}
+          >
+            <div className="flex items-center justify-center mb-3">
+              <Timer className="w-8 h-8 text-purple-500" />
+            </div>
+            <div className="text-3xl font-bold text-purple-500 mb-2">
+              {stats.tempoMedio}
+            </div>
+            <div className={`text-sm font-medium ${
+              isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'
+            }`}>
+              Tempo Médio
+            </div>
+          </motion.div>
         </motion.div>
 
         {/* Filtros e Busca */}
@@ -1615,20 +1670,22 @@ function Home() {
               <label className={`text-xs font-medium ${ 
                 isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'
               }`}>
-                Cliente
+                👤 Cliente
               </label>
               <select
                 value={filterClient}
                 onChange={e => setFilterClient(e.target.value)}
                 style={{
-                  width: '100%', 
-                  padding: '8px 12px', 
-                  border: isDarkMode ? '1px solid #0F0F0F' : '1px solid #e0e0e0', 
-                  borderRadius: 6, 
-                  fontSize: 12,
-                  background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.8) 0%, rgba(25, 25, 25, 0.6) 100%)' : '#fff',
-                  color: isDarkMode ? '#FFFFFF' : '#333',
-                  backdropFilter: isDarkMode ? 'blur(15px)' : 'none'
+            padding: 8, 
+            width: '100%', 
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            borderRadius: 4, 
+            fontSize: 14, 
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+            color: isDarkMode ? '#e2e8f0' : '#000'
                 }}
               >
                 <option value="">Todos os Clientes</option>
@@ -1641,20 +1698,22 @@ function Home() {
               <label className={`text-xs font-medium ${
                 isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'
               }`}>
-                Duração
+                ⏱️ Duração
               </label>
               <select
                 value={filterDuration}
                 onChange={e => setFilterDuration(e.target.value)}
               style={{
-                width: '100%', 
-                padding: '8px 12px', 
-                border: isDarkMode ? '1px solid #0F0F0F' : '1px solid #e0e0e0', 
-                borderRadius: 6, 
-                fontSize: 12,
-                background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.8) 0%, rgba(25, 25, 25, 0.6) 100%)' : '#fff',
-                color: isDarkMode ? '#FFFFFF' : '#333',
-                backdropFilter: isDarkMode ? 'blur(15px)' : 'none'
+            padding: 8, 
+            width: '100%', 
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            borderRadius: 4, 
+            fontSize: 14, 
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+            color: isDarkMode ? '#e2e8f0' : '#000'
               }}
               >
                 <option value="">Todas as Durações</option>
@@ -1669,20 +1728,22 @@ function Home() {
               <label className={`text-xs font-medium ${
                 isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'
               }`}>
-                Status
+                📊 Status
               </label>
               <select
                 value={filterStatus}
                 onChange={e => setFilterStatus(e.target.value)}
               style={{
-                width: '100%', 
-                padding: '8px 12px', 
-                border: isDarkMode ? '1px solid #0F0F0F' : '1px solid #e0e0e0', 
-                borderRadius: 6, 
-                fontSize: 12,
-                background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.8) 0%, rgba(25, 25, 25, 0.6) 100%)' : '#fff',
-                color: isDarkMode ? '#FFFFFF' : '#333',
-                backdropFilter: isDarkMode ? 'blur(15px)' : 'none'
+            padding: 8, 
+            width: '100%', 
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            borderRadius: 4, 
+            fontSize: 14, 
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+            color: isDarkMode ? '#e2e8f0' : '#000'
               }}
               >
                 <option value="">Todos os Status</option>
@@ -1695,20 +1756,22 @@ function Home() {
               <label className={`text-xs font-medium ${
                 isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'
               }`}>
-                Problema
+                ⚠️ Problema
               </label>
               <select
                 value={filterProblem}
                 onChange={e => setFilterProblem(e.target.value)}
               style={{
-                width: '100%', 
-                padding: '8px 12px', 
-                border: isDarkMode ? '1px solid #0F0F0F' : '1px solid #e0e0e0', 
-                borderRadius: 6, 
-                fontSize: 12,
-                background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.8) 0%, rgba(25, 25, 25, 0.6) 100%)' : '#fff',
-                color: isDarkMode ? '#FFFFFF' : '#333',
-                backdropFilter: isDarkMode ? 'blur(15px)' : 'none'
+            padding: 8, 
+            width: '100%', 
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            borderRadius: 4, 
+            fontSize: 14, 
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+            color: isDarkMode ? '#e2e8f0' : '#000'
               }}
               >
                 <option value="">Com ou sem Problema</option>
@@ -1722,20 +1785,22 @@ function Home() {
               <label className={`text-xs font-medium ${
                 isDarkMode ? 'text-dark-text-secondary' : 'text-light-text-secondary'
               }`}>
-                Fretista
+                🚛 Fretista
               </label>
               <select
                 value={filterFretista}
                 onChange={e => setFilterFretista(e.target.value)}
               style={{
-                width: '100%', 
-                padding: '8px 12px', 
-                border: isDarkMode ? '1px solid #0F0F0F' : '1px solid #e0e0e0', 
-                borderRadius: 6, 
-                fontSize: 12,
-                background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.8) 0%, rgba(25, 25, 25, 0.6) 100%)' : '#fff',
-                color: isDarkMode ? '#FFFFFF' : '#333',
-                backdropFilter: isDarkMode ? 'blur(15px)' : 'none'
+            padding: 8, 
+            width: '100%', 
+            background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            borderRadius: 4, 
+            fontSize: 14, 
+            backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
+            border: isDarkMode ? '1px solid #0F0F0F' : undefined,
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+            color: isDarkMode ? '#e2e8f0' : '#000'
               }}
               >
                 <option value="">Todos os Fretistas</option>
@@ -1998,7 +2063,7 @@ function Home() {
 
                     {/* Action Buttons */}
                     <div className="flex flex-col gap-2 mt-3">
-                      {record.status === 'Entrega em andamento' && (user?.email === record.userEmail || isAdmin(user?.email)) && (
+                      {record.status === 'Entrega em andamento' && (user?.email === record.userEmail || isAdmin(user?.email)) && !isComercial && (
                         <motion.button
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
@@ -2014,7 +2079,7 @@ function Home() {
                         </motion.button>
                       )}
 
-                      {record.status === 'Entrega em andamento' && (user?.email === record.userEmail || isAdmin(user?.email)) && (
+                      {record.status === 'Entrega em andamento' && (user?.email === record.userEmail || isAdmin(user?.email)) && !isComercial && (
                         <motion.button
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}

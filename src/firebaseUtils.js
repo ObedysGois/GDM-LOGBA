@@ -257,8 +257,6 @@ export const adminEmails = [
   "adm.salvador@frutasdocemel.com.br",
   "usuariodocemel@gmail.com",
   "obedysg@gmail.com",
-  "faturamentosalvador@frutasdocemel.com.br",
-  "jessica.louvores@frutasdocemel.com.br"
 ];
 
 // Function to add a new delivery record
@@ -329,13 +327,15 @@ export const getLatestDeliveryRecordsWithPermissions = async (numRecords = 10, c
       throw new Error('Usuário não autenticado');
     }
 
-    // Verificar se o usuário é admin ou colaborador
+    // Verificar se o usuário é admin, colaborador, gerencia ou comercial
     const userIsAdmin = await isAdmin(currentUser.email);
     const userIsCollaborator = await isCollaborator(currentUser);
+    const userIsGerencia = currentUser.type === 'gerencia';
+    const userIsComercial = currentUser.type === 'comercial';
 
     let q;
-    if (userIsAdmin || userIsCollaborator) {
-      // Admin e colaborador veem todos os registros
+    if (userIsAdmin || userIsCollaborator || userIsGerencia || userIsComercial) {
+      // Admin, colaborador, gerencia e comercial veem todos os registros
       q = query(collection(db, "deliveries"), orderBy("timestamp", "desc"), limit(numRecords));
     } else {
       // Para fretistas, usar uma abordagem que não precisa de índice composto
@@ -353,8 +353,8 @@ export const getLatestDeliveryRecordsWithPermissions = async (numRecords = 10, c
       records.push({ id: doc.id, ...doc.data() });
     });
 
-    // Se não é admin/colaborador, ordenar no cliente e limitar
-    if (!userIsAdmin && !userIsCollaborator) {
+    // Se não é admin/colaborador/gerencia/comercial, ordenar no cliente e limitar
+    if (!userIsAdmin && !userIsCollaborator && !userIsGerencia && !userIsComercial) {
       records = records
         .sort((a, b) => {
           const timestampA = a.timestamp?.toDate?.() || new Date(a.timestamp);
@@ -509,8 +509,8 @@ export const getDeliveryRecordsPaginatedWithPermissions = async (page = 1, pageS
   try {
     let allRecords;
     
-    // Se o usuário é admin ou colaborador, busca todos os registros
-    if (user && (user.type === 'admin' || user.type === 'colaborador' || isAdmin(user.email))) {
+    // Se o usuário é admin, colaborador, gerencia ou comercial, busca todos os registros
+    if (user && (user.type === 'admin' || user.type === 'colaborador' || user.type === 'gerencia' || user.type === 'comercial' || isAdmin(user.email))) {
       allRecords = await getAllDeliveryRecords();
     } else {
       // Se é fretista ou outro tipo, busca apenas os próprios registros
@@ -543,8 +543,8 @@ export const getDeliveryRecordsWithFiltersAndPermissions = async (filters = {}, 
   try {
     let records;
     
-    // Se o usuário é admin ou colaborador, busca com filtros normais
-    if (user && (user.type === 'admin' || user.type === 'colaborador' || isAdmin(user.email))) {
+    // Se o usuário é admin, colaborador, gerencia ou comercial, busca com filtros normais
+    if (user && (user.type === 'admin' || user.type === 'colaborador' || user.type === 'gerencia' || user.type === 'comercial' || isAdmin(user.email))) {
       records = await getDeliveryRecordsWithFilters(filters);
     } else {
       // Se é fretista, adiciona filtro por userEmail automaticamente
@@ -1210,5 +1210,87 @@ export const addDeliveryComment = async (recordId, comment, userEmail, userName)
   } catch (error) {
     console.error('Erro ao adicionar comentário:', error);
     throw error;
+  }
+};
+
+/**
+ * Busca o histórico de localização de um usuário
+ * @param {string} userEmail - Email do usuário
+ * @returns {Promise<Array>} Array com histórico de localizações
+ */
+export const getUserLocationHistory = async (userEmail) => {
+  try {
+    if (!userEmail) throw new Error('Email do usuário é obrigatório');
+    
+    // Busca todas as localizações do usuário ordenadas por data
+    const q = query(
+      collection(db, 'user_location_history'), 
+      where('user_email', '==', userEmail),
+      orderBy('timestamp', 'desc'),
+      limit(100) // Limita a 100 registros mais recentes
+    );
+    
+    const querySnapshot = await getDocs(q);
+    const history = [];
+    
+    querySnapshot.forEach((doc) => {
+      history.push({ id: doc.id, ...doc.data() });
+    });
+    
+    return history;
+  } catch (error) {
+    console.error('Erro ao buscar histórico de localização:', error);
+    return [];
+  }
+};
+
+/**
+ * Salva um ponto no histórico de localização
+ * @param {Object} locationData - Dados da localização
+ * @returns {Promise<boolean>} Sucesso da operação
+ */
+export const saveLocationToHistory = async (locationData) => {
+  try {
+    if (!locationData.user_email) throw new Error('Email do usuário é obrigatório');
+    
+    const historyData = {
+      ...locationData,
+      timestamp: new Date().toISOString(),
+    };
+    
+    await addDoc(collection(db, 'user_location_history'), historyData);
+    return true;
+  } catch (error) {
+    console.error('Erro ao salvar no histórico de localização:', error);
+    return false;
+  }
+};
+
+/**
+ * Busca histórico de localização de todos os usuários (para admins/gerentes)
+ * @returns {Promise<Array>} Array com histórico de localização de todos os usuários
+ */
+export const getAllUsersLocationHistory = async () => {
+  try {
+    const q = query(
+      collection(db, 'user_location_history'),
+      orderBy('timestamp', 'desc'),
+      limit(500) // Limita a 500 registros para performance
+    );
+    
+    const querySnapshot = await getDocs(q);
+    const locationHistory = [];
+    
+    querySnapshot.forEach((doc) => {
+      locationHistory.push({
+        id: doc.id,
+        ...doc.data()
+      });
+    });
+    
+    return locationHistory;
+  } catch (error) {
+    console.error('Erro ao buscar histórico de localização de todos os usuários:', error);
+    return [];
   }
 };

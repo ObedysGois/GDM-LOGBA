@@ -53,21 +53,76 @@ export const saveUserData = async (userData) => {
     };
     
     const db = await openDatabase();
-    const transaction = db.transaction(['userData'], 'readwrite');
-    const store = transaction.objectStore('userData');
+    
+    // Verificar se os object stores existem antes de usar
+    if (!db.objectStoreNames.contains('userData') || !db.objectStoreNames.contains('lastLogin')) {
+      console.warn('Object stores não encontrados, recriando banco...');
+      db.close();
+      // Forçar recriação do banco incrementando a versão
+      const newRequest = indexedDB.open(DB_NAME, DB_VERSION + 1);
+      return new Promise((resolve, reject) => {
+        newRequest.onupgradeneeded = (event) => {
+          const newDb = event.target.result;
+          if (!newDb.objectStoreNames.contains('userData')) {
+            newDb.createObjectStore('userData');
+          }
+          if (!newDb.objectStoreNames.contains('lastLogin')) {
+            newDb.createObjectStore('lastLogin');
+          }
+          if (!newDb.objectStoreNames.contains('pendingLocations')) {
+            newDb.createObjectStore('pendingLocations', { keyPath: 'timestamp' });
+          }
+        };
+        newRequest.onsuccess = async (event) => {
+          const newDb = event.target.result;
+          try {
+            const transaction = newDb.transaction(['userData', 'lastLogin'], 'readwrite');
+            const userStore = transaction.objectStore('userData');
+            const loginStore = transaction.objectStore('lastLogin');
+            
+            userStore.put(userDataClone, 'currentUser');
+            loginStore.put(new Date().toISOString(), 'lastLoginDate');
+            
+            transaction.oncomplete = () => {
+              newDb.close();
+              resolve(true);
+            };
+            transaction.onerror = (event) => {
+              console.error('Erro ao salvar dados do usuário:', event);
+              newDb.close();
+              reject(event);
+            };
+          } catch (error) {
+            console.error('Erro na transação:', error);
+            newDb.close();
+            reject(error);
+          }
+        };
+        newRequest.onerror = (event) => {
+          console.error('Erro ao recriar banco:', event);
+          reject(event);
+        };
+      });
+    }
+    
+    const transaction = db.transaction(['userData', 'lastLogin'], 'readwrite');
+    const userStore = transaction.objectStore('userData');
+    const loginStore = transaction.objectStore('lastLogin');
     
     // Salvar dados do usuário (versão simplificada)
-    store.put(userDataClone, 'currentUser');
+    userStore.put(userDataClone, 'currentUser');
     
     // Registrar data do último login
-    const loginTransaction = db.transaction(['lastLogin'], 'readwrite');
-    const loginStore = loginTransaction.objectStore('lastLogin');
     loginStore.put(new Date().toISOString(), 'lastLoginDate');
     
     return new Promise((resolve, reject) => {
-      transaction.oncomplete = () => resolve(true);
+      transaction.oncomplete = () => {
+        db.close();
+        resolve(true);
+      };
       transaction.onerror = (event) => {
         console.error('Erro ao salvar dados do usuário:', event);
+        db.close();
         reject(event);
       };
     });

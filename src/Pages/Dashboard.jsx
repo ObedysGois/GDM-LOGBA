@@ -440,10 +440,16 @@ function Dashboard() {
             <label style={{display: 'block', fontWeight: 500, color: isDarkMode ? '#9ca3af' : '#2a2a2a', marginBottom: 6, fontSize: 13}}>Período:</label>
           <select
           style={{
+            padding: 8, 
+            width: '100%', 
             background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            borderRadius: 4, 
+            fontSize: 14, 
             backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
             border: isDarkMode ? '1px solid #0F0F0F' : undefined,
-            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+            color: isDarkMode ? '#e2e8f0' : '#000'
             }}
             value={filterPeriod}
             onChange={(e) => setFilterPeriod(e.target.value)}
@@ -473,13 +479,19 @@ function Dashboard() {
         </div>
 
           <div>
-            <label style={{display: 'block', fontWeight: 500, color: isDarkMode ? '#9ca3af' : '#2a2a2a', marginBottom: 6, fontSize: 13}}>Cliente:</label>
+            <label style={{display: 'block', fontWeight: 500, color: isDarkMode ? '#9ca3af' : '#2a2a2a', marginBottom: 6, fontSize: 13}}>👤 Cliente:</label>
           <select
                     style={{
+            padding: 8, 
+            width: '100%', 
             background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            borderRadius: 4, 
+            fontSize: 14, 
             backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
             border: isDarkMode ? '1px solid #0F0F0F' : undefined,
-            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+            color: isDarkMode ? '#e2e8f0' : '#000'
             }}
             value={filterClient}
             onChange={(e) => setFilterClient(e.target.value)}
@@ -501,13 +513,19 @@ function Dashboard() {
         </div>
 
           <div>
-            <label style={{display: 'block', fontWeight: 500, color: isDarkMode ? '#9ca3af' : '#2a2a2a', marginBottom: 6, fontSize: 13}}>Fretista:</label>
+            <label style={{display: 'block', fontWeight: 500, color: isDarkMode ? '#9ca3af' : '#2a2a2a', marginBottom: 6, fontSize: 13}}>🚛 Fretista:</label>
           <select
             style={{
+            padding: 8, 
+            width: '100%', 
             background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            borderRadius: 4, 
+            fontSize: 14, 
             backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
             border: isDarkMode ? '1px solid #0F0F0F' : undefined,
-            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+            color: isDarkMode ? '#e2e8f0' : '#000'
             }}
             value={filterFretista}
             onChange={(e) => setFilterFretista(e.target.value)}
@@ -529,13 +547,19 @@ function Dashboard() {
         </div>
 
           <div>
-            <label style={{display: 'block', fontWeight: 500, color: isDarkMode ? '#9ca3af' : '#2a2a2a', marginBottom: 6, fontSize: 13}}>Tipo de Problema:</label>
+            <label style={{display: 'block', fontWeight: 500, color: isDarkMode ? '#9ca3af' : '#2a2a2a', marginBottom: 6, fontSize: 13}}>⚠️ Tipo de Problema:</label>
           <select
             style={{
+            padding: 8, 
+            width: '100%', 
             background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            borderRadius: 4, 
+            fontSize: 14, 
             backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
             border: isDarkMode ? '1px solid #0F0F0F' : undefined,
-            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+            color: isDarkMode ? '#e2e8f0' : '#000'
             }}
             value={filterProblemType}
             onChange={(e) => setFilterProblemType(e.target.value)}
@@ -557,13 +581,19 @@ function Dashboard() {
         </div>
 
           <div>
-            <label style={{display: 'block', fontWeight: 500, color: isDarkMode ? '#9ca3af' : '#2a2a2a', marginBottom: 6, fontSize: 13}}>Vendedor:</label>
+            <label style={{display: 'block', fontWeight: 500, color: isDarkMode ? '#9ca3af' : '#2a2a2a', marginBottom: 6, fontSize: 13}}>👨‍💼 Vendedor:</label>
           <select
             style={{
+            padding: 8, 
+            width: '100%', 
             background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            borderRadius: 4, 
+            fontSize: 14, 
             backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
             border: isDarkMode ? '1px solid #0F0F0F' : undefined,
-            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+            color: isDarkMode ? '#e2e8f0' : '#000'
             }}
             value={filterVendedor}
             onChange={(e) => setFilterVendedor(e.target.value)}
@@ -585,13 +615,19 @@ function Dashboard() {
         </div>
 
           <div>
-            <label style={{display: 'block', fontWeight: 500, color: isDarkMode ? '#9ca3af' : '#2a2a2a', marginBottom: 6, fontSize: 13}}>Rede:</label>
+            <label style={{display: 'block', fontWeight: 500, color: isDarkMode ? '#9ca3af' : '#2a2a2a', marginBottom: 6, fontSize: 13}}>🏪 Rede:</label>
           <select
             style={{
+            padding: 8, 
+            width: '100%', 
             background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            borderRadius: 4, 
+            fontSize: 14, 
             backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
             border: isDarkMode ? '1px solid #0F0F0F' : undefined,
-            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+            color: isDarkMode ? '#e2e8f0' : '#000'
             }}
             value={filterRede}
             onChange={(e) => setFilterRede(e.target.value)}
@@ -613,13 +649,19 @@ function Dashboard() {
         </div>
 
           <div>
-            <label style={{display: 'block', fontWeight: 500, color: isDarkMode ? '#9ca3af' : '#2a2a2a', marginBottom: 6, fontSize: 13}}>UF:</label>
+            <label style={{display: 'block', fontWeight: 500, color: isDarkMode ? '#9ca3af' : '#2a2a2a', marginBottom: 6, fontSize: 13}}>📍 UF:</label>
           <select
             style={{
+            padding: 8, 
+            width: '100%', 
             background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
+            borderRadius: 4, 
+            fontSize: 14, 
             backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
             border: isDarkMode ? '1px solid #0F0F0F' : undefined,
-            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+            color: isDarkMode ? '#e2e8f0' : '#000'
             }}
             value={filterUF}
             onChange={(e) => setFilterUF(e.target.value)}

@@ -1,0 +1,33 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "user_location_history",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "user_email",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "timestamp",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "deliveries",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "userEmail",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "timestamp",
+          "order": "DESCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
