@@ -1,8 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 
 const ToastNotification = ({ open, type = 'info', message, onClose, duration = 4000 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
+
+  const handleClose = useCallback(() => {
+    setIsExiting(true);
+    setTimeout(() => {
+      setIsVisible(false);
+      onClose();
+    }, 300); // Tempo da animação de saída
+  }, [onClose]);
 
   useEffect(() => {
     if (open) {
@@ -16,15 +24,7 @@ const ToastNotification = ({ open, type = 'info', message, onClose, duration = 4
 
       return () => clearTimeout(timer);
     }
-  }, [open, duration]);
-
-  const handleClose = () => {
-    setIsExiting(true);
-    setTimeout(() => {
-      setIsVisible(false);
-      onClose();
-    }, 300); // Tempo da animação de saída
-  };
+  }, [open, duration, handleClose]);
 
   if (!isVisible) return null;
 

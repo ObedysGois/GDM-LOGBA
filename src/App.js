@@ -16,6 +16,8 @@ import Profile from './Pages/Profile.jsx';
 import ChecklistExpedicao from './Pages/ChecklistExpedicao.jsx';
 import ToastNotification from './Components/ToastNotification.jsx';
 import GeolocationPermission from './Components/GeolocationPermission.jsx';
+import InstallPrompt from './Components/InstallPrompt.jsx';
+import UpdatePrompt from './Components/UpdatePrompt.jsx';
 import './App.css';
 
 // Context para toast notifications
@@ -46,6 +48,8 @@ function App() {
           }}
         >
             <div className="App">
+              <InstallPrompt />
+              <UpdatePrompt />
               <Routes>
                 <Route path="/login" element={<Login />} />
                 <Route path="/" element={<Layout />}>

@@ -22,7 +22,7 @@ export const uploadRouteImage = async (file, userEmail) => {
     const filePath = `${date}/${fileName}`;
     
     // Upload para Supabase Storage
-    const { data, error } = await supabase.storage
+    const { error } = await supabase.storage
       .from(STORAGE_BUCKETS.ROUTE_IMAGES)
       .upload(filePath, file, {
         cacheControl: '3600',
@@ -71,14 +71,14 @@ export const uploadDeliveryAttachment = async (file, deliveryId, userEmail, fret
     const now = new Date();
     const dateStr = now.toISOString().slice(0,10).replace(/-/g, ''); // YYYYMMDD
     const extension = file.name.split('.').pop();
-    const nameNoExt = file.name.replace(`.${extension}`, '');
+    // const nameNoExt = file.name.replace(`.${extension}`, ''); // Não utilizado
     // Remover randomId do nome do arquivo
     const fileName = `${dateStr}_${sanitize(fretista)}_${sanitize(cliente)}_${sanitize(userEmail)}.${extension}`;
     const filePath = `${dateStr}/${deliveryId}/${fileName}`;
 
     // Tentar upload para Supabase Storage
     try {
-      const { data, error } = await supabase.storage
+      const { error } = await supabase.storage
         .from(STORAGE_BUCKETS.DELIVERY_ATTACHMENTS)
         .upload(filePath, file, {
           cacheControl: '3600',
@@ -143,7 +143,7 @@ export const uploadGeneralFile = async (file, category = 'general', userEmail) =
     const filePath = `${date}/${category}/${fileName}`;
     
     // Upload para Supabase Storage
-    const { data, error } = await supabase.storage
+    const { error } = await supabase.storage
       .from(STORAGE_BUCKETS.GENERAL_FILES)
       .upload(filePath, file, {
         cacheControl: '3600',
@@ -264,7 +264,6 @@ export const uploadFileWithFallback = async (file, uploadFunction, userEmail) =>
     
     // Fallback para localStorage
     const base64Data = await fileToBase64(file);
-    const date = new Date().toISOString().split('T')[0];
     
     return {
       id: `local_${Date.now()}`,

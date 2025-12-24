@@ -26,20 +26,24 @@ messaging.onBackgroundMessage(function(payload) {
   const notificationTitle = payload.notification.title || 'GDM LogBA';
   const notificationOptions = {
     body: payload.notification.body || 'Nova notificação',
-    icon: '/favicon.ico',
-    badge: '/favicon.ico',
-    tag: 'gdm-notification',
-    requireInteraction: true,
+    icon: '/icons/icon-192x192.png',
+    badge: '/icons/icon-72x72.png',
+    image: payload.notification.image || undefined,
+    tag: payload.data?.tag || 'gdm-notification',
+    requireInteraction: payload.data?.requireInteraction !== false,
+    data: payload.data || {},
     actions: [
       {
         action: 'open',
-        title: 'Abrir'
+        title: 'Abrir App'
       },
       {
         action: 'close',
         title: 'Fechar'
       }
-    ]
+    ],
+    vibrate: [200, 100, 200],
+    timestamp: Date.now()
   };
 
   self.registration.showNotification(notificationTitle, notificationOptions);
@@ -51,10 +55,30 @@ self.addEventListener('notificationclick', function(event) {
 
   event.notification.close();
 
-  if (event.action === 'open') {
-    // Open the app
+  const urlToOpen = event.notification.data?.url || '/';
+
+  if (event.action === 'open' || !event.action) {
+    // Abrir ou focar o app
     event.waitUntil(
-      clients.openWindow('/')
+      clients.matchAll({
+        type: 'window',
+        includeUncontrolled: true
+      }).then((clientList) => {
+        // Verificar se já existe uma janela aberta
+        for (let i = 0; i < clientList.length; i++) {
+          const client = clientList[i];
+          if (client.url === urlToOpen && 'focus' in client) {
+            return client.focus();
+          }
+        }
+        // Se não houver janela aberta, abrir uma nova
+        if (clients.openWindow) {
+          return clients.openWindow(urlToOpen);
+        }
+      })
     );
+  } else if (event.action === 'close') {
+    // Apenas fechar a notificação
+    event.notification.close();
   }
 });

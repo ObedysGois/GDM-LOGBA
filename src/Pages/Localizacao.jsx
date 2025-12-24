@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MapPin, Navigation, Filter, Clock, User, Building, Truck } from 'lucide-react';
+import { MapPin, Navigation, Filter, Clock, User, Truck } from 'lucide-react';
 import PageHeader from '../Components/PageHeader.jsx';
 import LocationHistory from '../Components/LocationHistory.jsx';
 import { useTheme } from '../contexts/ThemeContext.js';
@@ -12,6 +12,7 @@ import { ToastContext } from '../App.js';
 import { useNavigate } from 'react-router-dom';
 import { saveUserLocation, getOnlineUserLocations, getDeliveryRecordsByUser } from '../firebaseUtils.js';
 import { saveUserData, hasLoggedInToday } from '../indexedDBUtils.js';
+import { getAddressFromCoordinates } from '../utils/geocodingUtils.js';
 
 // Função para gerar cores diferentes para cada usuário
 const generateUserColor = (userEmail) => {
@@ -71,7 +72,8 @@ function Localizacao() {
       showToast('Acesso negado! Apenas administradores, colaboradores e fretistas podem acessar a localização.', 'error');
       navigate('/');
     }
-  }, [currentUser, navigate]); // Removido showToast das dependências para evitar loop infinito
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser, navigate]); // showToast removido das dependências para evitar loops
 
   // Registra o service worker para atualização em segundo plano
   useEffect(() => {
@@ -105,8 +107,25 @@ function Localizacao() {
     if (navigator.geolocation) {
       locationWatchId.current = navigator.geolocation.watchPosition(
         async (pos) => {
-          const { latitude, longitude } = pos.coords;
+          const { latitude, longitude, accuracy } = pos.coords;
           setUserLocation({ latitude, longitude });
+          
+          // Obter endereço usando geocodificação reversa (apenas se precisão for boa)
+          // Limitar chamadas de geocodificação para evitar muitas requisições
+          let address = null;
+          if (accuracy && accuracy < 100) {
+            try {
+              // Throttle: só buscar endereço a cada 30 segundos para evitar muitas requisições
+              const lastGeocodeTime = sessionStorage.getItem('lastGeocodeTime');
+              const now = Date.now();
+              if (!lastGeocodeTime || (now - parseInt(lastGeocodeTime)) > 30000) {
+                address = await getAddressFromCoordinates(latitude, longitude);
+                sessionStorage.setItem('lastGeocodeTime', now.toString());
+              }
+            } catch (geocodeError) {
+              console.log('Erro ao obter endereço (não crítico):', geocodeError);
+            }
+          }
           
           // Salva no Firestore
           await saveUserLocation({
@@ -114,6 +133,8 @@ function Localizacao() {
             user_name: currentUser.displayName || currentUser.email,
             latitude,
             longitude,
+            accuracy: accuracy || null,
+            address: address,
             is_online: true,
           });
           
@@ -217,10 +238,10 @@ function Localizacao() {
     return null;
   }
 
-  // Extrai lista de fretistas únicos
-  const fretistasList = Array.from(new Set(onlineDrivers.map(d => d.user_name)));
+  // Extrai lista de fretistas únicos (filtrando valores nulos/undefined)
+  const fretistasList = Array.from(new Set(onlineDrivers.map(d => d.user_name).filter(Boolean)));
   // Extrai lista de clientes únicos das entregas em andamento (simulado)
-  const clientesList = currentDelivery ? [currentDelivery.client] : [];
+  const clientesList = currentDelivery && currentDelivery.client ? [currentDelivery.client] : [];
 
   // Filtro aplicado aos fretistas ativos
   const filteredDrivers = onlineDrivers.filter(driver => {
@@ -310,7 +331,7 @@ function Localizacao() {
             }}
         >
           <option value="">🚛 Todos os Fretistas</option>
-          {fretistasList.map(f => <option key={f} value={f}>{f}</option>)}
+          {fretistasList.map((f, idx) => <option key={f || `fretista-${idx}`} value={f}>{f}</option>)}
         </select>
         <select
           value={selectedCliente}
@@ -329,7 +350,7 @@ function Localizacao() {
             }}
         >
           <option value="">👤 Todos os Clientes</option>
-          {clientesList.map(c => <option key={c} value={c}>{c}</option>)}
+          {clientesList.map((c, idx) => <option key={c || `cliente-${idx}`} value={c}>{c}</option>)}
         </select>
         <button
           type="button"

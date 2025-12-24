@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { BarChart3, Filter, Download, TrendingUp, Users, Building, ShoppingCart, AlertTriangle, Clock, CheckCircle, XCircle, Loader2 } from 'lucide-react';
-import { getDeliveryRecordsWithFilters, getDeliveryRecordsWithFiltersAndPermissions, clientData, fretistas, problemTypes } from '../firebaseUtils.js';
+import { BarChart3, Filter, Download, Users, Building, ShoppingCart, AlertTriangle, Clock, CheckCircle, XCircle, Loader2 } from 'lucide-react';
+import { getDeliveryRecordsWithFiltersAndPermissions, clientData, fretistas, problemTypes } from '../firebaseUtils.js';
 import '../App.css';
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend, LineChart, Line
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend
 } from 'recharts';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
@@ -205,6 +205,11 @@ function Dashboard() {
           startDateFilter = new Date(now.getFullYear() - 1, 0, 1);
           endDateFilter = new Date(now.getFullYear() - 1, 11, 31, 23, 59, 59);
           break;
+        default:
+          // Usar mês atual como padrão
+          startDateFilter = new Date(now.getFullYear(), now.getMonth(), 1);
+          endDateFilter = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
+          break;
       }
 
       // Buscar registros
@@ -230,6 +235,7 @@ function Dashboard() {
   // Carregar dados quando o componente montar ou filtros mudarem
   useEffect(() => {
     fetchRecords();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterPeriod, filterClient, filterFretista, filterProblemType, filterVendedor, filterRede, filterUF]);
 
   const handleClearFilters = () => {
@@ -368,7 +374,6 @@ function Dashboard() {
   };
 
   // Cores para os gráficos com gradientes
-  const COLORS = ['#ff9800', '#2196f3', '#4caf50', '#f44336', '#9c27b0', '#ff5722', '#795548', '#607d8b'];
   const GRADIENT_COLORS = [
     { start: '#ff9800', end: '#ff5722' },
     { start: '#2196f3', end: '#1976d2' },

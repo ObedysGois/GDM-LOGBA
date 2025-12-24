@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Monitor, Filter, Trash2, Share2, Edit, MessageSquare, Download, Search, ChevronLeft, ChevronRight } from 'lucide-react';
-import { getDeliveryRecordsPaginated, getDeliveryRecordsPaginatedWithPermissions, clientData, fretistas, problemTypes, updateDeliveryRecord, deleteDeliveryRecord, addDeliveryComment, getAttachmentFromLocalStorage } from '../firebaseUtils.js';
+import { getDeliveryRecordsPaginatedWithPermissions, clientData, fretistas, problemTypes, deleteDeliveryRecord, addDeliveryComment, getAttachmentFromLocalStorage } from '../firebaseUtils.js';
 import { supabase, STORAGE_BUCKETS } from '../supabaseConfig.js';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -320,6 +320,7 @@ function Monitoramento() {
 
   useEffect(() => {
     loadRecords(currentPage);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage]);
 
   // Removido o useEffect que bloqueava o acesso - agora as permissões são controladas pela função de busca
@@ -710,7 +711,7 @@ function Monitoramento() {
     // Converter objetos em arrays e calcular percentuais/medias
     const totalRecords = records.length;
     const totalProblems = Object.values(problemTypesMap).reduce((sum, count) => sum + count, 0);
-    const totalDrivers = Object.keys(driverRecordsCountMap).length;
+    // const totalDrivers = Object.keys(driverRecordsCountMap).length; // Não utilizado no momento
     const totalClientsWithProblems = Object.keys(topClientsByProblemsMap).length;
 
     // Processar tipos de problema
@@ -1625,7 +1626,7 @@ ${message}`);
         case 'lastQuarter':
           const lastQuarter = Math.floor(now.getMonth() / 3) - 1;
           const lastQuarterYear = lastQuarter < 0 ? now.getFullYear() - 1 : now.getFullYear();
-          const lastQuarterMonth = lastQuarter < 0 ? 9 : lastQuarter * 3;
+          // const lastQuarterMonth = lastQuarter < 0 ? 9 : lastQuarter * 3; // Não utilizado
           matchesPeriod = Math.floor(recordDate.getMonth() / 3) === lastQuarter && recordDate.getFullYear() === lastQuarterYear;
           break;
         case 'currentSemester':
@@ -1635,7 +1636,7 @@ ${message}`);
         case 'lastSemester':
           const lastSemester = Math.floor(now.getMonth() / 6) - 1;
           const lastSemesterYear = lastSemester < 0 ? now.getFullYear() - 1 : now.getFullYear();
-          const lastSemesterMonth = lastSemester < 0 ? 6 : lastSemester * 6;
+          // const lastSemesterMonth = lastSemester < 0 ? 6 : lastSemester * 6; // Não utilizado
           matchesPeriod = Math.floor(recordDate.getMonth() / 6) === lastSemester && recordDate.getFullYear() === lastSemesterYear;
           break;
         case 'currentYear':

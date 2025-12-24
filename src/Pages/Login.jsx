@@ -14,17 +14,17 @@ function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [loginType, setLoginType] = useState('login'); // 'login' or 'register'
   const { currentUser } = useAuth();
-  const { isDarkMode, colors } = useTheme();
-  const navigate = window.reactRouterNavigate || ((path) => { window.location.href = path; });
+  const { isDarkMode } = useTheme();
+  const navigateRef = React.useRef(window.reactRouterNavigate || ((path) => { window.location.href = path; }));
 
   React.useEffect(() => {
     if (currentUser) {
       const timer = setTimeout(() => {
-        navigate('/');
+        navigateRef.current('/');
       }, 5000);
       return () => clearTimeout(timer);
     }
-  }, [currentUser, navigate]);
+  }, [currentUser]);
 
   const handleLogin = async (e) => {
     e.preventDefault();

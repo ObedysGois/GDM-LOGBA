@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Filter, Send, Download, Calendar, BarChart3, Clock, Package, CheckCircle, XCircle, AlertTriangle, Loader2, User, Timer } from 'lucide-react';
 import { getDeliveryRecordsByUser, getDeliveryRecordsWithFiltersAndPermissions } from '../firebaseUtils.js';
 import { useAuth } from '../AuthContext.js';
@@ -195,6 +195,7 @@ function MeuResumo() {
   // Carregar dados quando o componente montar ou filtros mudarem
   useEffect(() => {
     fetchRecords();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterPeriod, startDate, endDate, currentUser?.email]);
 
   const handleGenerateDaySummary = () => {
@@ -841,7 +842,6 @@ function MeuResumo() {
             boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined, borderRadius: '12px',
             background: isDarkMode ? '#2a2a2a' : '#eeeeeeff', 
             padding: 24, 
-            borderRadius: 8, 
             textAlign: 'center'
           }}>
             <Calendar style={{width: 40, height: 40, color: isDarkMode ? '#a0aec0' : '#666', marginBottom: 12}} />

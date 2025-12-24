@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { getUserLocationHistory, getAllUsersLocationHistory, isAdmin, isCollaborator } from '../firebaseUtils';
 import { useAuth } from '../AuthContext';
+import { getAddressFromCoordinates } from '../utils/geocodingUtils';
 import './LocationHistory.css';
 
 const LocationHistory = () => {
   const [locationHistory, setLocationHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [addressesLoading, setAddressesLoading] = useState(new Set());
   const { currentUser } = useAuth();
 
   useEffect(() => {
@@ -57,32 +59,19 @@ const LocationHistory = () => {
     });
   };
 
-  const getAddressFromCoords = async (lat, lng) => {
-    try {
-      const response = await fetch(
-        `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lng}&key=YOUR_API_KEY&language=pt&pretty=1`
-      );
-      const data = await response.json();
-      
-      if (data.results && data.results.length > 0) {
-        const components = data.results[0].components;
-        const neighbourhood = components.neighbourhood || components.suburb || '';
-        const road = components.road || '';
-        return `${road}${neighbourhood ? `, ${neighbourhood}` : ''}`;
-      }
-    } catch (error) {
-      console.error('Erro ao buscar endereço:', error);
+
+  // Função para extrair o nome do usuário do email ou usar user_name
+  const getUserDisplayName = (location) => {
+    if (location.user_name) {
+      return location.user_name;
     }
-    return `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+    if (location.user_email) {
+      return location.user_email.split('@')[0];
+    }
+    return 'Usuário desconhecido';
   };
 
-  // Função para extrair o nome do usuário do email
-  const getUserNameFromEmail = (email) => {
-    if (!email) return 'Usuário desconhecido';
-    return email.split('@')[0];
-  };
-
-  // Verifica se deve mostrar informações de usuário
+  // Verifica se deve mostrar informações de usuário (sempre mostrar para admins/colaboradores)
   const shouldShowUserInfo = () => {
     return isAdmin(currentUser?.email) || 
            isCollaborator(currentUser) || 
@@ -126,24 +115,54 @@ const LocationHistory = () => {
       ) : (
         <div className="history-list">
           {locationHistory.map((location, index) => (
-            <div key={location.id || index} className="history-item">
+            <div key={location.id || `location-${index}`} className="history-item">
               <div className="history-time">
-                {formatDate(location.timestamp)}
+                {formatDate(location.timestamp || location.last_update)}
               </div>
-              {shouldShowUserInfo() && (
-                <div className="user-info">
-                  👤 {getUserNameFromEmail(location.user_email)}
-                </div>
-              )}
+              {/* Sempre mostrar nome do usuário */}
+              <div className="user-info">
+                👤 {getUserDisplayName(location)}
+              </div>
               <div className="history-location">
                 <div className="coordinates">
                   📍 {location.latitude?.toFixed(6)}, {location.longitude?.toFixed(6)}
                 </div>
-                {location.address && (
-                  <div className="address">{location.address}</div>
-                )}
+                {/* Mostrar endereço se disponível, caso contrário tentar obter */}
+                {location.address ? (
+                  <div className="address">📍 {location.address}</div>
+                ) : location.latitude && location.longitude && !addressesLoading.has(location.id) ? (
+                  <div 
+                    className="address address-loading"
+                    onClick={async () => {
+                      if (addressesLoading.has(location.id)) return;
+                      setAddressesLoading(prev => new Set(prev).add(location.id));
+                      try {
+                        const address = await getAddressFromCoordinates(location.latitude, location.longitude);
+                        if (address) {
+                          setLocationHistory(prev => prev.map(loc => 
+                            loc.id === location.id ? { ...loc, address } : loc
+                          ));
+                        }
+                      } catch (err) {
+                        console.error('Erro ao obter endereço:', err);
+                      } finally {
+                        setAddressesLoading(prev => {
+                          const newSet = new Set(prev);
+                          newSet.delete(location.id);
+                          return newSet;
+                        });
+                      }
+                    }}
+                    style={{ cursor: 'pointer' }}
+                    title="Clique para carregar endereço"
+                  >
+                    📍 Clique para carregar endereço
+                  </div>
+                ) : location.latitude && location.longitude ? (
+                  <div className="address address-loading">📍 Carregando endereço...</div>
+                ) : null}
                 <div className="status">
-                  {location.is_online ? (
+                  {location.is_online !== false ? (
                     <span className="online">🟢 Online</span>
                   ) : (
                     <span className="offline">🔴 Offline</span>

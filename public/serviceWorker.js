@@ -1,53 +1,152 @@
-// Service Worker para atualização de localização em segundo plano
-const CACHE_NAME = 'logistica-gdm-v1';
-const urlsToCache = [
+// Service Worker PWA completo para Logística GDM
+const CACHE_VERSION = 'v2';
+const CACHE_NAME = `logistica-gdm-${CACHE_VERSION}`;
+const STATIC_CACHE = `logistica-gdm-static-${CACHE_VERSION}`;
+const DYNAMIC_CACHE = `logistica-gdm-dynamic-${CACHE_VERSION}`;
+
+// Recursos estáticos para cache na instalação
+const STATIC_ASSETS = [
   '/',
   '/index.html',
-  '/static/js/main.chunk.js',
-  '/static/js/0.chunk.js',
-  '/static/js/bundle.js',
   '/manifest.json',
-  '/favicon.ico',
-  '/assets/logodocemel.png'
+  '/assets/logodocemel.png',
+  '/assets/logosplash.png'
 ];
+
+// Estratégias de cache
+const CACHE_STRATEGIES = {
+  // Cache First: para assets estáticos
+  CACHE_FIRST: 'cache-first',
+  // Network First: para dados dinâmicos
+  NETWORK_FIRST: 'network-first',
+  // Stale While Revalidate: para recursos que podem ser atualizados
+  STALE_WHILE_REVALIDATE: 'stale-while-revalidate'
+};
 
 // Instalação do Service Worker
 self.addEventListener('install', event => {
+  console.log('[Service Worker] Instalando...', CACHE_NAME);
+  
   event.waitUntil(
-    caches.open(CACHE_NAME)
+    caches.open(STATIC_CACHE)
       .then(cache => {
-        console.log('Cache aberto');
-        return cache.addAll(urlsToCache);
+        console.log('[Service Worker] Cache estático aberto');
+        // Não falhar se alguns recursos não puderem ser cacheados
+        return cache.addAll(STATIC_ASSETS).catch(err => {
+          console.warn('[Service Worker] Alguns recursos não puderam ser cacheados:', err);
+        });
+      })
+      .then(() => {
+        // Forçar ativação imediata
+        return self.skipWaiting();
       })
   );
 });
 
 // Ativação do Service Worker
 self.addEventListener('activate', event => {
-  const cacheWhitelist = [CACHE_NAME];
+  console.log('[Service Worker] Ativando...');
+  
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cacheName => {
-          if (cacheWhitelist.indexOf(cacheName) === -1) {
+          // Remover caches antigos
+          if (cacheName !== CACHE_NAME && 
+              cacheName !== STATIC_CACHE && 
+              cacheName !== DYNAMIC_CACHE &&
+              !cacheName.startsWith('logistica-gdm-')) {
+            console.log('[Service Worker] Removendo cache antigo:', cacheName);
             return caches.delete(cacheName);
           }
         })
       );
+    }).then(() => {
+      // Assumir controle de todas as páginas
+      return self.clients.claim();
     })
   );
 });
 
-// Interceptação de requisições
+// Interceptação de requisições com estratégias inteligentes
 self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        if (response) {
-          return response;
-        }
-        return fetch(event.request);
+  const { request } = event;
+  const url = new URL(request.url);
+
+  // Ignorar requisições não-GET
+  if (request.method !== 'GET') {
+    return;
+  }
+
+  // Ignorar requisições para APIs externas (Firebase, etc) - sempre usar network
+  if (url.origin !== self.location.origin && 
+      (url.hostname.includes('firebase') || 
+       url.hostname.includes('googleapis') ||
+       url.hostname.includes('supabase'))) {
+    event.respondWith(fetch(request));
+    return;
+  }
+
+  // Estratégia: Cache First para assets estáticos
+  if (request.url.match(/\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot)$/)) {
+    event.respondWith(
+      caches.match(request).then(response => {
+        return response || fetch(request).then(fetchResponse => {
+          // Cachear resposta dinâmica
+          return caches.open(DYNAMIC_CACHE).then(cache => {
+            cache.put(request, fetchResponse.clone());
+            return fetchResponse;
+          });
+        }).catch(() => {
+          // Se offline e não tiver cache, retornar página offline
+          if (request.url.match(/\.(html)$/)) {
+            return caches.match('/index.html');
+          }
+        });
       })
+    );
+    return;
+  }
+
+  // Estratégia: Network First para HTML e dados
+  if (request.url.match(/\.(html)$/) || url.pathname === '/') {
+    event.respondWith(
+      fetch(request)
+        .then(response => {
+          // Cachear resposta bem-sucedida
+          const responseClone = response.clone();
+          caches.open(DYNAMIC_CACHE).then(cache => {
+            cache.put(request, responseClone);
+          });
+          return response;
+        })
+        .catch(() => {
+          // Se offline, retornar do cache
+          return caches.match(request).then(cachedResponse => {
+            return cachedResponse || caches.match('/index.html');
+          });
+        })
+    );
+    return;
+  }
+
+  // Estratégia padrão: Stale While Revalidate
+  event.respondWith(
+    caches.match(request).then(cachedResponse => {
+      const fetchPromise = fetch(request).then(networkResponse => {
+        // Atualizar cache
+        caches.open(DYNAMIC_CACHE).then(cache => {
+          cache.put(request, networkResponse.clone());
+        });
+        return networkResponse;
+      }).catch(() => {
+        // Se falhar, retornar cache se disponível
+        return cachedResponse;
+      });
+
+      // Retornar cache imediatamente se disponível, atualizar em background
+      return cachedResponse || fetchPromise;
+    })
   );
 });
 
@@ -55,6 +154,12 @@ self.addEventListener('fetch', event => {
 self.addEventListener('message', event => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
+    // Notificar todos os clientes para recarregar
+    self.clients.matchAll().then(clients => {
+      clients.forEach(client => {
+        client.postMessage({ type: 'SW_UPDATED' });
+      });
+    });
   }
 });
 
@@ -65,10 +170,20 @@ self.addEventListener('sync', event => {
   }
 });
 
+// Gerenciamento de sincronização periódica em segundo plano (se disponível)
+self.addEventListener('periodicsync', event => {
+  if (event.tag === 'updateLocation') {
+    event.waitUntil(updateUserLocation());
+  }
+});
+
 // Função para atualizar a localização do usuário
+// NOTA: Service Workers têm limitações com geolocalização
+// O rastreamento principal é feito pelo AuthContext na aplicação principal
 async function updateUserLocation() {
   try {
-    console.log('Iniciando atualização de localização em segundo plano...');
+    console.log('Service Worker: Sincronização de localização solicitada');
+    
     // Verificar se o usuário fez login hoje
     const loggedInToday = await hasLoggedInToday();
     if (!loggedInToday) {
@@ -83,83 +198,29 @@ async function updateUserLocation() {
       return;
     }
 
-    // Verificar conexão com a internet
-    if (!navigator.onLine) {
-      console.log('Sem conexão com a internet, armazenando para envio posterior');
-      // Obter localização atual mesmo offline
-      try {
-        const position = await getCurrentPosition();
-        if (position) {
-          // Armazenar para envio posterior
-          await storeLocationForRetry({
-            user_email: userData.email,
-            user_name: userData.displayName || userData.email,
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            is_online: true,
-            last_update: new Date().toISOString()
-          });
+    // Verificar se há localizações pendentes no IndexedDB
+    const pendingLocations = await getPendingLocations();
+    if (pendingLocations && pendingLocations.length > 0) {
+      console.log(`Encontradas ${pendingLocations.length} localizações pendentes para sincronizar`);
+      
+      // Tentar enviar localizações pendentes
+      for (const locationData of pendingLocations) {
+        try {
+          const result = await sendLocationToFirebase(locationData);
+          if (result && result.success !== false) {
+            // Remover da lista de pendentes se enviado com sucesso
+            await removePendingLocation(locationData.timestamp);
+          }
+        } catch (error) {
+          console.error('Erro ao enviar localização pendente:', error);
         }
-      } catch (posError) {
-        console.error('Erro ao obter posição offline:', posError);
       }
-      return;
     }
 
-    // Obter localização atual
-    let position;
-    try {
-      position = await getCurrentPosition();
-      if (!position) {
-        console.warn('Posição não disponível, usando posição padrão');
-        position = {
-          coords: {
-            latitude: -12.9704, // Coordenadas padrão (Salvador, BA)
-            longitude: -38.5124,
-            accuracy: 1000
-          },
-          timestamp: Date.now()
-        };
-      }
-    } catch (positionError) {
-      console.warn('Erro ao obter posição, usando posição padrão:', positionError);
-      position = {
-        coords: {
-          latitude: -12.9704, // Coordenadas padrão (Salvador, BA)
-          longitude: -38.5124,
-          accuracy: 1000
-        },
-        timestamp: Date.now()
-      };
-    }
-
-    // Preparar dados para envio
-    const locationData = {
-      user_email: userData.email,
-      user_name: userData.displayName || userData.email,
-      latitude: position.coords.latitude,
-      longitude: position.coords.longitude,
-      is_online: true,
-      last_update: new Date().toISOString()
-    };
-
-    // Enviar para o Firebase
-    const result = await sendLocationToFirebase(locationData);
+    // Service Worker não deve tentar obter geolocalização diretamente
+    // O rastreamento é feito pela aplicação principal (AuthContext)
+    console.log('Service Worker: Localizações pendentes processadas. Rastreamento principal feito pelo AuthContext.');
     
-    if (result && result.success === false) {
-      if (result.offline) {
-        console.log('Localização armazenada para envio posterior (dispositivo offline)');
-      } else {
-        console.log('Localização armazenada para envio posterior:', result);
-      }
-    } else {
-      console.log('Localização atualizada em segundo plano:', locationData);
-    }
-    
-    // Agendar próxima atualização (a cada 5 minutos)
-    setTimeout(() => {
-      self.registration.sync.register('updateLocation');
-    }, 5 * 60 * 1000);
   } catch (error) {
     console.error('Erro ao atualizar localização em segundo plano:', error);
   }
@@ -256,49 +317,146 @@ async function hasLoggedInToday() {
   });
 }
 
-// Função para obter a posição atual
-async function getCurrentPosition() {
+// Função para obter localizações pendentes do IndexedDB
+async function getPendingLocations() {
   return new Promise((resolve, reject) => {
-    if (!navigator.geolocation) {
-      console.warn('Geolocalização não suportada, usando posição padrão');
-      // Retorna uma posição padrão em vez de rejeitar a promessa
-      resolve({
-        coords: {
-          latitude: -12.9704, // Coordenadas padrão (Salvador, BA)
-          longitude: -38.5124,
-          accuracy: 1000
-        },
-        timestamp: Date.now()
-      });
-      return;
-    }
+    const request = indexedDB.open('logistica-gdm-db', 1);
     
-    navigator.geolocation.getCurrentPosition(
-      position => resolve(position),
-      error => {
-        console.warn('Erro ao obter localização, usando posição padrão:', error);
-        // Retorna uma posição padrão em caso de erro
-        resolve({
-          coords: {
-            latitude: -12.9704, // Coordenadas padrão (Salvador, BA)
-            longitude: -38.5124,
-            accuracy: 1000
-          },
-          timestamp: Date.now()
-        });
-      },
-      { enableHighAccuracy: true, maximumAge: 30000, timeout: 27000 }
-    );
+    request.onsuccess = event => {
+      const db = event.target.result;
+      if (!db.objectStoreNames.contains('pendingLocations')) {
+        resolve([]);
+        return;
+      }
+      
+      const transaction = db.transaction(['pendingLocations'], 'readonly');
+      const store = transaction.objectStore('pendingLocations');
+      const getAllRequest = store.getAll();
+      
+      getAllRequest.onsuccess = () => {
+        resolve(getAllRequest.result || []);
+      };
+      
+      getAllRequest.onerror = event => {
+        console.error('Erro ao obter localizações pendentes:', event);
+        resolve([]);
+      };
+    };
+    
+    request.onerror = event => {
+      console.error('Erro ao abrir IndexedDB:', event);
+      resolve([]);
+    };
+  });
+}
+
+// Função para remover localização pendente após envio bem-sucedido
+async function removePendingLocation(timestamp) {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open('logistica-gdm-db', 1);
+    
+    request.onsuccess = event => {
+      const db = event.target.result;
+      if (!db.objectStoreNames.contains('pendingLocations')) {
+        resolve();
+        return;
+      }
+      
+      const transaction = db.transaction(['pendingLocations'], 'readwrite');
+      const store = transaction.objectStore('pendingLocations');
+      const deleteRequest = store.delete(timestamp);
+      
+      deleteRequest.onsuccess = () => resolve();
+      deleteRequest.onerror = event => {
+        console.error('Erro ao remover localização pendente:', event);
+        resolve();
+      };
+    };
+    
+    request.onerror = event => {
+      console.error('Erro ao abrir IndexedDB:', event);
+      resolve();
+    };
   });
 }
 
 // Função para enviar localização para o Firebase
 async function sendLocationToFirebase(locationData) {
   try {
-    // Service worker não deve mais tentar enviar localizações
-    // O rastreamento automático é feito pelo AuthContext
-    console.log('Rastreamento de localização desabilitado no service worker - usando AuthContext');
-    return { success: true, disabled: true };
+    // Verificar se há conexão com a internet
+    if (!navigator.onLine) {
+      return { success: false, offline: true };
+    }
+
+    // Obter configuração do Firebase do cache ou usar fetch
+    const firebaseConfig = {
+      apiKey: "AIzaSyBla-ItwmWjbfqZWX-rPJb_L1kuT178uac",
+      projectId: "gdm-log-ba-2f8c5"
+    };
+
+    // Enviar para o Firestore usando REST API
+    const url = `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/(default)/documents/user_locations`;
+    
+    // Buscar documento existente
+    const queryUrl = `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/(default)/documents:runQuery`;
+    const queryBody = {
+      structuredQuery: {
+        where: {
+          fieldFilter: {
+            field: { fieldPath: 'user_email' },
+            op: 'EQUAL',
+            value: { stringValue: locationData.user_email }
+          }
+        },
+        from: [{ collectionId: 'user_locations' }],
+        limit: 1
+      }
+    };
+
+    try {
+      const queryResponse = await fetch(queryUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(queryBody)
+      });
+
+      const queryData = await queryResponse.json();
+      
+      const documentData = {
+        fields: {
+          user_email: { stringValue: locationData.user_email },
+          user_name: { stringValue: locationData.user_name || locationData.user_email },
+          latitude: { doubleValue: locationData.latitude },
+          longitude: { doubleValue: locationData.longitude },
+          is_online: { booleanValue: locationData.is_online !== false },
+          last_update: { timestampValue: new Date().toISOString() }
+        }
+      };
+
+      if (queryData && queryData[0] && queryData[0].document) {
+        // Atualizar documento existente
+        const docId = queryData[0].document.name.split('/').pop();
+        const updateUrl = `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/(default)/documents/user_locations/${docId}`;
+        
+        await fetch(updateUrl, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(documentData)
+        });
+      } else {
+        // Criar novo documento
+        await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(documentData)
+        });
+      }
+
+      return { success: true };
+    } catch (fetchError) {
+      console.error('Erro ao enviar localização via REST API:', fetchError);
+      return { success: false, error: fetchError.message };
+    }
   } catch (error) {
     console.error('Erro ao enviar localização:', error);
     return { success: false, error: error.message };
@@ -333,8 +491,6 @@ async function storeLocationForRetry(locationData) {
   });
 }
 
-// Configurar atualização periódica (a cada 5 minutos)
-setInterval(() => {
-  self.registration.sync.register('updateLocation')
-    .catch(err => console.error('Erro ao registrar sincronização:', err));
-}, 5 * 60 * 1000);
+// NOTA: O rastreamento principal de localização é feito pelo AuthContext na aplicação principal
+// O service worker apenas sincroniza localizações pendentes quando há conexão
+// Não configuramos atualização periódica automática aqui para evitar conflitos e logs desnecessários

@@ -1061,7 +1061,7 @@ export const processAttachmentFromLocalStorage = (attachment) => {
 
 /**
  * Salva ou atualiza a localização do usuário logado na collection 'user_locations'.
- * @param {Object} locationData - { user_email, user_name, latitude, longitude, is_online }
+ * @param {Object} locationData - { user_email, user_name, latitude, longitude, is_online, address? }
  */
 export const saveUserLocation = async (locationData) => {
   try {

@@ -149,7 +149,8 @@ const ChecklistExpedicao = () => {
   useEffect(() => {
     loadCSVData();
     loadRegistros();
-  }, []); // Remover dependências que causam re-renders desnecessários
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Executar apenas uma vez no mount
   
   // Controle de acesso por tipo de usuário
   let userType = user?.type || 'novo';
@@ -184,7 +185,7 @@ const ChecklistExpedicao = () => {
   const canSeeForm = ['colaborador', 'administrador', 'expedidor'].includes(userType); // 1ª parte
   const canSeeAnalytics = ['colaborador', 'administrador', 'fretista', 'expedidor'].includes(userType); // 2ª parte
   const canSeeTable = ['colaborador', 'administrador', 'fretista', 'expedidor'].includes(userType); // 3ª parte
-  const canSeeReports = ['colaborador', 'administrador', 'expedidor'].includes(userType); // 4ª parte
+  // const canSeeReports = ['colaborador', 'administrador', 'expedidor'].includes(userType); // 4ª parte - não utilizado no momento
   
   // Ajustar activeTab baseado no acesso do usuário
   useEffect(() => {
@@ -195,6 +196,7 @@ const ChecklistExpedicao = () => {
     } else if (canSeeTable) {
       setActiveTab('table');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Executar apenas uma vez no mount
   
   // Se não tem acesso, mostrar mensagem

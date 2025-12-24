@@ -1,12 +1,13 @@
 import { useState, useEffect, useCallback } from 'react';
 import { 
-  getToken, 
+  getToken,
   onMessage
 } from 'firebase/messaging';
 import { messaging } from '../firebaseConfig.js';
 import toast from 'react-hot-toast';
 
-const VAPID_KEY = 'BKxyz...'; // Você precisará gerar uma chave VAPID no console do Firebase
+// Chave VAPID do Firebase Cloud Messaging
+const VAPID_KEY = 'BPJZEKfa2WZNAcuspeq6k5qw4hhznbV_RxI9sEboy76RAwijEUEe7cLniRmnm2hWIpmq54Zx6wUGQnkUcMByUPg';
 
 export const useNotifications = () => {
   const [permission, setPermission] = useState(Notification.permission);
@@ -52,27 +53,23 @@ export const useNotifications = () => {
     }
 
     try {
-      // Temporariamente desabilitado para evitar erros de VAPID
-      console.log('Notificações temporariamente desabilitadas');
-      return null;
-      
-      /* 
       const currentToken = await getToken(messaging, {
         vapidKey: VAPID_KEY
       });
 
       if (currentToken) {
         setToken(currentToken);
-        console.log('FCM Token:', currentToken);
+        console.log('✅ FCM Token obtido com sucesso:', currentToken);
+        // Opcional: salvar token no backend para envio de notificações
+        // await saveTokenToBackend(currentToken);
         return currentToken;
       } else {
-        console.log('Nenhum token de registro disponível.');
+        console.log('⚠️ Nenhum token de registro disponível.');
         return null;
       }
-      */
     } catch (error) {
-      console.error('Erro ao obter token:', error);
-      toast.error('Erro ao configurar notificações');
+      console.error('❌ Erro ao obter token FCM:', error);
+      toast.error('Erro ao configurar notificações push');
       return null;
     }
   }, [permission]);
@@ -147,8 +144,8 @@ export const useNotifications = () => {
 
     const notification = new Notification(title, {
       body,
-      icon: '/favicon.ico',
-      badge: '/favicon.ico',
+      icon: '/icons/icon-192x192.png',
+      badge: '/icons/icon-72x72.png',
       tag: 'gdm-local-notification',
       ...options
     });

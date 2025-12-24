@@ -14,7 +14,6 @@ import {
   XCircle,
   Search,
   Filter,
-  Eye,
   MessageCircle,
   Paperclip,
   Truck,
@@ -53,7 +52,7 @@ function CollapsibleText({ text, maxLength = 20 }) {
 function Home() {
   const { currentUser: user } = useAuth();
   const { showToast } = React.useContext(ToastContext);
-  const { isDarkMode, colors } = useTheme();
+  const { isDarkMode } = useTheme();
   const [routeImage, setRouteImage] = useState(null);
   const [imageName, setImageName] = useState('');
   const [currentRouteImageId, setCurrentRouteImageId] = useState(null);
@@ -213,6 +212,9 @@ function Home() {
     }
   };
 
+  // Usar useRef para armazenar a função e evitar loops
+  const checkNotificationsRef = useRef();
+  
   const checkNotifications = useCallback(() => {
     const now = new Date();
     const newNotifications = [];
@@ -308,6 +310,9 @@ function Home() {
 
     setNotifications(newNotifications);
   }, [latestRecords, dismissedNotifications]);
+  
+  // Atualizar ref quando a função mudar
+  checkNotificationsRef.current = checkNotifications;
 
   // Carregar registros, verificar notificações e carregar imagem da rota
   useEffect(() => {
@@ -321,19 +326,19 @@ function Home() {
   // Configurar intervalo para verificar notificações
   useEffect(() => {
     const interval = setInterval(() => {
-      if (latestRecords.length > 0) {
-        checkNotifications();
+      if (latestRecords.length > 0 && checkNotificationsRef.current) {
+        checkNotificationsRef.current();
       }
     }, 60000); // Verificar a cada minuto
     return () => clearInterval(interval);
-  }, [latestRecords.length]); // Removido checkNotifications das dependências para evitar loop infinito
+  }, [latestRecords.length]);
 
   // Verificar notificações quando os registros mudarem
   useEffect(() => {
-    if (latestRecords.length > 0) {
-      checkNotifications();
+    if (latestRecords.length > 0 && checkNotificationsRef.current) {
+      checkNotificationsRef.current();
     }
-  }, [latestRecords.length]); // Removido checkNotifications das dependências para evitar loop infinito
+  }, [latestRecords.length]);
 
   // Mostrar toast sempre que uma nova notificação for criada
   useEffect(() => {
@@ -1880,7 +1885,6 @@ function Home() {
                 style={{
                   background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white', border: isDarkMode ? '1px solid #0F0F0F' : undefined,
                   boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
-                  maxWidth: '100%',
                   maxWidth: '100%'
                 }}
               >

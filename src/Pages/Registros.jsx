@@ -48,38 +48,38 @@ function Registros() {
   const fileInputRef = useRef();
   // Adicionar estados para chatbox
   const [chatMessages, setChatMessages] = useState([]);
-  const [chatInput, setChatInput] = useState("");
-  const WHATSAPP_NUMBER = "5599999999999"; // Substitua pelo número desejado
+  // const [chatInput, setChatInput] = useState(""); // Não utilizado no momento
+  // const WHATSAPP_NUMBER = "5599999999999"; // Não utilizado no momento
 
   // Substituir sendToAI por integração real com OpenAI
-  const sendToAI = async (msg) => {
-    if (!openaiKey) return "Por favor, informe sua chave da OpenAI para usar a IA.";
-    try {
-      const response = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${openaiKey}`
-        },
-        body: JSON.stringify({
-          model: "gpt-3.5-turbo",
-          messages: [
-            { role: "system", content: "Você é um assistente simpático e prestativo da Logística BA. Use linguagem simples, curta e amigável. Sempre que possível, use emojis relacionados a logística, caminhão, entrega, etc." },
-            ...chatMessages.map(m => ({ role: m.sender === 'user' ? 'user' : 'assistant', content: m.text })),
-            { role: "user", content: msg }
-          ],
-          max_tokens: 120
-        })
-      });
-      const data = await response.json();
-      if (data.choices && data.choices[0] && data.choices[0].message) {
-        return data.choices[0].message.content;
-      }
-      return "Desculpe, não consegui responder agora. Tente novamente mais tarde.";
-    } catch (e) {
-      return "Erro ao conectar com a IA. Tente novamente mais tarde.";
-    }
-  };
+  // const sendToAI = async (msg) => { // Não utilizado no momento
+  //   if (!openaiKey) return "Por favor, informe sua chave da OpenAI para usar a IA.";
+  //   try {
+  //     const response = await fetch("https://api.openai.com/v1/chat/completions", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "Authorization": `Bearer ${openaiKey}`
+  //       },
+  //       body: JSON.stringify({
+  //         model: "gpt-3.5-turbo",
+  //         messages: [
+  //           { role: "system", content: "Você é um assistente simpático e prestativo da Logística BA. Use linguagem simples, curta e amigável. Sempre que possível, use emojis relacionados a logística, caminhão, entrega, etc." },
+  //           ...chatMessages.map(m => ({ role: m.sender === 'user' ? 'user' : 'assistant', content: m.text })),
+  //           { role: "user", content: msg }
+  //         ],
+  //         max_tokens: 120
+  //       })
+  //     });
+  //     const data = await response.json();
+  //     if (data.choices && data.choices[0] && data.choices[0].message) {
+  //       return data.choices[0].message.content;
+  //     }
+  //     return "Desculpe, não consegui responder agora. Tente novamente mais tarde.";
+  //   } catch (e) {
+  //     return "Erro ao conectar com a IA. Tente novamente mais tarde.";
+  //   }
+  // };
 
   // Permitir upload de imagem no chat
   const [chatImage, setChatImage] = useState(null);
@@ -100,9 +100,9 @@ function Registros() {
   }, []);
 
   // Salvar chave no localStorage
-  const handleSaveKey = () => {
-    localStorage.setItem('openai_key', openaiKey);
-  };
+  // const handleSaveKey = () => { // Não utilizado no momento
+  //   localStorage.setItem('openai_key', openaiKey);
+  // };
 
   // Atualizar campos quando cliente for selecionado
   useEffect(() => {

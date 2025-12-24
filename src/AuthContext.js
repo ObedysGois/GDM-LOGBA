@@ -4,6 +4,7 @@ import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { logUserAccess, addUser, saveUserLocation, saveLocationToHistory } from './firebaseUtils.js';
 import { getDocs, query, collection, where, updateDoc, doc } from 'firebase/firestore';
 import { db } from './firebaseConfig.js';
+import { getAddressFromCoordinates } from './utils/geocodingUtils.js';
 import { adminEmails } from './firebaseUtils.js';
 import { saveUserData, savePendingLocation } from './indexedDBUtils.js';
 import { 
@@ -51,13 +52,32 @@ export const AuthProvider = ({ children }) => {
 
     // Função para atualizar localização
     const updateLocation = async (position) => {
-      const { latitude, longitude } = position.coords;
+      const { latitude, longitude, accuracy } = position.coords;
+      
+      // Obter endereço usando geocodificação reversa (apenas se precisão for boa)
+      // Limitar chamadas de geocodificação para evitar muitas requisições
+      let address = null;
+      if (accuracy && accuracy < 100) { // Apenas se precisão for menor que 100m
+        try {
+          // Throttle: só buscar endereço a cada 30 segundos para evitar muitas requisições
+          const lastGeocodeTime = sessionStorage.getItem('lastGeocodeTime');
+          const now = Date.now();
+          if (!lastGeocodeTime || (now - parseInt(lastGeocodeTime)) > 30000) {
+            address = await getAddressFromCoordinates(latitude, longitude);
+            sessionStorage.setItem('lastGeocodeTime', now.toString());
+          }
+        } catch (geocodeError) {
+          console.log('Erro ao obter endereço (não crítico):', geocodeError);
+        }
+      }
       
       const locationData = {
         user_email: user.email,
         user_name: user.displayName || user.email,
         latitude,
         longitude,
+        accuracy: accuracy || null,
+        address: address,
         is_online: true,
       };
 
@@ -121,6 +141,67 @@ export const AuthProvider = ({ children }) => {
 
       if (locationWatchId.current) {
         console.log('Rastreamento de localização iniciado para:', user.email);
+        
+        // Configurar intervalo de atualização periódica para garantir rastreamento contínuo
+        // Isso garante que mesmo se watchPosition falhar, continuamos rastreando
+        locationUpdateInterval.current = setInterval(async () => {
+          try {
+            // Obter posição atual
+            const position = await new Promise((resolve, reject) => {
+              navigator.geolocation.getCurrentPosition(resolve, reject, {
+                enableHighAccuracy: true,
+                timeout: 15000,
+                maximumAge: 60000
+              });
+            });
+            
+            // Atualizar localização
+            await updateLocation(position);
+            
+            // Registrar sync para service worker
+            if ('serviceWorker' in navigator && 'sync' in window.ServiceWorkerRegistration.prototype) {
+              navigator.serviceWorker.ready.then(async (registration) => {
+                try {
+                  await registration.sync.register('updateLocation');
+                } catch (error) {
+                  // Ignorar erros de sync
+                }
+              });
+            }
+          } catch (error) {
+            console.log('Erro no rastreamento periódico (não crítico):', error);
+          }
+        }, 2 * 60 * 1000); // A cada 2 minutos
+        
+        // Configurar periodic background sync se disponível (para rastreamento mesmo com app fechado)
+        if ('serviceWorker' in navigator && 'periodicSync' in window.ServiceWorkerRegistration.prototype) {
+          navigator.serviceWorker.ready.then(async (registration) => {
+            try {
+              // Solicitar permissão para periodic sync
+              const status = await navigator.permissions.query({ name: 'periodic-background-sync' });
+              if (status.state === 'granted') {
+                await registration.periodicSync.register('updateLocation', {
+                  minInterval: 5 * 60 * 1000 // A cada 5 minutos
+                });
+                console.log('Periodic background sync registrado para rastreamento contínuo');
+              }
+            } catch (error) {
+              console.log('Periodic background sync não disponível:', error);
+            }
+          });
+        }
+        
+        // Registrar background sync para quando o app estiver em segundo plano
+        if ('serviceWorker' in navigator && 'sync' in window.ServiceWorkerRegistration.prototype) {
+          navigator.serviceWorker.ready.then(async (registration) => {
+            try {
+              await registration.sync.register('updateLocation');
+              console.log('Background sync registrado');
+            } catch (error) {
+              console.log('Background sync não disponível:', error);
+            }
+          });
+        }
       }
     } catch (error) {
       console.error('Erro ao iniciar rastreamento de localização:', error);

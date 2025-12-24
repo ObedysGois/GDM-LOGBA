@@ -22,7 +22,7 @@ export const initializeStorageBuckets = async () => {
     
     for (const bucketName of buckets) {
       try {
-        const { data, error } = await supabase.storage.getBucket(bucketName);
+        const { error } = await supabase.storage.getBucket(bucketName);
         if (error && error.message.includes('not found')) {
           // Bucket não existe, criar
           const { error: createError } = await supabase.storage.createBucket(bucketName, {
@@ -65,7 +65,7 @@ export const getPublicUrl = (bucketName, filePath) => {
 // Função para testar conexão com Supabase
 export const testSupabaseConnection = async () => {
   try {
-    const { data, error } = await supabase.storage.listBuckets();
+    const { error } = await supabase.storage.listBuckets();
     if (error) {
       console.warn('Erro ao conectar com Supabase Storage:', error);
       return false;

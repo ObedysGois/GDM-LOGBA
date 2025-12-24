@@ -20,7 +20,7 @@ import ThemeToggle from './Components/ThemeToggle.jsx';
 
 function Layout() {
   const { currentUser, loading, logout } = useAuth();
-  const { isDarkMode, colors } = useTheme();
+  const { isDarkMode } = useTheme();
   const { showToast } = React.useContext(ToastContext);
   const navigate = useNavigate();
   const location = useLocation();

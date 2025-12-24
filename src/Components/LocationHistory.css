@@ -75,6 +75,28 @@
   font-weight: 500;
 }
 
+.user-info {
+  font-size: 13px;
+  color: #667eea;
+  margin-bottom: 8px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.address-loading {
+  color: #999;
+  font-style: italic;
+  font-size: 12px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.address-loading:hover {
+  color: #667eea;
+}
+
 .history-location {
   display: flex;
   flex-direction: column;
