@@ -7,7 +7,7 @@ import { messaging } from '../firebaseConfig.js';
 import toast from 'react-hot-toast';
 
 // Chave VAPID do Firebase Cloud Messaging
-const VAPID_KEY = 'BPJZEKfa2WZNAcuspeq6k5qw4hhznbV_RxI9sEboy76RAwijEUEe7cLniRmnm2hWIpmq54Zx6wUGQnkUcMByUPg';
+const VAPID_KEY = process.env.REACT_APP_FIREBASE_VAPID_KEY || 'BPJZEKfa2WZNAcuspeq6k5qw4hhznbV_RxI9sEboy76RAwijEUEe7cLniRmnm2hWIpmq54Zx6wUGQnkUcMByUPg';
 
 export const useNotifications = () => {
   const [permission, setPermission] = useState(Notification.permission);

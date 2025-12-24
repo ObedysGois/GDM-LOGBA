@@ -2,7 +2,7 @@
  * Utilitários para geocodificação usando Google Maps API
  */
 
-const GOOGLE_MAPS_API_KEY = 'AIzaSyAYPqweXiFwIA_PP1y1tbmjZiEXgSdqIUE';
+const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY || 'AIzaSyAYPqweXiFwIA_PP1y1tbmjZiEXgSdqIUE';
 
 /**
  * Obtém o endereço a partir de coordenadas (geocodificação reversa)

@@ -1,8 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 
 // Configuração do Supabase
-const supabaseUrl = 'https://tvihvvokdjihgjnfyaik.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR2aWh2dm9rZGppaGdqbmZ5YWlrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI0MzkwMjksImV4cCI6MjA2ODAxNTAyOX0.JbO_UfZa0pDJbwqk5AT7BwWkmZHTnk2IOJar_XxyToI';
+const supabaseUrl = process.env.REACT_APP_SUPABASE_URL || 'https://tvihvvokdjihgjnfyaik.supabase.co';
+const supabaseAnonKey = process.env.REACT_APP_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR2aWh2dm9rZGppaGdqbmZ5YWlrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI0MzkwMjksImV4cCI6MjA2ODAxNTAyOX0.JbO_UfZa0pDJbwqk5AT7BwWkmZHTnk2IOJar_XxyToI';
 
 // Criar cliente Supabase
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);

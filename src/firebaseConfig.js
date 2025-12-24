@@ -7,13 +7,13 @@ import { getMessaging, isSupported } from 'firebase/messaging';
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyBla-ItwmWjbfqZWX-rPJb_L1kuT178uac",
-  authDomain: "gdm-log-ba-2f8c5.firebaseapp.com",
-  projectId: "gdm-log-ba-2f8c5",
-  storageBucket: "gdm-log-ba-2f8c5.appspot.com",
-  messagingSenderId: "345609111488",
-  appId: "1:345609111488:web:6233ab1ee1de9af737ea25",
-  measurementId: "G-FL1VKY0EH9"
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY || "AIzaSyBla-ItwmWjbfqZWX-rPJb_L1kuT178uac",
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || "gdm-log-ba-2f8c5.firebaseapp.com",
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || "gdm-log-ba-2f8c5",
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET || "gdm-log-ba-2f8c5.appspot.com",
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID || "345609111488",
+  appId: process.env.REACT_APP_FIREBASE_APP_ID || "1:345609111488:web:6233ab1ee1de9af737ea25",
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID || "G-FL1VKY0EH9"
 };
 
 // Initialize Firebase
