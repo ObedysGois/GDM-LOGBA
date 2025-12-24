@@ -71,12 +71,7 @@ const LocationHistory = () => {
     return 'Usuário desconhecido';
   };
 
-  // Verifica se deve mostrar informações de usuário (sempre mostrar para admins/colaboradores)
-  const shouldShowUserInfo = () => {
-    return isAdmin(currentUser?.email) || 
-           isCollaborator(currentUser) || 
-           currentUser?.userType === 'manager';
-  };
+  // Função removida - não é mais necessária pois sempre mostramos o nome do usuário
 
   if (loading) {
     return (

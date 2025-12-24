@@ -839,8 +839,9 @@ function MeuResumo() {
             background: isDarkMode ? 'linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(25, 25, 25, 0.7) 100%)' : 'white',
             backdropFilter: isDarkMode ? 'blur(20px)' : 'none',
             border: isDarkMode ? '1px solid #0F0F0F' : undefined,
-            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined, borderRadius: '12px',
-            background: isDarkMode ? '#2a2a2a' : '#eeeeeeff', 
+            boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : undefined,
+            borderRadius: '12px',
+            backgroundColor: isDarkMode ? '#2a2a2a' : '#eeeeeeff', 
             padding: 24, 
             textAlign: 'center'
           }}>

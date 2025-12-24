@@ -3,7 +3,7 @@ import { signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthP
 import { motion } from 'framer-motion';
 import { auth } from '../firebaseConfig.js';
 import { useAuth } from '../AuthContext.js';
-import { useTheme } from '../contexts/ThemeContext.js';
+// import { useTheme } from '../contexts/ThemeContext.js'; // Não utilizado no momento
 import { LogIn, UserPlus, Mail, Lock, Loader2, Eye, EyeOff, User } from 'lucide-react';
 
 function Login() {
@@ -14,7 +14,6 @@ function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [loginType, setLoginType] = useState('login'); // 'login' or 'register'
   const { currentUser } = useAuth();
-  const { isDarkMode } = useTheme();
   const navigateRef = React.useRef(window.reactRouterNavigate || ((path) => { window.location.href = path; }));
 
   React.useEffect(() => {

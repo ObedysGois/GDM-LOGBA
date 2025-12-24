@@ -709,7 +709,7 @@ function Monitoramento() {
     });
 
     // Converter objetos em arrays e calcular percentuais/medias
-    const totalRecords = records.length;
+    // const totalRecords = records.length; // Não utilizado no momento
     const totalProblems = Object.values(problemTypesMap).reduce((sum, count) => sum + count, 0);
     // const totalDrivers = Object.keys(driverRecordsCountMap).length; // Não utilizado no momento
     const totalClientsWithProblems = Object.keys(topClientsByProblemsMap).length;

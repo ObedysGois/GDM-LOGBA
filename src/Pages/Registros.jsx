@@ -39,6 +39,7 @@ function Registros() {
   const [hasCheckedIn, setHasCheckedIn] = useState(false);
   const [currentDeliveryId, setCurrentDeliveryId] = useState(null);
   const [attachments, setAttachments] = useState([]);
+  // eslint-disable-next-line no-unused-vars
   const [showAttachmentInput, setShowAttachmentInput] = useState(false);
   const [loading, setLoading] = useState(false);
   // Adicionar estado para modal de confirmação
@@ -81,23 +82,24 @@ function Registros() {
   //   }
   // };
 
-  // Permitir upload de imagem no chat
-  const [chatImage, setChatImage] = useState(null);
+  // Permitir upload de imagem no chat (não utilizado no momento)
+  // const [chatImage, setChatImage] = useState(null);
 
   // Lista atualizada de clientes
   const clients = Object.keys(clientData);
 
   // Adicionar de volta as variáveis necessárias:
-  const [openaiKey, setOpenaiKey] = useState("");
+  // const [openaiKey, setOpenaiKey] = useState(""); // Não utilizado no momento
   const [showInfoModal, setShowInfoModal] = useState(false);
   const [tempInfo, setTempInfo] = useState('');
+  // eslint-disable-next-line no-unused-vars
   const [showProblemOptions, setShowProblemOptions] = useState(false);
 
-  // Carregar chave do localStorage
-  useEffect(() => {
-    const savedKey = localStorage.getItem('openai_key');
-    if (savedKey) setOpenaiKey(savedKey);
-  }, []);
+  // Carregar chave do localStorage (comentado pois openaiKey não é usado)
+  // useEffect(() => {
+  //   const savedKey = localStorage.getItem('openai_key');
+  //   if (savedKey) setOpenaiKey(savedKey);
+  // }, []);
 
   // Salvar chave no localStorage
   // const handleSaveKey = () => { // Não utilizado no momento
