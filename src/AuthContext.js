@@ -109,18 +109,25 @@ export const AuthProvider = ({ children }) => {
     const handleLocationError = (error) => {
       let errorMessage = 'Erro ao obter localização';
       
+      // Verificar se é erro de política de permissões
+      if (error.message && error.message.includes('Permissions policy')) {
+        errorMessage = 'Geolocalização bloqueada pela política de segurança. Verifique as configurações do servidor.';
+        console.error('Erro de política de permissões:', error);
+        return;
+      }
+      
       switch (error.code) {
         case error.PERMISSION_DENIED:
-          errorMessage = 'Permissão de localização negada';
+          errorMessage = 'Permissão de localização negada. Por favor, permita o acesso à localização nas configurações do navegador.';
           break;
         case error.POSITION_UNAVAILABLE:
-          errorMessage = 'Localização não disponível';
+          errorMessage = 'Localização não disponível. Verifique se o GPS está ativado.';
           break;
         case error.TIMEOUT:
-          errorMessage = 'Tempo limite para obter localização';
+          errorMessage = 'Tempo limite para obter localização. Tente novamente.';
           break;
         default:
-          errorMessage = 'Erro desconhecido ao obter localização';
+          errorMessage = `Erro ao obter localização: ${error.message || 'Erro desconhecido'}`;
           break;
       }
       

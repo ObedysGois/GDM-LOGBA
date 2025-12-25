@@ -105,8 +105,9 @@ function Localizacao() {
     
     // Pega localização do navegador
     if (navigator.geolocation) {
-      locationWatchId.current = navigator.geolocation.watchPosition(
-        async (pos) => {
+      try {
+        locationWatchId.current = navigator.geolocation.watchPosition(
+          async (pos) => {
           const { latitude, longitude, accuracy } = pos.coords;
           setUserLocation({ latitude, longitude });
           
@@ -152,10 +153,35 @@ function Localizacao() {
         },
         (err) => {
           setLoading(false);
-          alert('Não foi possível obter sua localização. Permita o acesso ao GPS.');
+          let errorMessage = 'Não foi possível obter sua localização.';
+          
+          // Verificar se é erro de política de permissões
+          if (err.message && err.message.includes('Permissions policy')) {
+            errorMessage = 'Geolocalização bloqueada pela política de segurança. O administrador precisa permitir geolocalização nas configurações do servidor.';
+            console.error('Erro de política de permissões:', err);
+          } else if (err.code === err.PERMISSION_DENIED) {
+            errorMessage = 'Permissão de localização negada. Por favor, permita o acesso à localização nas configurações do navegador.';
+          } else if (err.code === err.POSITION_UNAVAILABLE) {
+            errorMessage = 'Localização não disponível. Verifique se o GPS está ativado.';
+          } else if (err.code === err.TIMEOUT) {
+            errorMessage = 'Tempo limite para obter localização. Tente novamente.';
+          }
+          
+          console.error('Erro ao obter localização:', err);
+          alert(errorMessage);
         },
         { enableHighAccuracy: true, maximumAge: 10000, timeout: 20000 }
       );
+      } catch (error) {
+        setLoading(false);
+        if (error.message && error.message.includes('Permissions policy')) {
+          console.error('Erro de política de permissões ao iniciar watchPosition:', error);
+          alert('Geolocalização bloqueada pela política de segurança. O administrador precisa permitir geolocalização nas configurações do servidor.');
+        } else {
+          console.error('Erro ao iniciar watchPosition:', error);
+          alert('Erro ao iniciar rastreamento de localização. Tente recarregar a página.');
+        }
+      }
     } else {
       setLoading(false);
       alert('Geolocalização não suportada no seu navegador.');
